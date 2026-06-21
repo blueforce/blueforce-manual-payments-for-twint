@@ -43,6 +43,16 @@ In beiden Fällen findet **kein automatischer API-Call** statt – der Zahlungse
 - ✅ **Automatische Updates direkt im WordPress-Backend** (1-Klick, ohne wordpress.org)
 - ✅ Kein Build-Step, keine Tracking-Aufrufe
 
+## Screenshots
+
+**Block-Checkout** – TWINT mit Pflichtfeld für die Handynummer (Ablauf «Ich fordere an»):
+
+![Block-Checkout mit TWINT und Handynummer-Feld](docs/screenshots/checkout-block.png)
+
+**Einstellungen** – Ablauf, Nummer, Kontoinhaber und QR-Bild-Auswahl aus der Mediathek:
+
+![TWINT-Einstellungen im WooCommerce-Backend](docs/screenshots/admin-settings.png)
+
 ## Installation
 
 1. Das **[aktuelle Release-ZIP](https://github.com/blueforce/twint-for-woocommerce/releases/latest)** herunterladen (Datei `twint-for-woocommerce.zip` unter «Assets»).
