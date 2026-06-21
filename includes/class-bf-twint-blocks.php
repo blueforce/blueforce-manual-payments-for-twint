@@ -62,7 +62,7 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 		);
 
 		if ( function_exists( 'wp_set_script_translations' ) ) {
-			wp_set_script_translations( 'bf-twint-blocks', 'twint-for-woocommerce' );
+			wp_set_script_translations( 'bf-twint-blocks', 'twint-for-woocommerce', BF_TWINT_PATH . 'languages' );
 		}
 
 		return array( 'bf-twint-blocks' );

@@ -13,4 +13,6 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/).
 - Unterstützung für klassischen Checkout und Block-Checkout (Store-API).
 - Anweisungen auf Danke-Seite, in der Bestell-E-Mail und im Backend.
 - HPOS-Kompatibilität.
-- Vollständige Übersetzbarkeit (Text-Domain `twint-for-woocommerce`).
+- Vollständige Übersetzbarkeit (Text-Domain `twint-for-woocommerce`) inkl. mitgelieferter
+  Übersetzungen für **de_DE**, **en_GB** und **en_US** (`.po`/`.mo`) sowie JS-Übersetzungen
+  (`.json`) für den Block-Checkout.
