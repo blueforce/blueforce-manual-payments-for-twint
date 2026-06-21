@@ -171,6 +171,9 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		if ( 'woocommerce_page_wc-settings' !== $hook ) {
 			return;
 		}
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			return;
+		}
 		$section = isset( $_GET['section'] ) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( $this->id !== $section ) {
 			return;

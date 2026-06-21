@@ -9,6 +9,12 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.1.2] – 2026-06-21
+
+### Sicherheit
+- Zusätzlicher Berechtigungs-Check (`current_user_can( 'manage_woocommerce' )`) beim
+  Laden der Admin-Skripte (Defense-in-Depth, OWASP A01).
+
 ## [1.1.1] – 2026-06-21
 
 ### Hinzugefügt
