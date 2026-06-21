@@ -3,10 +3,10 @@
 # This file is distributed under the GPL-2.0-or-later license.
 msgid ""
 msgstr ""
-"Project-Id-Version: TWINT for WooCommerce 1.0.0\n"
+"Project-Id-Version: TWINT for WooCommerce 1.1.1\n"
 "Report-Msgid-Bugs-To: info@blueforce.ch\n"
-"POT-Creation-Date: 2026-06-21 19:11+0000\n"
-"PO-Revision-Date: 2026-06-21 19:11+0000\n"
+"POT-Creation-Date: 2026-06-21 20:19+0000\n"
+"PO-Revision-Date: 2026-06-21 20:19+0000\n"
 "Last-Translator: Blueforce Digital Solutions <info@blueforce.ch>\n"
 "Language-Team: Blueforce Digital Solutions <info@blueforce.ch>\n"
 "Language: en_GB\n"
@@ -73,11 +73,23 @@ msgstr "Account holder name"
 msgid "Optional. Wird dem Kunden zur Kontrolle angezeigt (z. B. Firmen- oder Personenname)."
 msgstr "Optional. Shown to the customer for verification (e.g. company or person name)."
 
-msgid "TWINT-QR-Bild (URL)"
-msgstr "TWINT QR image (URL)"
+msgid "TWINT-QR-Bild"
+msgstr "TWINT QR image"
 
-msgid "Optional, nur bei «Kunde sendet». Lade in der TWINT-App unter «Geld empfangen» deinen QR-Code, speichere ihn als Bild in der Mediathek und trage hier die Bild-URL ein. Der Kunde kann ihn dann direkt scannen."
-msgstr "Optional, only for “Customer sends”. In the TWINT app under “Receive money”, save your QR code as an image to the media library and enter the image URL here. The customer can then scan it directly."
+msgid "Optional, nur bei «Kunde sendet». Lade in der TWINT-App unter «Geld empfangen» deinen QR-Code, speichere ihn als Bild und wähle ihn hier aus der Mediathek. Der Kunde kann ihn dann direkt scannen."
+msgstr "Optional, only for “Customer sends”. In the TWINT app under “Receive money”, save your QR code as an image and select it here from the media library. The customer can then scan it directly."
+
+msgid "Bild auswählen"
+msgstr "Select image"
+
+msgid "Entfernen"
+msgstr "Remove"
+
+msgid "TWINT-QR-Bild wählen"
+msgstr "Choose TWINT QR image"
+
+msgid "Dieses Bild verwenden"
+msgstr "Use this image"
 
 msgid "Zusätzliche Hinweise"
 msgstr "Additional notes"

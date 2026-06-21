@@ -3,10 +3,10 @@
 # This file is distributed under the GPL-2.0-or-later license.
 msgid ""
 msgstr ""
-"Project-Id-Version: TWINT for WooCommerce 1.0.0\n"
+"Project-Id-Version: TWINT for WooCommerce 1.1.1\n"
 "Report-Msgid-Bugs-To: info@blueforce.ch\n"
-"POT-Creation-Date: 2026-06-21 19:11+0000\n"
-"PO-Revision-Date: 2026-06-21 19:11+0000\n"
+"POT-Creation-Date: 2026-06-21 20:19+0000\n"
+"PO-Revision-Date: 2026-06-21 20:19+0000\n"
 "Last-Translator: Blueforce Digital Solutions <info@blueforce.ch>\n"
 "Language-Team: Blueforce Digital Solutions <info@blueforce.ch>\n"
 "Language: de_DE\n"
@@ -73,11 +73,23 @@ msgstr "Name des Kontoinhabers"
 msgid "Optional. Wird dem Kunden zur Kontrolle angezeigt (z. B. Firmen- oder Personenname)."
 msgstr "Optional. Wird dem Kunden zur Kontrolle angezeigt (z. B. Firmen- oder Personenname)."
 
-msgid "TWINT-QR-Bild (URL)"
-msgstr "TWINT-QR-Bild (URL)"
+msgid "TWINT-QR-Bild"
+msgstr "TWINT-QR-Bild"
 
-msgid "Optional, nur bei «Kunde sendet». Lade in der TWINT-App unter «Geld empfangen» deinen QR-Code, speichere ihn als Bild in der Mediathek und trage hier die Bild-URL ein. Der Kunde kann ihn dann direkt scannen."
-msgstr "Optional, nur bei „Kunde sendet“. Lade in der TWINT-App unter „Geld empfangen“ deinen QR-Code, speichere ihn als Bild in der Mediathek und trage hier die Bild-URL ein. Der Kunde kann ihn dann direkt scannen."
+msgid "Optional, nur bei «Kunde sendet». Lade in der TWINT-App unter «Geld empfangen» deinen QR-Code, speichere ihn als Bild und wähle ihn hier aus der Mediathek. Der Kunde kann ihn dann direkt scannen."
+msgstr "Optional, nur bei „Kunde sendet“. Lade in der TWINT-App unter „Geld empfangen“ deinen QR-Code, speichere ihn als Bild und wähle ihn hier aus der Mediathek. Der Kunde kann ihn dann direkt scannen."
+
+msgid "Bild auswählen"
+msgstr "Bild auswählen"
+
+msgid "Entfernen"
+msgstr "Entfernen"
+
+msgid "TWINT-QR-Bild wählen"
+msgstr "TWINT-QR-Bild wählen"
+
+msgid "Dieses Bild verwenden"
+msgstr "Dieses Bild verwenden"
 
 msgid "Zusätzliche Hinweise"
 msgstr "Zusätzliche Hinweise"

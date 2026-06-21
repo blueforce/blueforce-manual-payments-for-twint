@@ -9,6 +9,16 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.1.1] – 2026-06-21
+
+### Hinzugefügt
+- **TWINT-Logo als Plugin-Icon** in der Update- und Plugin-Ansicht (PNG 128/256 + SVG),
+  da GitHub-Hosting kein Icon mitliefert.
+
+### Behoben
+- Englische Übersetzungen (`en_GB`/`en_US`) für die neuen Admin-Texte rund um die
+  QR-Bild-Auswahl ergänzt; `.pot` aktualisiert.
+
 ## [1.1.0] – 2026-06-21
 
 ### Hinzugefügt
