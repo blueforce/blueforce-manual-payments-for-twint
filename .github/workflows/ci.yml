@@ -43,19 +43,13 @@ jobs:
         with:
           php-version: '8.3'
           coverage: none
+          tools: composer
 
-      - name: PHPCS, WPCS und PHPCompatibilityWP installieren
-        run: |
-          composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
-          composer global require --no-interaction --no-progress \
-            "squizlabs/php_codesniffer:^3.9" \
-            "wp-coding-standards/wpcs:^3.1" \
-            "phpcompatibility/phpcompatibility-wp:^2.1" \
-            "dealerdirect/phpcodesniffer-composer-installer:^1.0"
-          echo "$(composer global config home)/vendor/bin" >> "$GITHUB_PATH"
+      - name: Dev-Abhängigkeiten installieren
+        run: composer install --no-interaction --no-progress
 
       - name: Coding Standards prüfen
-        run: phpcs -q
+        run: composer phpcs -- -q
 
   build:
     name: ZIP-Build

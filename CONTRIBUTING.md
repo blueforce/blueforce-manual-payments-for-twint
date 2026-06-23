@@ -53,4 +53,17 @@ Das Plugin folgt **[Semantic Versioning](https://semver.org/lang/de/)** im Forma
 - WordPress Coding Standards (Tabs, `esc_*`/`wp_kses_*` beim Ausgeben, Text-Domain `twint-for-woocommerce` bei allen Strings).
 - Keine externen Laufzeit-Abhängigkeiten ausser der eingebetteten Update-Bibliothek; kein Build-Step fürs Plugin selbst.
 
+## Lokale Qualitätsprüfung
+
+Die Coding Standards lassen sich vor dem Commit lokal prüfen (dieselbe Konfiguration wie in der CI, siehe `phpcs.xml.dist`). Die Tools sind reines Entwicklungs-Tooling und werden **nicht** mit dem Plugin ausgeliefert:
+
+```bash
+composer install      # einmalig: PHPCS, WPCS und PHPCompatibilityWP holen
+composer phpcs        # WordPress Coding Standards / PHP-Kompatibilität prüfen
+composer phpcbf       # automatisch behebbare Verstösse korrigieren
+composer lint         # reine PHP-Syntaxprüfung
+```
+
+Die GitHub-Action (`.github/workflows/ci.yml`) führt dieselben Checks plus den ZIP-Build-Test bei jedem Push/PR aus.
+
 Fragen? [info@blueforce.ch](mailto:info@blueforce.ch)

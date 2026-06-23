@@ -1,0 +1,29 @@
+{
+	"name": "blueforce/twint-for-woocommerce",
+	"description": "Entwicklungs-Tooling (Coding Standards / Kompatibilität) für das Plugin «TWINT for WooCommerce». Die Laufzeit des Plugins hat keine Composer-Abhängigkeiten.",
+	"license": "GPL-2.0-or-later",
+	"require": {
+		"php": ">=7.4"
+	},
+	"require-dev": {
+		"squizlabs/php_codesniffer": "^3.9",
+		"wp-coding-standards/wpcs": "^3.1",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
+	"scripts": {
+		"phpcs": "@php vendor/bin/phpcs",
+		"phpcbf": "@php vendor/bin/phpcbf",
+		"lint": "find . -name '*.php' -not -path './vendor/*' -not -path './includes/plugin-update-checker/*' -not -path './basic/*' -print0 | xargs -0 -n1 -P4 php -l"
+	},
+	"scripts-descriptions": {
+		"phpcs": "WordPress Coding Standards / PHPCompatibility prüfen.",
+		"phpcbf": "Automatisch behebbare Coding-Standard-Verstösse korrigieren.",
+		"lint": "PHP-Syntaxprüfung aller Plugin-Dateien."
+	}
+}

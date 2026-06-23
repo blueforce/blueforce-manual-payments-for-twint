@@ -6,3 +6,5 @@
 /basic         export-ignore
 /phpcs.xml.dist export-ignore
 /.github       export-ignore
+/composer.json export-ignore
+/composer.lock export-ignore
