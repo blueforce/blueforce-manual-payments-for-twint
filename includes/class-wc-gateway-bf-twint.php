@@ -577,6 +577,67 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 	}
 
 	/**
+	 * Detail-Text für die Plain-Text-Bestell-E-Mail (reiner Text, kein HTML).
+	 *
+	 * @param WC_Order $order Bestellung.
+	 * @return string
+	 */
+	private function details_text( $order ) {
+		$lines = array();
+
+		$mode         = $this->order_setting( $order, 'mode' );
+		$shop_phone   = $this->order_setting( $order, 'shop_phone' );
+		$account_name = $this->order_setting( $order, 'account_name' );
+		$instructions = $this->order_setting( $order, 'instructions' );
+
+		if ( 'request' === $mode ) {
+			$phone   = $order->get_meta( '_bf_twint_customer_phone' );
+			$lines[] = $phone
+				? sprintf(
+					/* translators: %s: customer TWINT phone number. */
+					__( 'Wir senden dir in Kürze eine TWINT-Zahlungsanforderung an %s. Bitte bestätige die Zahlung in deiner TWINT-App.', 'twint-for-woocommerce' ),
+					$phone
+				)
+				: __( 'Wir senden dir in Kürze eine TWINT-Zahlungsanforderung. Bitte bestätige die Zahlung in deiner TWINT-App.', 'twint-for-woocommerce' );
+		} else {
+			$total   = wp_strip_all_tags( $order->get_formatted_order_total() );
+			$lines[] = $shop_phone
+				? sprintf(
+					/* translators: 1: order total, 2: shop TWINT phone number. */
+					__( 'Bitte sende %1$s via TWINT an %2$s.', 'twint-for-woocommerce' ),
+					$total,
+					$shop_phone
+				)
+				: sprintf(
+					/* translators: %s: order total. */
+					__( 'Bitte sende %s via TWINT.', 'twint-for-woocommerce' ),
+					$total
+				);
+
+			if ( $account_name ) {
+				$lines[] = sprintf(
+					/* translators: %s: account holder name. */
+					__( 'Kontoinhaber: %s', 'twint-for-woocommerce' ),
+					$account_name
+				);
+			}
+
+			$lines[] = sprintf(
+				/* translators: %s: order number. */
+				__( 'Verwende deine Bestellnummer %s als Mitteilung.', 'twint-for-woocommerce' ),
+				'#' . $order->get_order_number()
+			);
+			// Der QR-Code wird in der Plain-Text-Mail bewusst weggelassen (nicht darstellbar).
+		}
+
+		if ( $instructions ) {
+			$lines[] = wp_strip_all_tags( $instructions );
+		}
+
+		return implode( "\n\n", $lines );
+	}
+
+	/**
 	 * Danke-Seite.
 	 *
 	 * @param int $order_id Bestell-ID.
@@ -622,6 +683,12 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		if ( ! $order->has_status( array( 'on-hold', 'pending' ) ) ) {
 			return;
 		}
+
+		if ( $plain_text ) {
+			echo esc_html( $this->details_text( $order ) ) . "\n\n";
+			return;
+		}
+
 		echo wp_kses_post( $this->details_html( $order ) );
 	}
 
