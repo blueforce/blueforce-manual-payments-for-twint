@@ -732,8 +732,10 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 			echo esc_html__( '3. Nach Versand: «Abgeschlossen».', 'twint-for-woocommerce' ) . '</p>';
 		}
 
-		// Ein-Klick-Bestätigung: Bestellung als bezahlt freigeben (nur solange offen).
-		if ( $order->has_status( array( 'on-hold', 'pending' ) ) ) {
+		// Ein-Klick-Bestätigung: Bestellung als bezahlt freigeben (nur solange offen
+		// und nur für Nutzer, die Bestellungen bearbeiten dürfen).
+		$can_mark_paid = current_user_can( 'edit_shop_orders' ) || current_user_can( 'edit_shop_order', $order->get_id() );
+		if ( $can_mark_paid && $order->has_status( array( 'on-hold', 'pending' ) ) ) {
 			echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" style="margin-top:10px">';
 			echo '<input type="hidden" name="action" value="bf_twint_mark_paid" />';
 			echo '<input type="hidden" name="order_id" value="' . esc_attr( $order->get_id() ) . '" />';
@@ -769,7 +771,16 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 			&& BF_TWINT_GATEWAY_ID === $order->get_payment_method()
 			&& $order->has_status( array( 'on-hold', 'pending' ) )
 		) {
-			$order->add_order_note( __( 'TWINT-Zahlung von Hand als erhalten bestätigt.', 'twint-for-woocommerce' ), false );
+			$user = wp_get_current_user();
+			$by   = ( $user && $user->exists() ) ? $user->display_name : __( 'unbekannt', 'twint-for-woocommerce' );
+			$order->add_order_note(
+				sprintf(
+					/* translators: %s: display name of the admin who confirmed the payment. */
+					__( 'TWINT-Zahlung von Hand als erhalten bestätigt (durch %s).', 'twint-for-woocommerce' ),
+					$by
+				),
+				false
+			);
 			$order->payment_complete();
 		}
 
