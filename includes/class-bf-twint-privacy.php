@@ -45,8 +45,13 @@ final class BF_TWINT_Privacy {
 	 * @return array
 	 */
 	public static function export_props( $props, $order ) {
-		unset( $order );
-		$props['bf_twint_customer_phone'] = __( 'TWINT-Handynummer (für Zahlungsanforderung)', 'twint-for-woocommerce' );
+		// Nur für TWINT-Bestellungen, bei denen tatsächlich eine Nummer vorliegt –
+		// sonst entstünden leere/irrelevante Felder im Datenexport.
+		if ( BF_TWINT_GATEWAY_ID === $order->get_payment_method()
+			&& '' !== (string) $order->get_meta( self::META_KEY )
+		) {
+			$props['bf_twint_customer_phone'] = __( 'TWINT-Handynummer (für Zahlungsanforderung)', 'twint-for-woocommerce' );
+		}
 		return $props;
 	}
 
