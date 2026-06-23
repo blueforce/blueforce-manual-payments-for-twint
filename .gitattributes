@@ -4,3 +4,5 @@
 /build.sh      export-ignore
 /docs          export-ignore
 /basic         export-ignore
+/phpcs.xml.dist export-ignore
+/.github       export-ignore

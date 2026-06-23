@@ -71,7 +71,7 @@ Obwohl das Plugin nicht im wordpress.org-Verzeichnis liegt, erhältst du Updates
 - Mit **«Jetzt aktualisieren»** wird die neue Version mit einem Klick installiert.
 - Optional lassen sich unter **Plugins** auch **automatische Updates aktivieren**.
 
-Technisch übernimmt das der eingebettete [Plugin Update Checker](https://github.com/YahnisElsts/plugin-update-checker), der die GitHub-Releases dieses Repos prüft. Es werden dabei keine personenbezogenen Daten an Dritte übermittelt.
+Technisch übernimmt das der eingebettete [Plugin Update Checker](https://github.com/YahnisElsts/plugin-update-checker), der die GitHub-Releases dieses Repos prüft. Dazu ruft deine WordPress-Installation periodisch die **öffentliche GitHub-Releases-API** auf (`api.github.com`) – wie bei jeder Update-Prüfung wird dabei die Server-Anfrage an GitHub übermittelt. Es werden **keine personenbezogenen Kunden- oder Bestelldaten** gesendet. Wer keinen externen Update-Request möchte, kann den Update-Checker per Filter deaktivieren oder das Plugin manuell aktualisieren.
 
 ## Konfiguration
 
