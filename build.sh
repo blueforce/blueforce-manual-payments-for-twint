@@ -53,6 +53,7 @@ echo "Pflicht-Bestandteile:"
 require_in_zip "${SLUG}/${SLUG}.php"                         "Hauptdatei"
 require_in_zip "${SLUG}/readme.txt"                          "readme.txt (WordPress.org)"
 require_in_zip "${SLUG}/includes/class-bf-twint-gateway.php" "Gateway-Klasse"
+require_in_zip "${SLUG}/uninstall.php"                       "uninstall.php (Deinstallations-Cleanup)"
 require_in_zip "${SLUG}/composer.json"                       "composer.json (Dev-Tooling, von WordPress.org gewünscht)"
 
 echo "Nicht ins ZIP (GitHub-Doku mit Repo-internen Links):"

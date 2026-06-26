@@ -30,6 +30,11 @@ _Noch keine unveröffentlichten Änderungen._
   erlaubte Werte normalisiert.
 - Block-Checkout-Daten werden vor der Übergabe ans Frontend defensiv bereinigt.
 
+### Aufräumen
+- `uninstall.php` ergänzt: Beim Löschen des Plugins werden die gespeicherten
+  Gateway-Einstellungen (`woocommerce_bf_twint_settings`) entfernt. Bestelldaten
+  (Order-Meta `_bf_twint_*`) bleiben erhalten.
+
 ## [1.4.2] – 2026-06-26
 
 ### Geändert
