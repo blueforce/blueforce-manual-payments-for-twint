@@ -72,7 +72,7 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 
 		$this->title        = $this->get_option( 'title', __( 'TWINT', 'blueforce-manual-payments-for-twint' ) );
 		$this->description  = $this->get_option( 'description' );
-		$this->mode         = $this->get_option( 'mode', 'send' );
+		$this->mode         = $this->normalize_mode( $this->get_option( 'mode', 'send' ) );
 		$this->phone        = $this->get_option( 'phone' );
 		$this->account_name = $this->get_option( 'account_name' );
 		$this->qr_image     = $this->get_option( 'qr_image' );
@@ -228,6 +228,27 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 				'default'     => __( 'Wir bearbeiten deine Bestellung, sobald die Zahlung eingegangen ist.', 'blueforce-manual-payments-for-twint' ),
 			),
 		);
+	}
+
+	/**
+	 * Normalisiert den gewählten Ablauf auf einen bekannten Wert.
+	 *
+	 * @param string $mode Rohwert.
+	 * @return string
+	 */
+	private function normalize_mode( $mode ) {
+		return in_array( $mode, array( 'send', 'request' ), true ) ? $mode : 'send';
+	}
+
+	/**
+	 * Validiert den Ablauf beim Speichern der Gateway-Einstellungen.
+	 *
+	 * @param string $key   Feld-Key.
+	 * @param string $value Rohwert.
+	 * @return string
+	 */
+	public function validate_mode_field( $key, $value ) {
+		return $this->normalize_mode( wc_clean( wp_unslash( $value ) ) );
 	}
 
 	/**

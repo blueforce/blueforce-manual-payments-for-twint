@@ -19,7 +19,7 @@
 	"scripts": {
 		"phpcs": "@php vendor/bin/phpcs",
 		"phpcbf": "@php vendor/bin/phpcbf",
-		"lint": "find . -name '*.php' -not -path './vendor/*' -not -path './basic/*' -print0 | xargs -0 -n1 -P4 php -l"
+		"lint": "find . -name '*.php' -not -path './vendor/*' -not -path './node_modules/*' -not -path './basic/*' -not -path './_marketing/*' -not -path './testinstanz/*' -not -path './wordpress.org/*' -print0 | xargs -0 -n1 -P4 php -l"
 	},
 	"scripts-descriptions": {
 		"phpcs": "WordPress Coding Standards / PHPCompatibility prüfen.",

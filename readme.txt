@@ -65,6 +65,8 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 * Wording: clarified that the plugin itself needs no TWINT API key or acquiring contract, while shop operators remain responsible for their own TWINT, bank and merchant terms for commercial use.
 * Removed "TWINT logo" phrasing from older changelog notes to avoid trademark ambiguity; the plugin icon is a custom Blueforce design.
 * Updated the translation template and metadata to the current version.
+* Hardening: the selected workflow (send/request) is normalised to a known value on load and save; block checkout data is sanitised before it is passed to the front end.
+* Packaging/CI: the build script now verifies that development, test, repo and WordPress.org asset folders never end up in the distributed plugin ZIP; PHP lint is limited to the actual plugin files.
 
 = 1.4.2 =
 * Coding standards: renamed the gateway class to use the plugin prefix (BF_TWINT_Gateway).

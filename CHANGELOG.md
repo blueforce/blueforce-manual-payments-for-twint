@@ -18,6 +18,17 @@ _Noch keine unveröffentlichten Änderungen._
 - «TWINT logo» aus älteren Changelog-Notizen entfernt (Trademark-Klarheit); das
   Plugin-Icon ist ein eigenes Blueforce-Design.
 - Übersetzungsvorlage und -Metadaten auf die aktuelle Version aktualisiert.
+- Release-/Packaging-Prüfung geschärft: das Build-Skript prüft nun explizit,
+  dass Entwicklungs-, Test-, Repo- und WordPress.org-Asset-Ordner nicht ins
+  distributierte Plugin-ZIP gelangen.
+- PHP-Lint in Composer und CI auf die tatsächlichen Plugin-Dateien begrenzt
+  (lokale Testinstanz, Basismaterial, Marketing und WordPress.org-Assets sind
+  ausgeschlossen).
+
+### Sicherheit
+- Gateway-Ablauf (`send`/`request`) wird beim Laden und Speichern defensiv auf
+  erlaubte Werte normalisiert.
+- Block-Checkout-Daten werden vor der Übergabe ans Frontend defensiv bereinigt.
 
 ## [1.4.2] – 2026-06-26
 

@@ -61,7 +61,7 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 		$available = 'CHF' === get_woocommerce_currency();
 
 		if ( $available ) {
-			$mode = isset( $this->settings['mode'] ) ? $this->settings['mode'] : 'send';
+			$mode = isset( $this->settings['mode'] ) && in_array( $this->settings['mode'], array( 'send', 'request' ), true ) ? $this->settings['mode'] : 'send';
 			if ( 'send' === $mode ) {
 				$phone = isset( $this->settings['phone'] ) ? trim( (string) $this->settings['phone'] ) : '';
 				$qr    = isset( $this->settings['qr_image'] ) ? trim( (string) $this->settings['qr_image'] ) : '';
@@ -117,11 +117,13 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 	 * @return array
 	 */
 	public function get_payment_method_data() {
+		$mode = isset( $this->settings['mode'] ) && in_array( $this->settings['mode'], array( 'send', 'request' ), true ) ? $this->settings['mode'] : 'send';
+
 		return array(
-			'title'       => isset( $this->settings['title'] ) ? $this->settings['title'] : __( 'TWINT', 'blueforce-manual-payments-for-twint' ),
-			'description' => isset( $this->settings['description'] ) ? $this->settings['description'] : '',
-			'mode'        => isset( $this->settings['mode'] ) ? $this->settings['mode'] : 'send',
-			'phone'       => isset( $this->settings['phone'] ) ? $this->settings['phone'] : '',
+			'title'       => isset( $this->settings['title'] ) ? wp_strip_all_tags( $this->settings['title'] ) : __( 'TWINT', 'blueforce-manual-payments-for-twint' ),
+			'description' => isset( $this->settings['description'] ) ? wp_strip_all_tags( $this->settings['description'] ) : '',
+			'mode'        => $mode,
+			'phone'       => isset( $this->settings['phone'] ) ? sanitize_text_field( $this->settings['phone'] ) : '',
 			'supports'    => array( 'products' ),
 		);
 	}
@@ -141,9 +143,9 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 		}
 
 		$gateway = $this->get_gateway();
-		$data    = $context->payment_data;
+		$data    = is_array( $context->payment_data ) ? $context->payment_data : array();
 		$phone   = isset( $data['bf_twint_phone'] ) ? sanitize_text_field( wp_unslash( $data['bf_twint_phone'] ) ) : '';
-		$mode    = isset( $this->settings['mode'] ) ? $this->settings['mode'] : 'send';
+		$mode    = isset( $this->settings['mode'] ) && in_array( $this->settings['mode'], array( 'send', 'request' ), true ) ? $this->settings['mode'] : 'send';
 
 		if ( 'request' === $mode ) {
 			if ( $gateway ) {

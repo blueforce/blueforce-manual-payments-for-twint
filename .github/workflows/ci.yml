@@ -30,6 +30,10 @@ jobs:
           find . -name '*.php' \
             -not -path './vendor/*' \
             -not -path './node_modules/*' \
+            -not -path './basic/*' \
+            -not -path './_marketing/*' \
+            -not -path './testinstanz/*' \
+            -not -path './wordpress.org/*' \
             -print0 | xargs -0 -n1 -P4 php -l
 
   coding-standards:
