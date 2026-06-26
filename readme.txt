@@ -8,13 +8,13 @@ Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Manual TWINT payment method for WooCommerce – no TWINT API and no acquiring contract needed. Incoming payments are confirmed by hand.
+Manual TWINT payment method for WooCommerce – the plugin needs no TWINT API or acquiring contract. Payments are confirmed by hand.
 
 == Description ==
 
-This plugin adds a TWINT payment method to WooCommerce that works without the TWINT API, without an acquiring contract and without a payment service provider. It uses the manual TWINT process (send or request money by mobile number) and is therefore suited to small shops, clubs and sole traders.
+This plugin adds a TWINT payment method to WooCommerce. The **plugin itself** needs no TWINT API, no acquiring contract and no payment service provider – it uses the manual TWINT process (send or request money by mobile number) and is therefore suited to small shops, clubs and sole traders. You remain responsible for complying with your own TWINT, bank and business terms for commercial use.
 
-TWINT does not offer its payment API publicly. An automated integration is only possible through a TWINT acquiring contract or a payment service provider. This plugin deliberately takes the manual route, which everyone can use right away.
+TWINT does not offer its payment API publicly. An automated integration is only possible through a TWINT acquiring contract or a payment service provider. This plugin deliberately takes the manual route, so you can start without a TWINT integration contract while still meeting your own TWINT and bank conditions.
 
 = Two workflows =
 
@@ -28,7 +28,7 @@ In both cases the order is set to "On hold" and the incoming payment is confirme
 * Classic and block checkout
 * Optional TWINT QR code on the thank-you page and in the email
 * HPOS compatible
-* Fully translatable (de, en, fr_CH, it_CH)
+* Translation-ready; German, English, French (CH) and Italian (CH) translations included
 * No external dependencies, no tracking, no phone-home calls
 
 == Installation ==

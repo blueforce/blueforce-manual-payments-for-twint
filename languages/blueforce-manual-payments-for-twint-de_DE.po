@@ -25,8 +25,8 @@ msgstr "Einstellungen"
 msgid "TWINT"
 msgstr "TWINT"
 
-msgid "TWINT als Offline-Zahlung – ohne API, ohne Vertrag mit TWINT. Ablauf «Kunde sendet» (deine TWINT-Nummer/QR wird angezeigt) oder «Ich fordere an» (Kunde gibt seine TWINT-Nummer an). Der Zahlungseingang wird von Hand bestätigt."
-msgstr "TWINT als Offline-Zahlung – ohne API, ohne Vertrag mit TWINT. Ablauf „Kunde sendet“ (deine TWINT-Nummer/QR wird angezeigt) oder „Ich fordere an“ (Kunde gibt seine TWINT-Nummer an). Der Zahlungseingang wird von Hand bestätigt."
+msgid "TWINT als Offline-Zahlung – ohne TWINT-API und ohne Acquiring-Vertrag. Ablauf «Kunde sendet» (deine TWINT-Nummer/QR wird angezeigt) oder «Ich fordere an» (Kunde gibt seine TWINT-Nummer an). Der Zahlungseingang wird von Hand bestätigt."
+msgstr "TWINT als Offline-Zahlung – ohne TWINT-API und ohne Acquiring-Vertrag. Ablauf „Kunde sendet“ (deine TWINT-Nummer/QR wird angezeigt) oder „Ich fordere an“ (Kunde gibt seine TWINT-Nummer an). Der Zahlungseingang wird von Hand bestätigt."
 
 #, php-format
 msgid "<strong>Blueforce Manual Payments for TWINT:</strong> Der Ablauf «Kunde sendet» ist aktiv, aber es ist weder eine TWINT-Handynummer noch ein QR-Code hinterlegt. Die Bezahlmethode wird im Checkout ausgeblendet, bis du die <a href=\"%s\">Angaben ergänzt</a>."

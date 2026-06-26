@@ -18,7 +18,7 @@ msgstr ""
 msgid "TWINT"
 msgstr ""
 
-msgid "TWINT als Offline-Zahlung – ohne API, ohne Vertrag mit TWINT. Ablauf «Kunde sendet» (deine TWINT-Nummer/QR wird angezeigt) oder «Ich fordere an» (Kunde gibt seine TWINT-Nummer an). Der Zahlungseingang wird von Hand bestätigt."
+msgid "TWINT als Offline-Zahlung – ohne TWINT-API und ohne Acquiring-Vertrag. Ablauf «Kunde sendet» (deine TWINT-Nummer/QR wird angezeigt) oder «Ich fordere an» (Kunde gibt seine TWINT-Nummer an). Der Zahlungseingang wird von Hand bestätigt."
 msgstr ""
 
 #, php-format
