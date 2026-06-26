@@ -2,104 +2,104 @@
 Contributors: worshipper
 Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
-Tested up to: 6.8
+Tested up to: 7.0
 Requires PHP: 7.4
 Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Manuelle TWINT-Bezahlmethode für WooCommerce – ohne API und ohne Vertrag mit TWINT. Der Zahlungseingang wird von Hand bestätigt.
+Manual TWINT payment method for WooCommerce – no API and no contract with TWINT required. Incoming payments are confirmed by hand.
 
 == Description ==
 
-Dieses Plugin fügt WooCommerce eine TWINT-Bezahlmethode hinzu, die ohne TWINT-API, ohne Acquiring-Vertrag und ohne Payment Service Provider funktioniert. Es nutzt das manuelle TWINT-Verfahren (Geld senden / anfordern per Handynummer) und eignet sich damit für kleine Shops, Vereine und Einzelunternehmen.
+This plugin adds a TWINT payment method to WooCommerce that works without the TWINT API, without an acquiring contract and without a payment service provider. It uses the manual TWINT process (send or request money by mobile number) and is therefore suited to small shops, clubs and sole traders.
 
-TWINT stellt seine Zahlungs-API nicht öffentlich zur Verfügung. Eine automatische Integration ist nur über einen TWINT-Acquiring-Vertrag oder einen Payment Service Provider möglich. Dieses Plugin geht bewusst den manuellen Weg, der für alle sofort nutzbar ist.
+TWINT does not offer its payment API publicly. An automated integration is only possible through a TWINT acquiring contract or a payment service provider. This plugin deliberately takes the manual route, which everyone can use right away.
 
-= Zwei Abläufe =
+= Two workflows =
 
-* **Kunde sendet:** Dem Kunden werden deine TWINT-Handynummer und optional dein QR-Code angezeigt. Er sendet den Betrag mit der Bestellnummer als Mitteilung.
-* **Ich fordere an:** Der Kunde gibt seine TWINT-Handynummer an; du forderst den Betrag in der TWINT-App an.
+* **Customer sends:** The customer is shown your TWINT mobile number and, optionally, your QR code. They send the amount using the order number as the message.
+* **I request:** The customer enters their TWINT mobile number; you request the amount in the TWINT app.
 
-In beiden Fällen wird die Bestellung auf «In Wartestellung» gesetzt und der Zahlungseingang von Hand bestätigt.
+In both cases the order is set to "On hold" and the incoming payment is confirmed by hand.
 
 = Features =
 
-* Klassischer und Block-Checkout
-* Optionaler TWINT-QR-Code auf Danke-Seite und in der E-Mail
-* HPOS-kompatibel
-* Vollständig übersetzbar (de, en, fr_CH, it_CH)
-* Keine externen Abhängigkeiten, kein Tracking, keine «Phone-Home»-Aufrufe
+* Classic and block checkout
+* Optional TWINT QR code on the thank-you page and in the email
+* HPOS compatible
+* Fully translatable (de, en, fr_CH, it_CH)
+* No external dependencies, no tracking, no phone-home calls
 
 == Installation ==
 
-1. Plugin hochladen und aktivieren.
-2. WooCommerce → Einstellungen → Zahlungen → TWINT öffnen.
-3. Aktivieren, Ablauf wählen und konfigurieren.
+1. Upload and activate the plugin.
+2. Open WooCommerce → Settings → Payments → TWINT.
+3. Enable it, choose a workflow and configure it.
 
 == Frequently Asked Questions ==
 
-= Brauche ich einen Vertrag mit TWINT? =
+= Do I need a contract with TWINT? =
 
-Nein. Dieses Plugin nutzt das manuelle TWINT-Verfahren und benötigt weder einen Acquiring-Vertrag noch einen Payment Service Provider.
+No. This plugin uses the manual TWINT process and requires neither an acquiring contract nor a payment service provider.
 
-= Wird die Zahlung automatisch geprüft? =
+= Is the payment verified automatically? =
 
-Nein. Der Zahlungseingang wird in der TWINT-App geprüft und die Bestellung von Hand auf «In Bearbeitung» gesetzt.
+No. The incoming payment is checked in the TWINT app and the order is set to "Processing" by hand.
 
-= Ist das Plugin offiziell von TWINT? =
+= Is this plugin official TWINT software? =
 
-Nein. Es ist ein unabhängiges Community-Projekt von Blueforce Digital Solutions und steht in keiner Verbindung zur TWINT AG. «TWINT» ist eine eingetragene Marke der TWINT AG und wird hier nur zur Beschreibung der Kompatibilität verwendet.
+No. It is an independent community project by Blueforce Digital Solutions and is not affiliated with TWINT AG. "TWINT" is a registered trademark of TWINT AG and is used here only to describe compatibility.
 
-= Welche personenbezogenen Daten werden gespeichert? =
+= What personal data is stored? =
 
-Nur im Ablauf «Ich fordere an»: die vom Kunden im Checkout angegebene TWINT-Handynummer (als Bestell-Metadatum, ausschliesslich zur Zahlungsanforderung). Sie wird in den WordPress-Datenexport und in die Datenlöschung einbezogen; ein Textbaustein für die Datenschutzerklärung steht unter Einstellungen → Datenschutz bereit. Im Ablauf «Kunde sendet» werden keine personenbezogenen Zahlungsdaten erfasst.
+Only in the "I request" workflow: the TWINT mobile number the customer enters at checkout (as order metadata, used solely to request the payment). It is included in the WordPress data export and erasure tools; a suggested privacy policy snippet is available under Settings → Privacy. In the "Customer sends" workflow, no personal payment data is collected.
 
 == Privacy ==
 
-Im Ablauf «Ich fordere an» speichert das Plugin die vom Kunden angegebene TWINT-Handynummer als Bestell-Metadatum (`_bf_twint_customer_phone`), um die Zahlung über die TWINT-App anzufordern. Diese Nummer wird vom WooCommerce-/WordPress-Datenexport und der Datenlöschung berücksichtigt. Es werden keine Daten an Dritte übermittelt und keine externen Dienste kontaktiert; der Zahlungsabgleich erfolgt manuell in der TWINT-App.
+In the "I request" workflow the plugin stores the TWINT mobile number provided by the customer as order metadata (`_bf_twint_customer_phone`) in order to request the payment via the TWINT app. This number is included in the WooCommerce/WordPress data export and erasure tools. No data is sent to third parties and no external services are contacted; payment reconciliation is done manually in the TWINT app.
 
 == Changelog ==
 
 = 1.4.0 =
-* Veröffentlichung im WordPress-Plugin-Verzeichnis; Plugin umbenannt in «Blueforce Manual Payments for TWINT».
-* Updates laufen neu direkt über WordPress.org; der bisherige GitHub-Update-Mechanismus wurde entfernt (keine externen Aufrufe mehr).
-* Keine funktionalen Änderungen an Checkout, Abläufen oder Datenschutz.
+* Published in the WordPress plugin directory; plugin renamed to "Blueforce Manual Payments for TWINT".
+* Updates now run directly through WordPress.org; the previous GitHub update mechanism has been removed (no more external calls).
+* No functional changes to checkout, workflows or privacy.
 
 = 1.3.0 =
-* Order-Snapshot: Ablauf, Nummer, Kontoinhaber, QR-Bild und Hinweise werden pro Bestellung eingefroren – Danke-Seite, E-Mail und Backend bleiben korrekt, auch wenn die Einstellungen später geändert werden.
-* Block-Checkout: TWINT wird bei Fremdwährung jetzt korrekt ausgeblendet (wie im klassischen Checkout).
-* Datenschutz: Kundennummer wird in Datenexport/-löschung einbezogen; Textbaustein für die Datenschutzerklärung ergänzt.
-* Admin-Hinweis bei unvollständiger Konfiguration; echte Plain-Text-E-Mail; zentrale Telefon-Validierung/-Normalisierung.
-* Accessibility verbessert; Inline-Styles in CSS ausgelagert; «Zahlung erhalten»-Button nur für berechtigte Rollen, mit Protokoll.
-* CI: PHP-Lint, WordPress Coding Standards und ZIP-Build-Test.
+* Order snapshot: workflow, number, account holder, QR image and notes are frozen per order – thank-you page, email and admin stay correct even if the settings are changed later.
+* Block checkout: TWINT is now correctly hidden for foreign currencies (as in the classic checkout).
+* Privacy: customer number is included in data export/erasure; privacy policy snippet added.
+* Admin notice for incomplete configuration; real plain-text email; centralised phone validation/normalisation.
+* Accessibility improvements; inline styles moved to CSS; "Mark as paid" button restricted to authorised roles, with a logged note.
+* CI: PHP lint, WordPress Coding Standards and ZIP build test.
 
 = 1.2.0 =
-* «Zahlung erhalten»-Button in der Bestellansicht: TWINT-Bestellung per Klick als bezahlt freigeben.
-* Französische (fr_CH) und italienische (it_CH) Übersetzung – inkl. Block-Checkout.
-* Kopier-Button für die Bestellnummer auf der Danke-Seite (weniger Tippfehler bei der TWINT-Mitteilung).
-* TWINT wird nur noch bei Shop-Währung CHF angezeigt (Filter «bf_twint_is_available» zum Übersteuern).
+* "Mark as paid" button in the order screen: release a TWINT order as paid with one click.
+* French (fr_CH) and Italian (it_CH) translations – including block checkout.
+* Copy button for the order number on the thank-you page (fewer typos in the TWINT message).
+* TWINT is only shown when the shop currency is CHF (filter "bf_twint_is_available" to override).
 
 = 1.1.2 =
-* Sicherheit: zusätzlicher Berechtigungs-Check (manage_woocommerce) beim Laden der Admin-Skripte.
+* Security: additional capability check (manage_woocommerce) when loading the admin scripts.
 
 = 1.1.1 =
-* TWINT-Logo als Plugin-Icon in der Plugin-Ansicht.
-* Englische Übersetzungen (en_GB/en_US) für die neuen Admin-Texte (QR-Bild-Auswahl) ergänzt.
+* TWINT logo as the plugin icon in the plugin list.
+* English translations (en_GB/en_US) added for the new admin texts (QR image selection).
 
 = 1.1.0 =
-* TWINT-QR-Bild: Auswahl direkt aus der Mediathek per Button (statt URL eintippen), mit Vorschau.
+* TWINT QR image: select directly from the media library via a button (instead of typing a URL), with preview.
 
 = 1.0.2 =
-* Block-Checkout: TWINT-Logo neben dem Methodennamen und Pflichtfeld-Markierung («*») bei der Handynummer.
+* Block checkout: TWINT logo next to the method name and required-field marker ("*") on the mobile number.
 
 = 1.0.1 =
-* Interne Verbesserungen.
+* Internal improvements.
 
 = 1.0.0 =
-* Erste Veröffentlichung.
+* Initial release.
 
 == Upgrade Notice ==
 
 = 1.4.0 =
-Veröffentlichung im WordPress-Plugin-Verzeichnis. Updates laufen neu über WordPress.org; keine externen Aufrufe mehr. Keine funktionalen Änderungen.
+Published in the WordPress plugin directory. Updates now run through WordPress.org; no more external calls. No functional changes.

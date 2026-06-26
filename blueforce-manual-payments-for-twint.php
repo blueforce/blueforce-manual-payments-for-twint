@@ -34,16 +34,6 @@ define( 'BF_TWINT_URL', plugin_dir_url( __FILE__ ) );
 define( 'BF_TWINT_GATEWAY_ID', 'bf_twint' );
 
 /**
- * Übersetzungen laden.
- */
-add_action(
-	'init',
-	static function () {
-		load_plugin_textdomain( 'blueforce-manual-payments-for-twint', false, dirname( plugin_basename( BF_TWINT_FILE ) ) . '/languages' );
-	}
-);
-
-/**
  * Admin-Hinweis, falls WooCommerce fehlt.
  */
 add_action(

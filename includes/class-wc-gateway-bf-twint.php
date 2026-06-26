@@ -379,7 +379,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 	 */
 	public function validate_fields() {
 		if ( 'request' === $this->mode ) {
-			$phone = isset( $_POST['bf_twint_phone'] ) ? trim( wc_clean( wp_unslash( $_POST['bf_twint_phone'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the checkout nonce.
+			$phone = isset( $_POST['bf_twint_phone'] ) ? sanitize_text_field( wp_unslash( $_POST['bf_twint_phone'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the checkout nonce.
 			if ( ! $this->is_valid_phone( $phone ) ) {
 				wc_add_notice( __( 'Bitte gib eine gültige TWINT-Handynummer an, damit wir die Zahlung anfordern können.', 'blueforce-manual-payments-for-twint' ), 'error' );
 				return false;

@@ -17,8 +17,14 @@ node_modules/
 # Logs
 *.log
 
+# Lokale WordPress-Testinstanz (MAMP) – niemals ins Plugin-Repo
+/testinstanz/
+
 # Ausgangsgrundlage (lokal behalten, nicht ins öffentliche Repo)
 /basic/
 
 # Marketing-/Blog-Material (gehört nicht ins öffentliche Plugin-Repo)
 /_marketing/
+
+# WordPress.org-Verzeichnis-Assets (Banner/Icon/Screenshots-Werkstatt) – nicht ins Plugin-ZIP/Repo
+/wordpress.org/
