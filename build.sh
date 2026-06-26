@@ -42,5 +42,5 @@ require_in_zip() {
 echo "Pflicht-Bestandteile:"
 require_in_zip "${SLUG}/${SLUG}.php"                           "Hauptdatei"
 require_in_zip "${SLUG}/readme.txt"                            "readme.txt (WordPress.org)"
-require_in_zip "${SLUG}/includes/class-wc-gateway-bf-twint.php" "Gateway-Klasse"
+require_in_zip "${SLUG}/includes/class-bf-twint-gateway.php" "Gateway-Klasse"
 echo "ZIP ist vollständig."
