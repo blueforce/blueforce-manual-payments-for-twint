@@ -1,6 +1,6 @@
 # Blueforce Manual Payments for TWINT
 
-[![Version](https://img.shields.io/github/v/release/blueforce/twint-for-woocommerce?label=Version)](https://github.com/blueforce/twint-for-woocommerce/releases)
+[![Version](https://img.shields.io/github/v/release/blueforce/blueforce-manual-payments-for-twint?label=Version)](https://github.com/blueforce/blueforce-manual-payments-for-twint/releases)
 [![License: GPL v2+](https://img.shields.io/badge/License-GPL%20v2%2B-blue.svg)](LICENSE)
 ![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b.svg)
 ![WooCommerce](https://img.shields.io/badge/WooCommerce-7.0%2B-96588a.svg)
