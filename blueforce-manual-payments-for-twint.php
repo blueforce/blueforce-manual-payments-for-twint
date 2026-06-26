@@ -3,7 +3,7 @@
  * Plugin Name:       Blueforce Manual Payments for TWINT
  * Plugin URI:        https://github.com/blueforce/blueforce-manual-payments-for-twint
  * Description:       Manuelle TWINT-Bezahlmethode für WooCommerce – ohne API, ohne Vertrag mit TWINT. Zwei Abläufe: «Kunde sendet» (deine TWINT-Nummer/QR wird angezeigt) oder «Ich fordere an» (Kunde gibt seine TWINT-Nummer an). Der Zahlungseingang wird von Hand bestätigt.
- * Version:           1.4.1
+ * Version:           1.4.2
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Blueforce Digital Solutions
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BF_TWINT_VERSION', '1.4.1' );
+define( 'BF_TWINT_VERSION', '1.4.2' );
 define( 'BF_TWINT_FILE', __FILE__ );
 define( 'BF_TWINT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'BF_TWINT_URL', plugin_dir_url( __FILE__ ) );
