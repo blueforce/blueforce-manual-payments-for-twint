@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * In beiden Fällen wird die Bestellung auf «In Wartestellung» gesetzt und der
  * Zahlungseingang von Hand bestätigt – es findet kein API-Call statt.
  */
-class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
+class BF_TWINT_Gateway extends WC_Payment_Gateway {
 
 	/**
 	 * Gewählter Ablauf: «send» oder «request».

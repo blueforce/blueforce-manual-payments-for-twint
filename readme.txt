@@ -62,7 +62,8 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 == Changelog ==
 
 = 1.4.1 =
-* Security/hardening: escape settings field output late with wp_kses_post() (tooltip and description HTML in the QR image field); removed the corresponding phpcs:ignore annotations. No functional changes.
+* Security/hardening: escape settings field output late with wp_kses_post() (tooltip and description HTML in the QR image field); removed the corresponding phpcs:ignore annotations.
+* Coding standards: renamed the gateway class to use the plugin prefix (BF_TWINT_Gateway) to resolve the Plugin Check naming warning. No functional changes.
 
 = 1.4.0 =
 * Published in the WordPress plugin directory; plugin renamed to "Blueforce Manual Payments for TWINT".

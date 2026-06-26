@@ -77,7 +77,7 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 	/**
 	 * Holt die registrierte Gateway-Instanz (oder null, falls nicht verfügbar).
 	 *
-	 * @return WC_Gateway_BF_TWINT|null
+	 * @return BF_TWINT_Gateway|null
 	 */
 	private function get_gateway() {
 		if ( ! function_exists( 'WC' ) || ! WC()->payment_gateways() ) {
