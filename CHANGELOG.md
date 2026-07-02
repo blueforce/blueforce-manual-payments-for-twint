@@ -34,6 +34,9 @@ _Noch keine unveröffentlichten Änderungen._
 - `uninstall.php` ergänzt: Beim Löschen des Plugins werden die gespeicherten
   Gateway-Einstellungen (`woocommerce_bf_twint_settings`) entfernt. Bestelldaten
   (Order-Meta `_bf_twint_*`) bleiben erhalten.
+- Konsistenz: Lizenz-Schreibweise in Header und readme angeglichen («GPLv2 or
+  later»); restliche interne Doc-Kommentare vom alten Namen «TWINT for
+  WooCommerce» auf den aktuellen Plugin-Namen umgestellt.
 
 ## [1.4.2] – 2026-06-26
 

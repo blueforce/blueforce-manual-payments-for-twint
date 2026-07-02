@@ -2,7 +2,7 @@
 /**
  * Integration in den Block-Checkout (WooCommerce Cart/Checkout-Blocks, Store-API).
  *
- * @package TWINT_For_WooCommerce
+ * @package Blueforce_Manual_Payments_For_TWINT
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

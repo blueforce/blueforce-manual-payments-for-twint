@@ -2,7 +2,7 @@
 /**
  * TWINT-Gateway (klassischer Checkout + gemeinsame Logik für Block-Checkout).
  *
- * @package TWINT_For_WooCommerce
+ * @package Blueforce_Manual_Payments_For_TWINT
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

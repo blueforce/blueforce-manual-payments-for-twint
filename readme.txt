@@ -68,6 +68,7 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 * Hardening: the selected workflow (send/request) is normalised to a known value on load and save; block checkout data is sanitised before it is passed to the front end.
 * Packaging/CI: the build script now verifies that development, test, repo and WordPress.org asset folders never end up in the distributed plugin ZIP; PHP lint is limited to the actual plugin files.
 * Cleanup: added uninstall.php so deleting the plugin removes its stored gateway settings (order data is kept).
+* Consistency: aligned the license notation between the plugin header and readme, and updated remaining internal doc comments to the current plugin name.
 
 = 1.4.2 =
 * Coding standards: renamed the gateway class to use the plugin prefix (BF_TWINT_Gateway).

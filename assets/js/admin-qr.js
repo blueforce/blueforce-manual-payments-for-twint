@@ -1,10 +1,10 @@
 /**
- * TWINT for WooCommerce — Media-Uploader für das QR-Bild-Feld (Admin).
+ * Blueforce Manual Payments for TWINT — Media-Uploader für das QR-Bild-Feld (Admin).
  *
  * Öffnet die WordPress-Mediathek über den Button neben dem Feld «TWINT-QR-Bild»
  * und schreibt die gewählte Bild-URL ins Feld (inkl. Vorschau).
  *
- * @package TWINT_For_WooCommerce
+ * @package Blueforce_Manual_Payments_For_TWINT
  */
 ( function ( $ ) {
 	'use strict';

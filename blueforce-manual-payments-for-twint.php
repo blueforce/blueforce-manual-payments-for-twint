@@ -11,7 +11,7 @@
  * Author URI:        https://blueforce.ch
  * Text Domain:       blueforce-manual-payments-for-twint
  * Domain Path:       /languages
- * License:           GPL-2.0-or-later
+ * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  *
  * WC requires at least: 7.0
@@ -21,7 +21,7 @@
  * Solutions und steht in keiner Verbindung zur TWINT AG. «TWINT» ist eine eingetragene
  * Marke der TWINT AG und wird hier nur zur Beschreibung der Kompatibilität verwendet.
  *
- * @package TWINT_For_WooCommerce
+ * @package Blueforce_Manual_Payments_For_TWINT
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

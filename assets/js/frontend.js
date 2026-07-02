@@ -1,11 +1,11 @@
 /**
- * TWINT for WooCommerce — Frontend-Helfer für die Danke-Seite.
+ * Blueforce Manual Payments for TWINT — Frontend-Helfer für die Danke-Seite.
  *
  * Kopiert die Bestellnummer (TWINT-Mitteilung) per Klick in die Zwischenablage.
  * Die Beschriftung («Kopieren» / «Kopiert!») kommt übersetzt aus den data-Attributen,
  * daher braucht dieses Script keine eigene Übersetzungsdatei.
  *
- * @package TWINT_For_WooCommerce
+ * @package Blueforce_Manual_Payments_For_TWINT
  */
 ( function () {
 	function flash( btn, text ) {

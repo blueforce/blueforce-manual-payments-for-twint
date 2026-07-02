@@ -4,7 +4,7 @@
  * TWINT-Handynummer des Kunden in die WooCommerce-/WordPress-Mechanik für
  * Datenexport, Löschung und Datenschutzerklärung ein.
  *
- * @package TWINT_For_WooCommerce
+ * @package Blueforce_Manual_Payments_For_TWINT
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

@@ -9,7 +9,7 @@
  * Bestelldaten (Order-Meta «_bf_twint_*») bleiben bewusst erhalten – sie
  * gehören zur Bestellhistorie des Shops und dürfen nicht mitgelöscht werden.
  *
- * @package TWINT_For_WooCommerce
+ * @package Blueforce_Manual_Payments_For_TWINT
  */
 
 // Nur ausführen, wenn WordPress die Deinstallation auslöst.

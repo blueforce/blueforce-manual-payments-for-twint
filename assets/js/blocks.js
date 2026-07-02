@@ -1,10 +1,10 @@
 /**
- * TWINT for WooCommerce — Block-Checkout-Integration (ohne Build-Step, via globale wc/wp-Objekte).
+ * Blueforce Manual Payments for TWINT — Block-Checkout-Integration (ohne Build-Step, via globale wc/wp-Objekte).
  *
  * Registriert die Bezahlmethode "bf_twint". Im Ablauf "request" erscheint ein Pflichtfeld
  * für die TWINT-Handynummer und wird als paymentMethodData (bf_twint_phone) übergeben.
  *
- * @package TWINT_For_WooCommerce
+ * @package Blueforce_Manual_Payments_For_TWINT
  */
 ( function () {
 	if ( ! window.wc || ! window.wc.wcBlocksRegistry || ! window.wp ) {
