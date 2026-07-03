@@ -143,11 +143,24 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 		}
 
 		$gateway = $this->get_gateway();
-		$data    = is_array( $context->payment_data ) ? $context->payment_data : array();
-		$phone   = isset( $data['bf_twint_phone'] ) ? sanitize_text_field( wp_unslash( $data['bf_twint_phone'] ) ) : '';
 		$mode    = isset( $this->settings['mode'] ) && in_array( $this->settings['mode'], array( 'send', 'request' ), true ) ? $this->settings['mode'] : 'send';
 
+		$dirty = false;
+
+		// Bestellrelevante Einstellungen einfrieren (analog zum klassischen Checkout).
+		if ( $gateway ) {
+			$gateway->store_settings_snapshot( $context->order );
+			$dirty = true;
+		}
+
+		// Die Kundennummer wird ausschliesslich im «request»-Ablauf erhoben und
+		// gespeichert – genau wie im klassischen Checkout. Im «send»-Ablauf sammeln
+		// wir bewusst keine personenbezogenen Zahlungsdaten und ignorieren ein
+		// etwaig (auch manipuliert) mitgesendetes Feld serverseitig.
 		if ( 'request' === $mode ) {
+			$data  = is_array( $context->payment_data ) ? $context->payment_data : array();
+			$phone = isset( $data['bf_twint_phone'] ) ? sanitize_text_field( wp_unslash( $data['bf_twint_phone'] ) ) : '';
+
 			if ( $gateway ) {
 				$valid = $gateway->is_valid_phone( $phone );
 			} else {
@@ -160,17 +173,7 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 			if ( $gateway ) {
 				$phone = $gateway->normalize_phone( $phone );
 			}
-		}
 
-		$dirty = false;
-
-		// Bestellrelevante Einstellungen einfrieren (analog zum klassischen Checkout).
-		if ( $gateway ) {
-			$gateway->store_settings_snapshot( $context->order );
-			$dirty = true;
-		}
-
-		if ( '' !== $phone ) {
 			$context->order->update_meta_data( '_bf_twint_customer_phone', $phone );
 			$dirty = true;
 		}

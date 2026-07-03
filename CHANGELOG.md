@@ -29,6 +29,9 @@ _Noch keine unveröffentlichten Änderungen._
 - Gateway-Ablauf (`send`/`request`) wird beim Laden und Speichern defensiv auf
   erlaubte Werte normalisiert.
 - Block-Checkout-Daten werden vor der Übergabe ans Frontend defensiv bereinigt.
+- Datenschutz: Im Ablauf «Kunde sendet» speichert der Block-Checkout serverseitig
+  keine Kundennummer mehr, selbst wenn ein manipulierter Client das Feld
+  mitsendet – konsistent mit dem klassischen Checkout und der Datenschutz-Zusage.
 
 ### Aufräumen
 - `uninstall.php` ergänzt: Beim Löschen des Plugins werden die gespeicherten
