@@ -1,5 +1,12 @@
 # Blueforce Manual Payments for TWINT
 
+> [!CAUTION]
+> **Dieses Plugin ist auf WordPress.org umgezogen.**
+> Installiere es ab sofort direkt aus dem offiziellen Plugin-Verzeichnis:
+> **→ [wordpress.org/plugins/blueforce-manual-payments-for-twint](https://wordpress.org/plugins/blueforce-manual-payments-for-twint/)**
+>
+> Für **neue Installationen** bitte ausschliesslich die Version aus dem WordPress-Verzeichnis verwenden – **nicht** dieses Repository. Dieses GitHub-Repo wird **nicht weiter gepflegt** und dient nur noch als **Archiv**.
+
 [![Version](https://img.shields.io/github/v/release/blueforce/blueforce-manual-payments-for-twint?label=Version)](https://github.com/blueforce/blueforce-manual-payments-for-twint/releases)
 [![License: GPL v2+](https://img.shields.io/badge/License-GPL%20v2%2B-blue.svg)](LICENSE)
 ![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b.svg)
@@ -42,7 +49,7 @@ In beiden Fällen findet **kein automatischer API-Call** statt – der Zahlungse
 - ✅ Anweisungen auf der Danke-Seite, in der Bestell-E-Mail und im Backend
 - ✅ Vollständig übersetzbar (Text-Domain `blueforce-manual-payments-for-twint`; de, en, fr_CH, it_CH)
 - ✅ Kompatibel mit **HPOS** (High-Performance Order Storage)
-- ✅ **Updates über das WordPress-Plugin-Verzeichnis** (sobald freigeschaltet)
+- ✅ **Updates über das offizielle WordPress-Plugin-Verzeichnis**
 - ✅ Kein Build-Step, kein Tracking, keine externen Aufrufe
 
 ## Screenshots
@@ -57,9 +64,7 @@ In beiden Fällen findet **kein automatischer API-Call** statt – der Zahlungse
 
 ## Installation
 
-**Manuell (ZIP):** Das ZIP unter **Plugins → Installieren → Plugin hochladen** einspielen und aktivieren.
-
-**Aus dem WordPress-Verzeichnis** (sobald freigeschaltet): Im Backend unter **Plugins → Installieren** nach **«Blueforce Manual Payments for TWINT»** suchen, installieren und aktivieren.
+**Empfohlen – aus dem WordPress-Verzeichnis:** Im Backend unter **Plugins → Installieren** nach **«Blueforce Manual Payments for TWINT»** suchen, installieren und aktivieren. Oder direkt über [wordpress.org/plugins/blueforce-manual-payments-for-twint](https://wordpress.org/plugins/blueforce-manual-payments-for-twint/).
 
 Anschliessend unter **WooCommerce → Einstellungen → Zahlungen → TWINT** aktivieren und konfigurieren.
 
@@ -67,7 +72,7 @@ Anschliessend unter **WooCommerce → Einstellungen → Zahlungen → TWINT** ak
 
 ## Updates
 
-Sobald das Plugin im **WordPress-Plugin-Verzeichnis** freigeschaltet ist, erscheinen Updates – wie bei jedem anderen Verzeichnis-Plugin – automatisch unter **Plugins** und lassen sich mit einem Klick oder per Auto-Update installieren. Das Plugin selbst macht **keine externen Aufrufe** und kontaktiert keine fremden Server.
+Das Plugin liegt im **offiziellen WordPress-Plugin-Verzeichnis**. Updates erscheinen – wie bei jedem anderen Verzeichnis-Plugin – automatisch unter **Plugins** und lassen sich mit einem Klick oder per Auto-Update installieren. Das Plugin selbst macht **keine externen Aufrufe** und kontaktiert keine fremden Server.
 
 ## Konfiguration
 
