@@ -9,6 +9,20 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.5.0] – 2026-07-04 — wordpress.org Welcome Release! 🎉
+
+### Geändert
+- **Internationalisierung umgestellt:** Das Plugin nutzt jetzt **englische
+  Quell-Strings**; Deutsch, Französisch (CH) und Italienisch (CH) sind echte
+  Übersetzungen (`.po`/`.mo`/`.json`). Damit funktioniert die Übersetzung über
+  translate.wordpress.org korrekt – die bisherigen deutschen Quell-Strings
+  verhinderten das («noch nicht auf Deutsch übersetzt»-Meldung im Verzeichnis).
+- Plugin-Header-Beschreibung und interner Marken-Disclaimer auf Englisch.
+- `en_GB`/`en_US`-Übersetzungsdateien entfernt (Quellsprache ist jetzt Englisch).
+
+### Hinweis
+- Keine funktionalen Änderungen an Checkout, Abläufen, Datenschutz oder Einstellungen.
+
 ## [1.4.3] – 2026-06-26
 
 ### Geändert

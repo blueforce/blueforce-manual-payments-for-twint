@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       Blueforce Manual Payments for TWINT
  * Plugin URI:        https://github.com/blueforce/blueforce-manual-payments-for-twint
- * Description:       Manuelle TWINT-Bezahlmethode für WooCommerce ohne TWINT-API – Zahlungen werden von Hand abgeglichen und bestätigt.
- * Version:           1.4.3
+ * Description:       Manual TWINT payment method for WooCommerce without the TWINT API – payments are reconciled and confirmed by hand.
+ * Version:           1.5.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -17,9 +17,9 @@
  * WC requires at least: 7.0
  * WC tested up to:       10.8
  *
- * Hinweis: Dieses Plugin ist ein unabhängiges Community-Projekt von Blueforce Digital
- * Solutions und steht in keiner Verbindung zur TWINT AG. «TWINT» ist eine eingetragene
- * Marke der TWINT AG und wird hier nur zur Beschreibung der Kompatibilität verwendet.
+ * Note: This plugin is an independent community project by Blueforce Digital
+ * Solutions and is not affiliated with TWINT AG. "TWINT" is a registered trademark
+ * of TWINT AG and is used here only to describe compatibility.
  *
  * @package Blueforce_Manual_Payments_For_TWINT
  */
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BF_TWINT_VERSION', '1.4.3' );
+define( 'BF_TWINT_VERSION', '1.5.0' );
 define( 'BF_TWINT_FILE', __FILE__ );
 define( 'BF_TWINT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'BF_TWINT_URL', plugin_dir_url( __FILE__ ) );
@@ -44,7 +44,7 @@ add_action(
 			return;
 		}
 		echo '<div class="notice notice-error"><p>';
-		echo esc_html__( 'Blueforce Manual Payments for TWINT benötigt ein aktives WooCommerce.', 'blueforce-manual-payments-for-twint' );
+		echo esc_html__( 'Blueforce Manual Payments for TWINT requires WooCommerce to be active.', 'blueforce-manual-payments-for-twint' );
 		echo '</p></div>';
 	}
 );
@@ -100,7 +100,7 @@ add_filter(
 	'plugin_action_links_' . plugin_basename( BF_TWINT_FILE ),
 	static function ( $links ) {
 		$url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=' . BF_TWINT_GATEWAY_ID );
-		array_unshift( $links, '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Einstellungen', 'blueforce-manual-payments-for-twint' ) . '</a>' );
+		array_unshift( $links, '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Settings', 'blueforce-manual-payments-for-twint' ) . '</a>' );
 		return $links;
 	}
 );

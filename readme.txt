@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.4.3
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,6 +60,9 @@ Only in the "I request" workflow: the TWINT mobile number the customer enters at
 In the "I request" workflow the plugin stores the TWINT mobile number provided by the customer as order metadata (`_bf_twint_customer_phone`) in order to request the payment via the TWINT app. This number is included in the WooCommerce/WordPress data export and erasure tools. No data is sent to third parties and no external services are contacted; payment reconciliation is done manually in the TWINT app.
 
 == Changelog ==
+
+= 1.5.0 – wordpress.org Welcome Release! =
+* Internationalisation: the plugin now uses English source strings, with German, French (CH) and Italian (CH) shipped as proper translations. This lets translate.wordpress.org handle translations correctly – the previous German source strings prevented that. No functional changes.
 
 = 1.4.3 =
 * Wording: clarified that the plugin itself needs no TWINT API key or acquiring contract, while shop operators remain responsible for their own TWINT, bank and merchant terms for commercial use.

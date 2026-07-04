@@ -168,7 +168,7 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 				$valid  = $digits >= 6 && $digits <= 15;
 			}
 			if ( ! $valid ) {
-				throw new \Exception( esc_html__( 'Bitte gib eine gültige TWINT-Handynummer an, damit wir die Zahlung anfordern können.', 'blueforce-manual-payments-for-twint' ) );
+				throw new \Exception( esc_html__( 'Please enter a valid TWINT mobile number so that we can request the payment.', 'blueforce-manual-payments-for-twint' ) );
 			}
 			if ( $gateway ) {
 				$phone = $gateway->normalize_phone( $phone );

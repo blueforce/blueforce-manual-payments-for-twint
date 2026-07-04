@@ -45,7 +45,7 @@
 					if ( digits.length < 6 || digits.length > 15 ) {
 						return {
 							type: responseTypes.ERROR,
-							message: __( 'Bitte gib deine TWINT-Handynummer an, damit wir die Zahlung anfordern können.', 'blueforce-manual-payments-for-twint' ),
+							message: __( 'Please enter your TWINT mobile number so we can request the payment.', 'blueforce-manual-payments-for-twint' ),
 						};
 					}
 					return {
@@ -65,8 +65,8 @@
 
 		if ( 'request' === mode ) {
 			children.push( el( 'label', { key: 'lbl', htmlFor: 'bf_twint_phone', style: { display: 'block', marginTop: '8px', fontWeight: 600 } }, [
-				__( 'TWINT-Handynummer', 'blueforce-manual-payments-for-twint' ),
-				el( 'abbr', { key: 'req', className: 'required', title: __( 'Pflichtfeld', 'blueforce-manual-payments-for-twint' ), style: { color: '#b32d2e', textDecoration: 'none', marginLeft: '2px' } }, '*' ),
+				__( 'TWINT mobile number', 'blueforce-manual-payments-for-twint' ),
+				el( 'abbr', { key: 'req', className: 'required', title: __( 'Required field', 'blueforce-manual-payments-for-twint' ), style: { color: '#b32d2e', textDecoration: 'none', marginLeft: '2px' } }, '*' ),
 			] ) );
 			children.push( el( 'input', {
 				key: 'inp',
@@ -83,7 +83,7 @@
 			} ) );
 			children.push( el( 'span', { key: 'hint', id: 'bf_twint_phone_hint', style: { display: 'block', fontSize: '.9em', color: '#666', marginTop: '4px' } }, __( 'Wir senden dir eine TWINT-Zahlungsanforderung an diese Nummer.', 'blueforce-manual-payments-for-twint' ) ) );
 		} else if ( phone ) {
-			children.push( el( 'p', { key: 'mphone', style: { marginTop: '8px' } }, sprintf( __( 'Sende den Betrag via TWINT an %s – Details erhältst du nach der Bestellung.', 'blueforce-manual-payments-for-twint' ), phone ) ) );
+			children.push( el( 'p', { key: 'mphone', style: { marginTop: '8px' } }, sprintf( __( 'Send the amount via TWINT to %s – you will receive the details after ordering.', 'blueforce-manual-payments-for-twint' ), phone ) ) );
 		}
 
 		return el( 'div', { className: 'bf-twint-fields' }, children );

@@ -1,244 +1,219 @@
-# Blueforce Manual Payments for TWINT – Italiano (Svizzera)
 # Copyright (C) 2026 Blueforce Digital Solutions
 # This file is distributed under the GPL-2.0-or-later license.
 msgid ""
 msgstr ""
-"Project-Id-Version: Blueforce Manual Payments for TWINT 1.4.3\n"
+"Project-Id-Version: Blueforce Manual Payments for TWINT 1.5.0\n"
 "Report-Msgid-Bugs-To: info@blueforce.ch\n"
-"POT-Creation-Date: 2026-06-22 00:00+0000\n"
-"PO-Revision-Date: 2026-06-22 00:00+0000\n"
-"Last-Translator: Blueforce Digital Solutions <info@blueforce.ch>\n"
-"Language-Team: Blueforce Digital Solutions <info@blueforce.ch>\n"
-"Language: it_CH\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: it_CH\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: blueforce-manual-payments-for-twint\n"
 
-msgid "Blueforce Manual Payments for TWINT benötigt ein aktives WooCommerce."
+msgid "Blueforce Manual Payments for TWINT requires WooCommerce to be active."
 msgstr "Blueforce Manual Payments for TWINT richiede un'installazione WooCommerce attiva."
 
-msgid "Einstellungen"
+msgid "Settings"
 msgstr "Impostazioni"
 
 msgid "TWINT"
 msgstr "TWINT"
 
-msgid "TWINT als Offline-Zahlung – ohne TWINT-API und ohne Acquiring-Vertrag. Ablauf «Kunde sendet» (deine TWINT-Nummer/QR wird angezeigt) oder «Ich fordere an» (Kunde gibt seine TWINT-Nummer an). Der Zahlungseingang wird von Hand bestätigt."
+msgid "TWINT as an offline payment – no TWINT API or acquiring contract. Flow \"Customer sends\" (your TWINT number/QR is shown) or \"I request\" (customer enters their TWINT number). Incoming payments are confirmed manually."
 msgstr "TWINT come pagamento offline – senza API TWINT né contratto di acquiring. Modalità « il cliente invia » (viene mostrato il tuo numero TWINT/QR) o « richiedo l'importo » (il cliente indica il suo numero TWINT). L'incasso viene confermato manualmente."
 
-#, php-format
-msgid "<strong>Blueforce Manual Payments for TWINT:</strong> Der Ablauf «Kunde sendet» ist aktiv, aber es ist weder eine TWINT-Handynummer noch ein QR-Code hinterlegt. Die Bezahlmethode wird im Checkout ausgeblendet, bis du die <a href=\"%s\">Angaben ergänzt</a>."
+msgid "<strong>Blueforce Manual Payments for TWINT:</strong> The \"Customer sends\" flow is active, but neither a TWINT mobile number nor a QR code is set. The payment method is hidden at checkout until you <a href=\"%s\">add the details</a>."
 msgstr "<strong>Blueforce Manual Payments for TWINT:</strong> La modalità « Il cliente invia » è attiva, ma non è impostato né un numero di cellulare TWINT né un codice QR. Il metodo di pagamento viene nascosto al checkout finché non <a href=\"%s\">aggiungi i dati</a>."
 
-msgid "Aktivieren"
+msgid "Enable"
 msgstr "Attiva"
 
-msgid "TWINT als Bezahlmethode aktivieren"
+msgid "Enable TWINT as a payment method"
 msgstr "Attiva TWINT come metodo di pagamento"
 
-msgid "Titel"
+msgid "Title"
 msgstr "Titolo"
 
-msgid "Im Checkout angezeigter Name."
+msgid "Name shown at checkout."
 msgstr "Nome mostrato alla cassa."
 
-msgid "Beschreibung"
+msgid "Description"
 msgstr "Descrizione"
 
-msgid "Kurztext unter dem Methodennamen im Checkout."
+msgid "Short text shown below the method name at checkout."
 msgstr "Breve testo sotto il nome del metodo alla cassa."
 
-msgid "Bezahle einfach und sicher mit TWINT."
+msgid "Pay easily and securely with TWINT."
 msgstr "Paga in modo semplice e sicuro con TWINT."
 
-msgid "Ablauf"
+msgid "Flow"
 msgstr "Modalità"
 
-msgid "«Kunde sendet»: deine TWINT-Nummer wird angezeigt. «Ich fordere an»: Kunde gibt seine TWINT-Nummer an, du forderst den Betrag."
+msgid "\"Customer sends\": your TWINT number is shown. \"I request\": the customer enters their TWINT number and you request the amount."
 msgstr "« Il cliente invia » : viene mostrato il tuo numero TWINT. « Richiedo l'importo » : il cliente indica il suo numero TWINT e tu richiedi l'importo."
 
-msgid "Kunde sendet an meine TWINT-Nummer"
+msgid "Customer sends to my TWINT number"
 msgstr "Il cliente invia al mio numero TWINT"
 
-msgid "Ich fordere den Betrag an (Kunde gibt Nummer an)"
+msgid "I request the amount (customer enters number)"
 msgstr "Richiedo l'importo (il cliente indica il numero)"
 
-msgid "Deine TWINT-Handynummer"
+msgid "Your TWINT mobile number"
 msgstr "Il tuo numero di cellulare TWINT"
 
-msgid "Nur bei «Kunde sendet»: Nummer, an die der Betrag gesendet wird (z. B. +41 79 123 45 67)."
+msgid "Only for \"Customer sends\": the number the amount is sent to (e.g. +41 79 123 45 67)."
 msgstr "Solo per « il cliente invia » : numero al quale viene inviato l'importo (ad es. +41 79 123 45 67)."
 
-msgid "Name des Kontoinhabers"
+msgid "Account holder name"
 msgstr "Nome dell'intestatario del conto"
 
-msgid "Optional. Wird dem Kunden zur Kontrolle angezeigt (z. B. Firmen- oder Personenname)."
+msgid "Optional. Shown to the customer for verification (e.g. company or person name)."
 msgstr "Facoltativo. Mostrato al cliente per verifica (ad es. nome dell'azienda o della persona)."
 
-msgid "TWINT-QR-Bild"
+msgid "TWINT QR image"
 msgstr "Immagine QR TWINT"
 
-msgid "Optional, nur bei «Kunde sendet». Lade in der TWINT-App unter «Geld empfangen» deinen QR-Code, speichere ihn als Bild und wähle ihn hier aus der Mediathek. Der Kunde kann ihn dann direkt scannen."
+msgid "Optional, only for \"Customer sends\". In the TWINT app under \"Receive money\", save your QR code as an image and select it here from the media library. The customer can then scan it directly."
 msgstr "Facoltativo, solo per « il cliente invia ». Nell'app TWINT, sotto « Ricevere denaro », apri il tuo codice QR, salvalo come immagine e selezionalo qui dalla libreria media. Il cliente può poi scansionarlo direttamente."
 
-msgid "Zusätzliche Hinweise"
+msgid "Additional notes"
 msgstr "Indicazioni aggiuntive"
 
-msgid "Erscheint auf der Danke-Seite und in der Bestell-E-Mail."
+msgid "Shown on the thank-you page and in the order email."
 msgstr "Compare nella pagina di ringraziamento e nell'e-mail dell'ordine."
 
-msgid "Wir bearbeiten deine Bestellung, sobald die Zahlung eingegangen ist."
+msgid "We will process your order as soon as the payment has been received."
 msgstr "Elaboriamo il tuo ordine non appena riceviamo il pagamento."
 
-msgid "TWINT-QR-Bild wählen"
+msgid "Choose TWINT QR image"
 msgstr "Scegli l'immagine QR TWINT"
 
-msgid "Dieses Bild verwenden"
+msgid "Use this image"
 msgstr "Usa questa immagine"
 
-msgid "Bild auswählen"
+msgid "Select image"
 msgstr "Seleziona immagine"
 
-msgid "Entfernen"
+msgid "Remove"
 msgstr "Rimuovi"
 
-msgid "TWINT-Handynummer"
+msgid "TWINT mobile number"
 msgstr "Numero di cellulare TWINT"
 
-msgid "Pflichtfeld"
+msgid "Required field"
 msgstr "Campo obbligatorio"
 
-msgid "An diese Nummer senden wir dir eine TWINT-Zahlungsanforderung."
+msgid "We will send you a TWINT payment request to this number."
 msgstr "Ti invieremo una richiesta di pagamento TWINT a questo numero."
 
-#, php-format
-msgid "Sende den Betrag via TWINT an %s – die genauen Angaben erhältst du nach der Bestellung."
+msgid "Send the amount via TWINT to %s – you will receive the exact details after ordering."
 msgstr "Invia l'importo tramite TWINT al %s – riceverai le indicazioni precise dopo l'ordine."
 
-msgid "Bitte gib eine gültige TWINT-Handynummer an, damit wir die Zahlung anfordern können."
+msgid "Please enter a valid TWINT mobile number so that we can request the payment."
 msgstr "Indica un numero di cellulare TWINT valido così possiamo richiedere il pagamento."
 
-#, php-format
-msgid "TWINT: Zahlungsanforderung an %s senden."
+msgid "TWINT: send a payment request to %s."
 msgstr "TWINT: inviare la richiesta di pagamento al %s."
 
-msgid "(keine Nummer angegeben)"
+msgid "(no number provided)"
 msgstr "(nessun numero indicato)"
 
-msgid "TWINT: Warten auf Zahlungseingang (Kunde sendet)."
+msgid "TWINT: awaiting incoming payment (customer sends)."
 msgstr "TWINT: in attesa del pagamento (il cliente invia)."
 
-#, php-format
-msgid "Wir senden dir in Kürze eine <strong>TWINT-Zahlungsanforderung</strong>%s. Bitte bestätige die Zahlung in deiner TWINT-App."
+msgid "We will shortly send you a <strong>TWINT payment request</strong>%s. Please confirm the payment in your TWINT app."
 msgstr "Ti invieremo a breve una <strong>richiesta di pagamento TWINT</strong>%s. Conferma il pagamento nella tua app TWINT."
 
-#, php-format
-msgid "an %s"
+msgid "to %s"
 msgstr "al %s"
 
-#, php-format
-msgid "Bitte sende %1$s via <strong>TWINT</strong>%2$s."
+msgid "Please send %1$s via <strong>TWINT</strong>%2$s."
 msgstr "Invia %1$s tramite <strong>TWINT</strong>%2$s."
 
-#, php-format
-msgid "Kontoinhaber: %s"
+msgid "Account holder: %s"
 msgstr "Intestatario del conto: %s"
 
-msgid "Kopiert!"
+msgid "Copied!"
 msgstr "Copiato!"
 
-msgid "Bestellnummer kopieren"
+msgid "Copy order number"
 msgstr "Copia il numero d'ordine"
 
-msgid "Kopieren"
+msgid "Copy"
 msgstr "Copia"
 
-#, php-format
-msgid "Verwende deine Bestellnummer %s als Mitteilung."
+msgid "Use your order number %s as the message."
 msgstr "Usa il tuo numero d'ordine %s come messaggio."
 
-msgid "TWINT-QR-Code"
+msgid "TWINT QR code"
 msgstr "Codice QR TWINT"
 
-#, php-format
-msgid "Wir senden dir in Kürze eine TWINT-Zahlungsanforderung an %s. Bitte bestätige die Zahlung in deiner TWINT-App."
+msgid "We will shortly send you a TWINT payment request to %s. Please confirm the payment in your TWINT app."
 msgstr "Ti invieremo a breve una richiesta di pagamento TWINT al numero %s. Conferma il pagamento nella tua app TWINT."
 
-msgid "Wir senden dir in Kürze eine TWINT-Zahlungsanforderung. Bitte bestätige die Zahlung in deiner TWINT-App."
+msgid "We will shortly send you a TWINT payment request. Please confirm the payment in your TWINT app."
 msgstr "Ti invieremo a breve una richiesta di pagamento TWINT. Conferma il pagamento nella tua app TWINT."
 
-#, php-format
-msgid "Bitte sende %1$s via TWINT an %2$s."
+msgid "Please send %1$s via TWINT to %2$s."
 msgstr "Invia %1$s tramite TWINT al numero %2$s."
 
-#, php-format
-msgid "Bitte sende %s via TWINT."
+msgid "Please send %s via TWINT."
 msgstr "Invia %s tramite TWINT."
 
-msgid "TWINT-Handynummer (Kunde):"
+msgid "TWINT mobile number (customer):"
 msgstr "Numero di cellulare TWINT (cliente):"
 
-msgid "keine"
+msgid "none"
 msgstr "nessuno"
 
-msgid "Vorgehen:"
+msgid "Procedure:"
 msgstr "Procedura:"
 
-#, php-format
-msgid "1. In der TWINT-App den Betrag (%1$s) an diese Nummer anfordern – Bestellnummer %2$s als Mitteilung."
+msgid "1. In the TWINT app, request the amount (%1$s) from this number – order number %2$s as the message."
 msgstr "1. Nell'app TWINT richiedi l'importo (%1$s) a questo numero – numero d'ordine %2$s come messaggio."
 
-msgid "2. Nach Zahlungseingang: Status auf «In Bearbeitung» setzen."
+msgid "2. After payment is received: set the status to \"Processing\"."
 msgstr "2. Dopo l'incasso: imposta lo stato su « In lavorazione »."
 
-msgid "3. Nach Versand: «Abgeschlossen»."
+msgid "3. After shipping: \"Completed\"."
 msgstr "3. Dopo la spedizione: « Completato »."
 
-msgid "TWINT-Ablauf:"
+msgid "TWINT flow:"
 msgstr "Modalità TWINT:"
 
-msgid "Kunde sendet den Betrag selbst."
+msgid "The customer sends the amount themselves."
 msgstr "Il cliente invia l'importo autonomamente."
 
-#, php-format
-msgid "1. Prüfe in der TWINT-App den Eingang von %1$s mit Mitteilung %2$s."
+msgid "1. In the TWINT app, check for the incoming payment of %1$s with message %2$s."
 msgstr "1. Verifica nell'app TWINT la ricezione di %1$s con il messaggio %2$s."
 
-msgid "Zahlung erhalten – Bestellung freigeben"
+msgid "Payment received – release order"
 msgstr "Pagamento ricevuto – sblocca l'ordine"
 
-msgid "Du hast keine Berechtigung, diese Bestellung zu bearbeiten."
+msgid "You do not have permission to edit this order."
 msgstr "Non hai l'autorizzazione per modificare questo ordine."
 
-msgid "unbekannt"
+msgid "unknown"
 msgstr "sconosciuto"
 
-#, php-format
-msgid "TWINT-Zahlung von Hand als erhalten bestätigt (durch %s)."
+msgid "TWINT payment manually confirmed as received (by %s)."
 msgstr "Pagamento TWINT confermato manualmente come ricevuto (da %s)."
 
-msgid "TWINT-Handynummer (für Zahlungsanforderung)"
+msgid "TWINT mobile number (for payment request)"
 msgstr "Numero di cellulare TWINT (per la richiesta di pagamento)"
 
-msgid "Wenn du im Checkout TWINT mit dem Ablauf «Ich fordere an» wählst, speichern wir die von dir angegebene TWINT-Handynummer bei deiner Bestellung. Wir verwenden sie ausschliesslich, um die Zahlung über die TWINT-App anzufordern. Die Nummer wird beim Export und bei der Löschung deiner personenbezogenen Daten berücksichtigt."
+msgid "If you choose TWINT with the \"I request the amount\" flow at checkout, we store the TWINT mobile number you provide with your order. We use it solely to request payment via the TWINT app. The number is included in the export and erasure of your personal data."
 msgstr "Se scegli TWINT con la modalità « Richiedo l'importo » al checkout, salviamo il numero di cellulare TWINT che indichi con il tuo ordine. Lo utilizziamo esclusivamente per richiedere il pagamento tramite l'app TWINT. Il numero viene considerato nell'esportazione e nella cancellazione dei tuoi dati personali."
 
 msgid "Blueforce Manual Payments for TWINT"
 msgstr "Blueforce Manual Payments for TWINT"
 
-msgid "TWINT ist derzeit nicht vollständig konfiguriert. Bitte wähle eine andere Zahlungsart oder versuche es später erneut."
+msgid "TWINT is currently not fully configured. Please choose another payment method or try again later."
 msgstr "TWINT al momento non è configurato completamente. Scegli un altro metodo di pagamento o riprova più tardi."
 
-#~ msgid "Sende den Betrag via TWINT an %s – Details erhältst du nach der Bestellung."
-#~ msgstr "Invia l'importo tramite TWINT al %s – i dettagli ti verranno comunicati dopo l'ordine."
+msgid "Please enter your TWINT mobile number so we can request the payment."
+msgstr "Indica il tuo numero di cellulare TWINT così possiamo richiedere il pagamento."
 
-#~ msgid "Bitte gib deine TWINT-Handynummer an, damit wir die Zahlung anfordern können."
-#~ msgstr "Indica il tuo numero di cellulare TWINT così possiamo richiedere il pagamento."
-
-#~ msgid "Wir senden dir eine TWINT-Zahlungsanforderung an diese Nummer."
-#~ msgstr "Ti invieremo una richiesta di pagamento TWINT a questo numero."
-
-#~ msgid "TWINT-Zahlung von Hand als erhalten bestätigt."
-#~ msgstr "Pagamento TWINT confermato manualmente come ricevuto."
+msgid "Send the amount via TWINT to %s – you will receive the details after ordering."
+msgstr "Invia l'importo tramite TWINT al %s – i dettagli ti verranno comunicati dopo l'ordine."
