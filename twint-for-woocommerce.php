@@ -77,10 +77,13 @@ add_action(
 		if ( ! $screen || ! in_array( $screen->id, array( 'dashboard', 'plugins', 'woocommerce_page_wc-settings' ), true ) ) {
 			return;
 		}
-		$install_url = admin_url( 'plugin-install.php?s=blueforce-manual-payments-for-twint&tab=search&type=term' );
+		// Direkter Link zur Plugin-Detailseite (über den Slug, nicht über die Suche):
+		// funktioniert sofort nach Veröffentlichung, unabhängig vom Such-Index
+		// (der bis zu 72 h braucht).
+		$install_url = admin_url( 'plugin-install.php?tab=plugin-information&plugin=blueforce-manual-payments-for-twint' );
 		echo '<div class="notice notice-warning"><p>';
 		printf(
-			/* translators: %s: URL to the plugin install search page. */
+			/* translators: %s: URL to the plugin information/install page. */
 			wp_kses_post( __( '<strong>TWINT for WooCommerce ist umgezogen.</strong> Diese GitHub-Version wird nicht mehr aktualisiert. Die gepflegte Version findest du jetzt im offiziellen WordPress-Verzeichnis als «Blueforce Manual Payments for TWINT». Bitte <a href="%s">die neue Version installieren</a> und diese hier anschliessend deaktivieren – deine Einstellungen und Bestellungen bleiben erhalten.', 'twint-for-woocommerce' ) ),
 			esc_url( $install_url )
 		);
