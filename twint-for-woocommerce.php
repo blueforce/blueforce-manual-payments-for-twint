@@ -3,7 +3,7 @@
  * Plugin Name:       TWINT for WooCommerce
  * Plugin URI:        https://github.com/blueforce/twint-for-woocommerce
  * Description:       TWINT als Bezahlmethode für WooCommerce – ohne API, ohne Vertrag mit TWINT. Zwei Abläufe: «Kunde sendet» (deine TWINT-Nummer/QR wird angezeigt) oder «Ich fordere an» (Kunde gibt seine TWINT-Nummer an). Der Zahlungseingang wird von Hand bestätigt.
- * Version:           1.3.1
+ * Version:           1.3.2
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Blueforce Digital Solutions
@@ -27,7 +27,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BF_TWINT_VERSION', '1.3.1' );
+/*
+ * Migrations-Schutz: Ist die neue Verzeichnis-Version «Blueforce Manual Payments
+ * for TWINT» ebenfalls aktiv, definiert sie dieselben Konstanten und Klassen
+ * (BF_TWINT_Blocks_Support, BF_TWINT_Privacy …). Da sie alphabetisch zuerst lädt,
+ * würde diese alte Version beim erneuten Definieren einen «Cannot redeclare»-Fatal
+ * auslösen. Darum hier früh aussteigen und nur einen Hinweis zeigen, dass diese
+ * alte Version jetzt gefahrlos gelöscht werden kann.
+ */
+if ( defined( 'BF_TWINT_VERSION' ) ) {
+	add_action(
+		'admin_notices',
+		static function () {
+			if ( ! current_user_can( 'activate_plugins' ) ) {
+				return;
+			}
+			echo '<div class="notice notice-warning is-dismissible"><p>';
+			echo esc_html__( 'Die neue Version «Blueforce Manual Payments for TWINT» ist aktiv. Diese alte Version «TWINT for WooCommerce» ist dadurch inaktiv und kann jetzt gefahrlos gelöscht werden – deine Einstellungen und Bestellungen bleiben erhalten.', 'twint-for-woocommerce' );
+			echo '</p></div>';
+		}
+	);
+	return;
+}
+
+define( 'BF_TWINT_VERSION', '1.3.2' );
 define( 'BF_TWINT_FILE', __FILE__ );
 define( 'BF_TWINT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'BF_TWINT_URL', plugin_dir_url( __FILE__ ) );
@@ -84,7 +107,7 @@ add_action(
 		echo '<div class="notice notice-warning"><p>';
 		printf(
 			/* translators: %s: URL to the plugin information/install page. */
-			wp_kses_post( __( '<strong>TWINT for WooCommerce ist umgezogen.</strong> Diese GitHub-Version wird nicht mehr aktualisiert. Die gepflegte Version findest du jetzt im offiziellen WordPress-Verzeichnis als «Blueforce Manual Payments for TWINT». Bitte <a href="%s">die neue Version installieren</a> und diese hier anschliessend deaktivieren – deine Einstellungen und Bestellungen bleiben erhalten.', 'twint-for-woocommerce' ) ),
+			wp_kses_post( __( '<strong>TWINT for WooCommerce ist umgezogen.</strong> Diese GitHub-Version wird nicht mehr aktualisiert. Die gepflegte Version findest du jetzt im offiziellen WordPress-Verzeichnis als «Blueforce Manual Payments for TWINT». Wichtig: Deaktiviere zuerst dieses Plugin, dann <a href="%s">installiere die neue Version</a> – so vermeidest du einen Fehler durch beide gleichzeitig aktiven Versionen. Deine Einstellungen und Bestellungen bleiben erhalten.', 'twint-for-woocommerce' ) ),
 			esc_url( $install_url )
 		);
 		echo '</p></div>';

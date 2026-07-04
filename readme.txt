@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment, payment gateway, switzerland
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,6 +60,9 @@ Nur im Ablauf «Ich fordere an»: die vom Kunden im Checkout angegebene TWINT-Ha
 Im Ablauf «Ich fordere an» speichert das Plugin die vom Kunden angegebene TWINT-Handynummer als Bestell-Metadatum (`_bf_twint_customer_phone`), um die Zahlung über die TWINT-App anzufordern. Diese Nummer wird vom WooCommerce-/WordPress-Datenexport und der Datenlöschung berücksichtigt. Es werden keine Daten an Dritte übermittelt; der Zahlungsabgleich erfolgt manuell in der TWINT-App. Hinweis: Für Plugin-Updates wird die GitHub-Releases-API dieses Repositorys kontaktiert (siehe Abschnitt «Automatische Updates»).
 
 == Changelog ==
+
+= 1.3.2 =
+* Migrations-Schutz: Sind versehentlich die alte und die neue Version gleichzeitig aktiv, lädt sich diese alte Version nicht mehr (verhindert einen «Cannot redeclare»-Fatal) und zeigt nur einen Hinweis, dass sie gelöscht werden kann. Der Umzugshinweis empfiehlt jetzt, dieses Plugin vor dem Aktivieren der neuen Version zu deaktivieren.
 
 = 1.3.1 =
 * Umzug: Dieses Plugin ist ins offizielle WordPress-Plugin-Verzeichnis umgezogen und heisst dort «Blueforce Manual Payments for TWINT». Diese GitHub-Version wird nicht mehr weiterentwickelt. Ein Hinweis im Backend verlinkt die neue Version; Einstellungen und Bestellungen bleiben beim Wechsel erhalten (gleiche Gateway-ID).
