@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de_DE\n"
+"Language: de_CH\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: blueforce-manual-payments-for-twint\n"
 
@@ -204,7 +204,7 @@ msgid "TWINT mobile number (for payment request)"
 msgstr "TWINT-Handynummer (für Zahlungsanforderung)"
 
 msgid "If you choose TWINT with the \"I request the amount\" flow at checkout, we store the TWINT mobile number you provide with your order. We use it solely to request payment via the TWINT app. The number is included in the export and erasure of your personal data."
-msgstr "Wenn du im Checkout TWINT mit dem Ablauf «Ich fordere an» wählst, speichern wir die von dir angegebene TWINT-Handynummer bei deiner Bestellung. Wir verwenden sie ausschließlich, um die Zahlung über die TWINT-App anzufordern. Die Nummer wird beim Export und bei der Löschung deiner personenbezogenen Daten berücksichtigt."
+msgstr "Wenn du im Checkout TWINT mit dem Ablauf «Ich fordere an» wählst, speichern wir die von dir angegebene TWINT-Handynummer bei deiner Bestellung. Wir verwenden sie ausschliesslich, um die Zahlung über die TWINT-App anzufordern. Die Nummer wird beim Export und bei der Löschung deiner personenbezogenen Daten berücksichtigt."
 
 msgid "Blueforce Manual Payments for TWINT"
 msgstr "Blueforce Manual Payments for TWINT"

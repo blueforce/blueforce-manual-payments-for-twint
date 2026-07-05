@@ -31,13 +31,13 @@ existiert, sehen Nutzer also die GlotPress-Version, nicht die gebündelte.
   Teams** automatisch aus de_DE abgeleitet – man muss de_CH nicht selbst pflegen.
 - Praktisch heisst das: **de_DE mit «ß» pflegen**, de_CH dem Team überlassen.
 
-**Achtung Fallstrick:** Die aktuell gebündelte `…-de_DE.po` hat noch «ss»-Inhalt –
-das ist faktisch de_CH. Beim GlotPress-Import wurde sie deshalb auf «ß» korrigiert
-(betroffen war nur **ein** Wort: «ausschliesslich» → «ausschließlich»; die übrigen
-Strings haben gar kein scharfes s).
-
-**Offen fürs nächste Release:** Gebündelte Dateien sauber trennen – `de_DE`(ß) +
-`de_CH`(ss) bündeln, statt de_DE mit ss-Inhalt.
+**Getrennt seit `[Unreleased]` (geht mit 1.5.1 live):** Die gebündelten Dateien
+sind jetzt sauber getrennt – `…-de_DE.po/.mo` («ß») + `…-de_CH.po/.mo/.json` («ss»).
+Zuvor lag unter de_DE die «ss»-Variante (faktisch de_CH). Die de_CH-Dateien wurden
+aus der alten de_DE abgeleitet; für de_DE wurde nur **ein** Wort auf «ß» korrigiert
+(«ausschliesslich» → «ausschließlich»; die übrigen Strings haben kein scharfes s).
+Die JS-`.json` enthält keine ss/ß-Wörter → `de_CH`-json = Kopie der `de_DE`-json.
+Kein Code-Change nötig – WordPress lädt `de_CH` automatisch über den Domain-Path.
 
 ## de_DE: zwei Zweige (du / Sie)
 
@@ -105,4 +105,4 @@ Code-Strings.
    GlotPress importieren (stable **und** dev).
 3. fr/it neue Strings als **waiting** nachreichen.
 4. Readme-Änderungen ins «Readme»-Projekt (HTML-Matching beachten).
-5. Perspektivisch: gebündelte Dateien auf `de_DE`(ß) + `de_CH`(ss) trennen.
+5. ✅ Gebündelte Dateien sind auf `de_DE`(ß) + `de_CH`(ss) getrennt (seit 1.5.1).
