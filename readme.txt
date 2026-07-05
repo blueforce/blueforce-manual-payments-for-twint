@@ -28,7 +28,7 @@ In both cases the order is set to "On hold" and the incoming payment is confirme
 * Classic and block checkout
 * Optional TWINT QR code on the thank-you page and in the email
 * HPOS compatible
-* Translation-ready; German, English, French (CH) and Italian (CH) translations included
+* Translation-ready; German (Germany and Switzerland), French (Switzerland) and Italian (Switzerland) translations included
 * No external dependencies, no tracking, no phone-home calls
 
 == Installation ==
