@@ -7,6 +7,10 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 ## [Unreleased]
 
+_Noch keine unveröffentlichten Änderungen._
+
+## [1.5.1] – 2026-07-05
+
 ### Geändert
 - `Plugin URI` zeigt neu auf die Plugin-Landingpage <https://blueforce.ch/twint>
   statt auf das GitHub-Repo. Damit führt «Plugin-Website aufrufen» im WordPress-
