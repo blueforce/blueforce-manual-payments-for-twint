@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Blueforce Manual Payments for TWINT
- * Plugin URI:        https://github.com/blueforce/blueforce-manual-payments-for-twint
+ * Plugin URI:        https://blueforce.ch/twint
  * Description:       Manual TWINT payment method for WooCommerce without the TWINT API – payments are reconciled and confirmed by hand.
  * Version:           1.5.0
  * Requires at least: 6.0
