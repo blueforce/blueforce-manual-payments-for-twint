@@ -79,6 +79,9 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 		add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 		add_action( 'woocommerce_email_after_order_table', array( $this, 'email_instructions' ), 10, 3 );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'admin_order_details' ) );
+
+		// Beleg-Hinweis in der PDF-Rechnung (nur aktiv, wenn ein WPO-PDF-Plugin läuft).
+		add_action( 'wpo_wcpdf_after_order_details', array( $this, 'pdf_payment_note' ), 10, 2 );
 	}
 
 	/**
@@ -832,6 +835,44 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 		}
 
 		echo '</div>';
+	}
+
+	/**
+	 * Beleg-Hinweis in der PDF-Rechnung: «Bezahlt mit TWINT am …».
+	 *
+	 * Hängt am Hook des Plugins «WooCommerce PDF Invoices & Packing Slips»
+	 * (WPO) und feuert daher nur, wenn ein solches PDF-Plugin aktiv ist.
+	 * Der Hinweis erscheint ausschliesslich auf dem Rechnungsdokument und nur,
+	 * wenn die Bestellung tatsächlich bezahlt ist (Status «processing»/
+	 * «completed») – NICHT an der Zahlungsart aufgehängt, sonst stünde
+	 * «bezahlt» auf einer noch offenen (on-hold) Rechnung. Gilt für beide
+	 * Abläufe (Kunde sendet / ich fordere an).
+	 *
+	 * @param string $document_type Dokumenttyp des WPO-Plugins (z. B. «invoice»).
+	 * @param mixed  $order         Bestellung (WC_Order erwartet).
+	 * @return void
+	 */
+	public function pdf_payment_note( $document_type, $order ) {
+		if ( 'invoice' !== $document_type || ! $order instanceof WC_Order ) {
+			return;
+		}
+		if ( $order->get_payment_method() !== $this->id ) {
+			return;
+		}
+		if ( ! $order->has_status( wc_get_is_paid_statuses() ) ) {
+			return;
+		}
+
+		$date = $order->get_date_paid();
+		$text = $date
+			? sprintf(
+				/* translators: %s: payment date. */
+				__( 'Paid with TWINT on %s', 'blueforce-manual-payments-for-twint' ),
+				wc_format_datetime( $date )
+			)
+			: __( 'Paid with TWINT', 'blueforce-manual-payments-for-twint' );
+
+		echo '<div class="bf-twint-pdf-paid" style="margin-top:6px;font-weight:bold;">' . esc_html( $text ) . '</div>';
 	}
 
 	/**
