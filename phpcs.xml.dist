@@ -9,6 +9,8 @@
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/basic/*</exclude-pattern>
 	<exclude-pattern>*/_marketing/*</exclude-pattern>
+	<!-- Lokale Plugin-Check-Testinstanz (komplettes WordPress, gitignored, nicht im Release). -->
+	<exclude-pattern>*/testinstanz/*</exclude-pattern>
 
 	<arg name="extensions" value="php"/>
 	<arg name="colors"/>

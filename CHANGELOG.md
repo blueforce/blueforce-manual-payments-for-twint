@@ -7,11 +7,21 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 ## [Unreleased]
 
+_Noch keine unveröffentlichten Änderungen._
+
+## [1.5.1] – 2026-07-05
+
 ### Geändert
 - `Plugin URI` zeigt neu auf die Plugin-Landingpage <https://blueforce.ch/twint>
   statt auf das GitHub-Repo. Damit führt «Plugin-Website aufrufen» im WordPress-
   Backend auf die offizielle Info-Seite (WordPress.org-URLs sind als Plugin URI
   nicht erlaubt).
+- Gebündelte deutsche Sprachdateien getrennt: **de_DE** nutzt jetzt die deutsche
+  Rechtschreibung («ß»), **de_CH** die Schweizer Schreibweise («ss»). Bisher lag
+  unter `de_DE` fälschlich die «ss»-Variante. Nutzer mit «Deutsch (Schweiz)» sehen
+  damit die passende Schweizer Schreibweise, `de_DE` folgt dem Deutschland-Standard.
+  (Über translate.wordpress.org wird `de_DE` ohnehin mit «ß» ausgeliefert; die
+  Schweizer Variante leitet das de_CH-Team-Skript daraus ab.)
 
 ### Behoben
 - Die Konfig-Warnung («Ablauf ‹Kunde sendet› ist aktiv, aber weder Nummer noch

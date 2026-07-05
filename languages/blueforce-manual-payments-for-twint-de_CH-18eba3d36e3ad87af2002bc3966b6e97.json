@@ -1,0 +1,32 @@
+{
+    "translation-revision-date": "2026-07-04 00:00+0000",
+    "generator": "blueforce-gen-i18n",
+    "domain": "messages",
+    "locale_data": {
+        "messages": {
+            "": {
+                "domain": "messages",
+                "lang": "de_DE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "TWINT": [
+                "TWINT"
+            ],
+            "Please enter your TWINT mobile number so we can request the payment.": [
+                "Bitte gib deine TWINT-Handynummer an, damit wir die Zahlung anfordern können."
+            ],
+            "TWINT mobile number": [
+                "TWINT-Handynummer"
+            ],
+            "Required field": [
+                "Pflichtfeld"
+            ],
+            "Wir senden dir eine TWINT-Zahlungsanforderung an diese Nummer.": [
+                "Wir senden dir eine TWINT-Zahlungsanforderung an diese Nummer."
+            ],
+            "Send the amount via TWINT to %s – you will receive the details after ordering.": [
+                "Sende den Betrag via TWINT an %s – Details erhältst du nach der Bestellung."
+            ]
+        }
+    }
+}
