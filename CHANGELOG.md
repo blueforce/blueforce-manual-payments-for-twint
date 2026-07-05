@@ -7,7 +7,18 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 ## [Unreleased]
 
-_Noch keine unveröffentlichten Änderungen._
+### Geändert
+- `Plugin URI` zeigt neu auf die Plugin-Landingpage <https://blueforce.ch/twint>
+  statt auf das GitHub-Repo. Damit führt «Plugin-Website aufrufen» im WordPress-
+  Backend auf die offizielle Info-Seite (WordPress.org-URLs sind als Plugin URI
+  nicht erlaubt).
+
+### Behoben
+- Die Konfig-Warnung («Ablauf ‹Kunde sendet› ist aktiv, aber weder Nummer noch
+  QR-Code hinterlegt») blieb nach dem Wechsel auf «Ich fordere an» bis zum
+  nächsten Seitenaufruf sichtbar. Ursache: Die gecachten Gateway-Properties
+  wurden beim Speichern nicht aufgefrischt. Sie werden jetzt nach dem Speichern
+  neu geladen, sodass die Warnung sofort korrekt verschwindet.
 
 ## [1.5.0] – 2026-07-04 — wordpress.org Welcome Release! 🎉
 
