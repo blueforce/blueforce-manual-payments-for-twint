@@ -70,13 +70,7 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 		$this->init_form_fields();
 		$this->init_settings();
 
-		$this->title        = $this->get_option( 'title', __( 'TWINT', 'blueforce-manual-payments-for-twint' ) );
-		$this->description  = $this->get_option( 'description' );
-		$this->mode         = $this->normalize_mode( $this->get_option( 'mode', 'send' ) );
-		$this->phone        = $this->get_option( 'phone' );
-		$this->account_name = $this->get_option( 'account_name' );
-		$this->qr_image     = $this->get_option( 'qr_image' );
-		$this->instructions = $this->get_option( 'instructions' );
+		$this->hydrate_settings();
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_assets' ) );
@@ -85,6 +79,40 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 		add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 		add_action( 'woocommerce_email_after_order_table', array( $this, 'email_instructions' ), 10, 3 );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'admin_order_details' ) );
+	}
+
+	/**
+	 * Liest die gespeicherten Einstellungen in die Objekt-Properties.
+	 *
+	 * Wird im Konstruktor und erneut nach dem Speichern aufgerufen. Ohne den
+	 * zweiten Aufruf blieben «$this->mode» & Co. im Speicher-Request auf dem
+	 * alten Wert, sodass z. B. die Konfig-Warnung nach dem Wechsel des Ablaufs
+	 * erst beim nächsten Seitenaufruf verschwand.
+	 *
+	 * @return void
+	 */
+	private function hydrate_settings() {
+		$this->title        = $this->get_option( 'title', __( 'TWINT', 'blueforce-manual-payments-for-twint' ) );
+		$this->description  = $this->get_option( 'description' );
+		$this->mode         = $this->normalize_mode( $this->get_option( 'mode', 'send' ) );
+		$this->phone        = $this->get_option( 'phone' );
+		$this->account_name = $this->get_option( 'account_name' );
+		$this->qr_image     = $this->get_option( 'qr_image' );
+		$this->instructions = $this->get_option( 'instructions' );
+	}
+
+	/**
+	 * Speichert die Gateway-Einstellungen und frischt danach die gecachten
+	 * Properties auf, damit Ausgaben im selben Request (u. a. die Konfig-Warnung)
+	 * bereits den neuen Stand sehen.
+	 *
+	 * @return bool
+	 */
+	public function process_admin_options() {
+		$saved = parent::process_admin_options();
+		$this->hydrate_settings();
+
+		return $saved;
 	}
 
 	/**
