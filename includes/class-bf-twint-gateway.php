@@ -644,7 +644,14 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 			) . $copy_button . '</p>';
 
 			if ( $qr_image ) {
-				$out .= '<p><img src="' . esc_url( $qr_image ) . '" alt="' . esc_attr__( 'TWINT QR code', 'blueforce-manual-payments-for-twint' ) . '" class="bf-twint-qr" /></p>';
+				if ( 'thankyou' === $context ) {
+					// Danke-Seite: Grösse und Rahmen kommen aus frontend.css (.bf-twint-qr).
+					$out .= '<p><img src="' . esc_url( $qr_image ) . '" alt="' . esc_attr__( 'TWINT QR code', 'blueforce-manual-payments-for-twint' ) . '" class="bf-twint-qr" /></p>';
+				} else {
+					// E-Mail: Mail-Clients laden kein externes CSS. Grösse und Rahmen darum
+					// inline setzen, sonst rendert der QR in Originalgrösse und sprengt das Layout.
+					$out .= '<p><img src="' . esc_url( $qr_image ) . '" alt="' . esc_attr__( 'TWINT QR code', 'blueforce-manual-payments-for-twint' ) . '" width="220" style="width:220px;max-width:100%;height:auto;border:1px solid #eee;padding:8px;background:#fff;" /></p>';
+				}
 			}
 		}
 
