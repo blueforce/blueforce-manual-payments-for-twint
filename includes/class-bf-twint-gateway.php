@@ -259,6 +259,17 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 				'description' => __( 'Shown on the thank-you page and in the order email.', 'blueforce-manual-payments-for-twint' ),
 				'default'     => __( 'We will process your order as soon as the payment has been received.', 'blueforce-manual-payments-for-twint' ),
 			),
+			'reminder_days'    => array(
+				'title'             => __( 'Payment reminder', 'blueforce-manual-payments-for-twint' ),
+				'type'              => 'number',
+				'description'       => __( 'Days after which the customer receives a one-time email reminder for an unpaid TWINT order, with the payment details again. Empty or 0 disables the reminder.', 'blueforce-manual-payments-for-twint' ),
+				'default'           => '',
+				'desc_tip'          => true,
+				'custom_attributes' => array(
+					'min'  => '0',
+					'step' => '1',
+				),
+			),
 			'auto_cancel_days' => array(
 				'title'             => __( 'Auto-cancel unpaid orders', 'blueforce-manual-payments-for-twint' ),
 				'type'              => 'number',
@@ -274,6 +285,18 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	}
 
 	/**
+	 * Sanitisiert die Erinnerungs-Frist als ganze Tage (leer = deaktiviert).
+	 *
+	 * @param string $key   Feld-Key.
+	 * @param string $value Rohwert.
+	 * @return string
+	 */
+	public function validate_reminder_days_field( $key, $value ) {
+		$value = trim( (string) $value );
+		return '' === $value ? '' : (string) absint( $value );
+	}
+
+	/**
 	 * Sanitisiert die Auto-Cancel-Frist als ganze Tage (leer = deaktiviert).
 	 *
 	 * @param string $key   Feld-Key.
@@ -283,6 +306,19 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	public function validate_auto_cancel_days_field( $key, $value ) {
 		$value = trim( (string) $value );
 		return '' === $value ? '' : (string) absint( $value );
+	}
+
+	/**
+	 * Zahlungsangaben einer Bestellung als E-Mail-HTML (für die Erinnerungs-Mail).
+	 *
+	 * Öffentlicher Zugang zu details_html() im E-Mail-Kontext – gleiche Angaben
+	 * wie in der Bestellbestätigung (Nummer/QR/Referenz, inline-Grössen).
+	 *
+	 * @param WC_Order $order Bestellung.
+	 * @return string
+	 */
+	public function get_payment_details_html( $order ) {
+		return wp_kses_post( $this->details_html( $order, 'email' ) );
 	}
 
 	/**

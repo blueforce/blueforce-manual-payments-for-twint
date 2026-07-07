@@ -103,18 +103,25 @@ add_action(
 		// Auto-Cancel: unbezahlte TWINT-Bestellungen nach konfigurierter Frist stornieren.
 		require_once BF_TWINT_PATH . 'includes/class-bf-twint-auto-cancel.php';
 		BF_TWINT_Auto_Cancel::init();
+
+		// Zahlungserinnerung: einmalige Mail für unbezahlte TWINT-Bestellungen.
+		require_once BF_TWINT_PATH . 'includes/class-bf-twint-payment-reminder.php';
+		BF_TWINT_Payment_Reminder::init();
 	},
 	11
 );
 
 /**
- * Beim Deaktivieren das Auto-Cancel-Cron-Event entfernen.
+ * Beim Deaktivieren die Cron-Events des Plugins entfernen.
  */
 register_deactivation_hook(
 	__FILE__,
 	static function () {
 		if ( class_exists( 'BF_TWINT_Auto_Cancel' ) ) {
 			BF_TWINT_Auto_Cancel::unschedule();
+		}
+		if ( class_exists( 'BF_TWINT_Payment_Reminder' ) ) {
+			BF_TWINT_Payment_Reminder::unschedule();
 		}
 	}
 );

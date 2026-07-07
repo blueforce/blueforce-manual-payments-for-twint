@@ -289,3 +289,18 @@ msgstr "Il cliente segnala di aver inviato il pagamento (%s)."
 
 msgid "Customer reported via the order page that the payment has been sent."
 msgstr "Il cliente ha segnalato tramite la pagina dell'ordine che il pagamento è stato inviato."
+
+msgid "Payment reminder"
+msgstr "Promemoria di pagamento"
+
+msgid "Days after which the customer receives a one-time email reminder for an unpaid TWINT order, with the payment details again. Empty or 0 disables the reminder."
+msgstr "Giorni dopo i quali il cliente riceve un promemoria unico via e-mail per un ordine TWINT non pagato, con i dati di pagamento. Vuoto o 0 disattiva il promemoria."
+
+msgid "Payment reminder for your order %s"
+msgstr "Promemoria di pagamento per il tuo ordine %s"
+
+msgid "We have not yet received the TWINT payment for your order %s. Here are the payment details again:"
+msgstr "Non abbiamo ancora ricevuto il pagamento TWINT per il tuo ordine %s. Ecco di nuovo i dati di pagamento:"
+
+msgid "TWINT: payment reminder sent to %s."
+msgstr "TWINT: promemoria di pagamento inviato a %s."
