@@ -116,7 +116,7 @@ final class BF_TWINT_Payments_Page {
 	 * Eine Bestell-Zeile rendern.
 	 *
 	 * @param WC_Order $order    Bestellung.
-	 * @param bool     $can_edit Darf der Nutzer Bestellungen freigeben?
+	 * @param bool     $can_edit Ob der Nutzer Bestellungen freigeben darf.
 	 * @return void
 	 */
 	private static function render_row( $order, $can_edit ) {
