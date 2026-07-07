@@ -59,6 +59,15 @@ Only in the "I request" workflow: the TWINT mobile number the customer enters at
 
 In the "I request" workflow the plugin stores the TWINT mobile number provided by the customer as order metadata (`_bf_twint_customer_phone`) in order to request the payment via the TWINT app. This number is included in the WooCommerce/WordPress data export and erasure tools. No data is sent to third parties and no external services are contacted; payment reconciliation is done manually in the TWINT app.
 
+== Screenshots ==
+
+1. Checkout with the "Customer sends" flow – the customer sees your TWINT mobile number right away.
+2. Thank-you page with payment instructions, a copy button for the order number and your TWINT QR code.
+3. Checkout with the "I request" flow – the customer enters their TWINT mobile number.
+4. Gateway settings: flow, TWINT mobile number, account holder, QR image and additional notes.
+5. Order screen with step-by-step instructions and the "Payment received – release order" button.
+6. Customers can revisit the payment instructions at any time under My account → View order.
+
 == Changelog ==
 
 = 1.5.1 =
