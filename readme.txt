@@ -66,12 +66,12 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 
 == Screenshots ==
 
-1. Checkout with the "Customer sends" flow – the customer sees your TWINT mobile number right away.
+1. Checkout with the “Customer sends” flow – the customer sees your TWINT mobile number right away.
 2. Thank-you page with payment instructions, a copy button for the order number and your TWINT QR code.
-3. Checkout with the "I request" flow – the customer enters their TWINT mobile number.
+3. Checkout with the “I request” flow – the customer enters their TWINT mobile number.
 4. Gateway settings: flow, TWINT mobile number, account holder, QR image and additional notes.
-5. Order screen with step-by-step instructions and the "Payment received – release order" button.
-6. Customers can revisit the payment instructions at any time under My account → View order.
+5. Order screen with step-by-step instructions and the “Payment received – release order” button.
+6. Customers can revisit the payment instructions at any time under My account – View order.
 
 == Changelog ==
 
