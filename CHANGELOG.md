@@ -9,6 +9,43 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.6.0] – 2026-07-07
+
+### Neu
+- **Übersicht «TWINT-Zahlungen»** im WooCommerce-Menü: alle offenen (unbezahlten)
+  TWINT-Bestellungen mit Betrag, Kunde, Alter, modus-gerechter Anweisung und
+  «Zahlung erhalten»-Button direkt in der Zeile – der manuelle Abgleich läuft
+  über eine einzige Seite.
+- **Zahlungserinnerung** (Option, standardmässig aus): Nach einer konfigurierbaren
+  Frist erhält der Kunde einmalig eine E-Mail mit den Zahlungsangaben
+  (Nummer/QR/Referenz). Kunden mit «Ich habe bezahlt»-Meldung werden nicht erinnert.
+- **Auto-Stornierung** (Option, standardmässig aus): Unbezahlte TWINT-Bestellungen
+  werden nach einer konfigurierbaren Frist automatisch storniert; der Lagerbestand
+  wird wieder freigegeben.
+- **«Ich habe bezahlt»-Meldung**: Kunden können auf der Danke-Seite und unter
+  «Mein Konto» melden, dass die Zahlung unterwegs ist. Die Meldung erscheint an
+  der Bestellung und in der Zahlungsübersicht – der Status bleibt unverändert.
+- **Zahlungsangaben in «Mein Konto»**: Nummer/QR/Referenz erscheinen auch unter
+  «Mein Konto → Bestellung ansehen», solange die Zahlung aussteht.
+- **PDF-Beleg**: «Bezahlt mit TWINT am [Datum]» auf der Rechnung (Plugin
+  «WooCommerce PDF Invoices & Packing Slips») – nur bei tatsächlich bezahlter
+  Bestellung.
+- **Admin-Mail**: Im Ablauf «Ich fordere an» enthält die «Neue Bestellung»-Mail
+  jetzt die TWINT-Nummer des Kunden, den Betrag und die Referenz.
+- **Einstellungen**: Es werden nur noch die zum gewählten Ablauf passenden Felder
+  angezeigt.
+
+### Behoben
+- Der Hinweis unter dem Nummernfeld im Block-Checkout erschien auf nicht-deutschen
+  Sites deutsch (Überbleibsel der i18n-Umstellung in 1.5.0).
+- Das Nummernfeld im Block-Checkout ragte über den Rand der Bezahlmethoden-Box
+  hinaus (fehlendes `box-sizing`).
+- Der QR-Code in E-Mails wird jetzt auf eine sinnvolle Grösse begrenzt
+  (Mail-Clients laden das Plugin-Stylesheet nicht).
+
+### Geändert
+- Währungssymbole in Klartext-E-Mails werden nicht mehr HTML-kodiert ausgegeben.
+
 ## [1.5.1] – 2026-07-05
 
 ### Geändert

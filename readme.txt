@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.5.1
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,7 +26,12 @@ In both cases the order is set to "On hold" and the incoming payment is confirme
 = Features =
 
 * Classic and block checkout
-* Optional TWINT QR code on the thank-you page and in the email
+* Optional TWINT QR code on the thank-you page, in the order email and under My account
+* "TWINT payments" overview: all open payments at a glance, with one-click release
+* Optional one-time payment reminder email for unpaid orders
+* Optional auto-cancelling of unpaid orders after a configurable number of days (stock is released)
+* Customers can report "I have sent the payment" – shown on the order and in the payments overview
+* "Paid with TWINT" note on PDF invoices (with WooCommerce PDF Invoices & Packing Slips)
 * HPOS compatible
 * Translation-ready; German (Germany and Switzerland), French (Switzerland) and Italian (Switzerland) translations included
 * No external dependencies, no tracking, no phone-home calls
@@ -61,14 +66,28 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 
 == Screenshots ==
 
-1. Checkout with the "Customer sends" flow – the customer sees your TWINT mobile number right away.
+1. Checkout with the “Customer sends” flow – the customer sees your TWINT mobile number right away.
 2. Thank-you page with payment instructions, a copy button for the order number and your TWINT QR code.
-3. Checkout with the "I request" flow – the customer enters their TWINT mobile number.
+3. Checkout with the “I request” flow – the customer enters their TWINT mobile number.
 4. Gateway settings: flow, TWINT mobile number, account holder, QR image and additional notes.
-5. Order screen with step-by-step instructions and the "Payment received – release order" button.
-6. Customers can revisit the payment instructions at any time under My account → View order.
+5. Order screen with step-by-step instructions and the “Payment received – release order” button.
+6. Customers can revisit the payment instructions at any time under My account – View order.
 
 == Changelog ==
+
+= 1.6.0 =
+* New: "TWINT payments" overview under the WooCommerce menu – all open (unpaid) TWINT orders with amount, customer, age, the matching instruction per flow and a one-click "Payment received" button.
+* New: optional one-time payment reminder email for unpaid orders (days configurable; off by default). Customers who already reported their payment are not reminded.
+* New: optional auto-cancelling of unpaid TWINT orders after a configurable number of days (off by default); the stock is released automatically.
+* New: customers can report "I have sent the payment" on the thank-you page and under My account. The report is shown on the order, in the payments overview and never changes the order status.
+* New: payment instructions (number/QR/reference) are also shown under My account → View order while the payment is pending.
+* New: "Paid with TWINT on [date]" note on PDF invoices (WooCommerce PDF Invoices & Packing Slips) – only when the order is actually paid.
+* New: in the "I request" flow, the "New order" admin email now contains the customer's TWINT number, the amount and the reference.
+* New: the gateway settings only show the fields relevant to the selected flow.
+* Fixed: the phone-number hint in the block checkout appeared in German on non-German sites.
+* Fixed: the phone-number field in the block checkout overflowed the payment method box.
+* Fixed: the QR code in emails is now limited to a sensible size (email clients do not load the plugin stylesheet).
+* Changed: currency symbols in plain-text emails are no longer HTML-encoded.
 
 = 1.5.1 =
 * Fixed: the configuration notice ("Customer sends" flow active but no number or QR code set) stayed visible after switching to "I request" until the next page load; the cached gateway settings are now refreshed on save.
