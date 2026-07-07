@@ -93,14 +93,11 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 	 * @return string[]
 	 */
 	public function get_payment_method_script_handles() {
-		$file = BF_TWINT_PATH . 'assets/js/blocks.js';
-		$ver  = file_exists( $file ) ? (string) filemtime( $file ) : BF_TWINT_VERSION;
-
 		wp_register_script(
 			'bf-twint-blocks',
 			BF_TWINT_URL . 'assets/js/blocks.js',
 			array( 'wc-blocks-registry', 'wc-settings', 'wp-element', 'wp-html-entities', 'wp-i18n' ),
-			$ver,
+			BF_TWINT_VERSION,
 			true
 		);
 
