@@ -203,26 +203,26 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	 */
 	public function init_form_fields() {
 		$this->form_fields = array(
-			'enabled'      => array(
+			'enabled'          => array(
 				'title'   => __( 'Enable', 'blueforce-manual-payments-for-twint' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Enable TWINT as a payment method', 'blueforce-manual-payments-for-twint' ),
 				'default' => 'no',
 			),
-			'title'        => array(
+			'title'            => array(
 				'title'       => __( 'Title', 'blueforce-manual-payments-for-twint' ),
 				'type'        => 'text',
 				'description' => __( 'Name shown at checkout.', 'blueforce-manual-payments-for-twint' ),
 				'default'     => __( 'TWINT', 'blueforce-manual-payments-for-twint' ),
 				'desc_tip'    => true,
 			),
-			'description'  => array(
+			'description'      => array(
 				'title'       => __( 'Description', 'blueforce-manual-payments-for-twint' ),
 				'type'        => 'textarea',
 				'description' => __( 'Short text shown below the method name at checkout.', 'blueforce-manual-payments-for-twint' ),
 				'default'     => __( 'Pay easily and securely with TWINT.', 'blueforce-manual-payments-for-twint' ),
 			),
-			'mode'         => array(
+			'mode'             => array(
 				'title'       => __( 'Flow', 'blueforce-manual-payments-for-twint' ),
 				'type'        => 'select',
 				'description' => __( '"Customer sends": your TWINT number is shown. "I request": the customer enters their TWINT number and you request the amount.', 'blueforce-manual-payments-for-twint' ),
@@ -233,33 +233,56 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 				),
 				'desc_tip'    => true,
 			),
-			'phone'        => array(
+			'phone'            => array(
 				'title'       => __( 'Your TWINT mobile number', 'blueforce-manual-payments-for-twint' ),
 				'type'        => 'text',
 				'description' => __( 'Only for "Customer sends": the number the amount is sent to (e.g. +41 79 123 45 67).', 'blueforce-manual-payments-for-twint' ),
 				'default'     => '',
 				'desc_tip'    => true,
 			),
-			'account_name' => array(
+			'account_name'     => array(
 				'title'       => __( 'Account holder name', 'blueforce-manual-payments-for-twint' ),
 				'type'        => 'text',
 				'description' => __( 'Optional. Shown to the customer for verification (e.g. company or person name).', 'blueforce-manual-payments-for-twint' ),
 				'default'     => '',
 				'desc_tip'    => true,
 			),
-			'qr_image'     => array(
+			'qr_image'         => array(
 				'title'       => __( 'TWINT QR image', 'blueforce-manual-payments-for-twint' ),
 				'type'        => 'qr_image',
 				'description' => __( 'Optional, only for "Customer sends". In the TWINT app under "Receive money", save your QR code as an image and select it here from the media library. The customer can then scan it directly.', 'blueforce-manual-payments-for-twint' ),
 				'default'     => '',
 			),
-			'instructions' => array(
+			'instructions'     => array(
 				'title'       => __( 'Additional notes', 'blueforce-manual-payments-for-twint' ),
 				'type'        => 'textarea',
 				'description' => __( 'Shown on the thank-you page and in the order email.', 'blueforce-manual-payments-for-twint' ),
 				'default'     => __( 'We will process your order as soon as the payment has been received.', 'blueforce-manual-payments-for-twint' ),
 			),
+			'auto_cancel_days' => array(
+				'title'             => __( 'Auto-cancel unpaid orders', 'blueforce-manual-payments-for-twint' ),
+				'type'              => 'number',
+				'description'       => __( 'Days after which unpaid TWINT orders (on hold or pending) are cancelled automatically and the stock is released. Empty or 0 disables auto-cancelling.', 'blueforce-manual-payments-for-twint' ),
+				'default'           => '',
+				'desc_tip'          => true,
+				'custom_attributes' => array(
+					'min'  => '0',
+					'step' => '1',
+				),
+			),
 		);
+	}
+
+	/**
+	 * Sanitisiert die Auto-Cancel-Frist als ganze Tage (leer = deaktiviert).
+	 *
+	 * @param string $key   Feld-Key.
+	 * @param string $value Rohwert.
+	 * @return string
+	 */
+	public function validate_auto_cancel_days_field( $key, $value ) {
+		$value = trim( (string) $value );
+		return '' === $value ? '' : (string) absint( $value );
 	}
 
 	/**
@@ -794,7 +817,46 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 			'data-copied'        => true,
 		);
 
-		echo '<section class="woocommerce-bf-twint">' . wp_kses( $this->details_html( $order, 'thankyou' ), $allowed ) . '</section>';
+		echo '<section class="woocommerce-bf-twint">' . wp_kses( $this->details_html( $order, 'thankyou' ), $allowed );
+		$this->render_paid_claim( $order );
+		echo '</section>';
+	}
+
+	/**
+	 * «Ich habe bezahlt»-Meldung des Kunden (Danke-Seite und «Mein Konto»).
+	 *
+	 * Reines Signal an den Shop (Order-Notiz + Meta) – KEIN Statuswechsel; die
+	 * Bestellung wird weiterhin erst nach geprüftem Zahlungseingang freigegeben.
+	 * Reduziert «habt ihr mein Geld erhalten?»-Rückfragen und priorisiert den
+	 * Abgleich in der Zahlungsübersicht.
+	 *
+	 * @param WC_Order $order Bestellung.
+	 * @return void
+	 */
+	private function render_paid_claim( $order ) {
+		if ( ! $order->has_status( array( 'on-hold', 'pending' ) ) ) {
+			return;
+		}
+
+		$claimed = absint( $order->get_meta( '_bf_twint_paid_claimed' ) );
+		if ( $claimed > 0 ) {
+			echo '<p><em>' . esc_html(
+				sprintf(
+					/* translators: %s: date and time the customer reported the payment. */
+					__( 'Thanks – you reported your payment on %s. We will release the order as soon as it arrives.', 'blueforce-manual-payments-for-twint' ),
+					wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $claimed )
+				)
+			) . '</em></p>';
+			return;
+		}
+
+		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+		echo '<input type="hidden" name="action" value="bf_twint_claim_paid" />';
+		echo '<input type="hidden" name="order_id" value="' . esc_attr( $order->get_id() ) . '" />';
+		echo '<input type="hidden" name="order_key" value="' . esc_attr( $order->get_order_key() ) . '" />';
+		wp_nonce_field( 'bf_twint_claim_paid_' . $order->get_id() );
+		echo '<button type="submit" class="button">' . esc_html__( 'I have sent the payment', 'blueforce-manual-payments-for-twint' ) . '</button>';
+		echo '</form>';
 	}
 
 	/**
@@ -892,6 +954,18 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 		$mode  = $this->order_setting( $order, 'mode' );
 
 		echo '<div class="bf-twint-admin-box">';
+
+		// Kundenmeldung «Zahlung gesendet» prominent anzeigen (reines Signal).
+		$claimed = absint( $order->get_meta( '_bf_twint_paid_claimed' ) );
+		if ( $claimed > 0 ) {
+			echo '<p><strong>' . esc_html(
+				sprintf(
+					/* translators: %s: date and time the customer reported the payment. */
+					__( 'Customer reports the payment as sent (%s).', 'blueforce-manual-payments-for-twint' ),
+					wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $claimed )
+				)
+			) . '</strong></p>';
+		}
 
 		if ( 'request' === $mode ) {
 			$phone = $order->get_meta( '_bf_twint_customer_phone' );
@@ -1009,6 +1083,40 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 		}
 
 		wp_safe_redirect( wp_get_referer() ? wp_get_referer() : admin_url( 'admin.php?page=wc-orders' ) );
+		exit;
+	}
+
+	/**
+	 * Verarbeitet die «Ich habe bezahlt»-Meldung des Kunden (auch als Gast).
+	 *
+	 * Autorisierung über Nonce UND Bestellschlüssel (order_key) – wer die
+	 * Danke-Seite bzw. Bestellansicht sieht, kennt den Schlüssel. Setzt nur
+	 * Meta + Order-Notiz, ändert nie den Status; Doppelmeldungen sind idempotent.
+	 *
+	 * @return void
+	 */
+	public static function handle_claim_paid() {
+		$order_id = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
+
+		check_admin_referer( 'bf_twint_claim_paid_' . $order_id );
+
+		$key   = isset( $_POST['order_key'] ) ? sanitize_text_field( wp_unslash( $_POST['order_key'] ) ) : '';
+		$order = $order_id ? wc_get_order( $order_id ) : false;
+
+		if ( $order
+			&& $key
+			&& hash_equals( (string) $order->get_order_key(), $key )
+			&& BF_TWINT_GATEWAY_ID === $order->get_payment_method()
+			&& $order->has_status( array( 'on-hold', 'pending' ) )
+			&& ! absint( $order->get_meta( '_bf_twint_paid_claimed' ) )
+		) {
+			$order->update_meta_data( '_bf_twint_paid_claimed', time() );
+			$order->add_order_note( __( 'Customer reported via the order page that the payment has been sent.', 'blueforce-manual-payments-for-twint' ), false );
+			$order->save();
+		}
+
+		$fallback = $order ? $order->get_checkout_order_received_url() : home_url( '/' );
+		wp_safe_redirect( wp_get_referer() ? wp_get_referer() : $fallback );
 		exit;
 	}
 }

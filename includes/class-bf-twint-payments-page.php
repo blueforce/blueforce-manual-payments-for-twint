@@ -159,6 +159,18 @@ final class BF_TWINT_Payments_Page {
 			);
 		}
 
+		// Kundenmeldung «Zahlung gesendet» – diese Bestellungen zuerst prüfen.
+		$claimed = absint( $order->get_meta( '_bf_twint_paid_claimed' ) );
+		if ( $claimed > 0 ) {
+			$twint .= '<br><span class="description">✓ ' . esc_html(
+				sprintf(
+					/* translators: %s: date and time the customer reported the payment. */
+					__( 'Customer reports the payment as sent (%s).', 'blueforce-manual-payments-for-twint' ),
+					wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $claimed )
+				)
+			) . '</span>';
+		}
+
 		echo '<tr>';
 		echo '<td><a href="' . esc_url( $order->get_edit_order_url() ) . '"><strong>#' . esc_html( $number ) . '</strong></a></td>';
 		echo '<td>' . esc_html( $created ? $created->date_i18n( get_option( 'date_format' ) ) : '' ) . ( $age ? '<br><span class="description">' . esc_html( $age ) . '</span>' : '' ) . '</td>';

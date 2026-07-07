@@ -268,3 +268,24 @@ msgstr "Zahlungseingang mit Mitteilung %s prüfen"
 
 msgid "Action needed: request %1$s via TWINT from %2$s (order number %3$s as the message)."
 msgstr "Handlung nötig: Fordere %1$s via TWINT von %2$s an (Bestellnummer %3$s als Mitteilung)."
+
+msgid "Auto-cancel unpaid orders"
+msgstr "Unbezahlte Bestellungen automatisch stornieren"
+
+msgid "Days after which unpaid TWINT orders (on hold or pending) are cancelled automatically and the stock is released. Empty or 0 disables auto-cancelling."
+msgstr "Tage, nach denen unbezahlte TWINT-Bestellungen (in Wartestellung oder ausstehend) automatisch storniert werden und der Lagerbestand wieder frei wird. Leer oder 0 deaktiviert das automatische Stornieren."
+
+msgid "TWINT: automatically cancelled – no payment was received within %d days."
+msgstr "TWINT: automatisch storniert – innerhalb von %d Tagen ist keine Zahlung eingegangen."
+
+msgid "I have sent the payment"
+msgstr "Ich habe bezahlt"
+
+msgid "Thanks – you reported your payment on %s. We will release the order as soon as it arrives."
+msgstr "Danke – du hast deine Zahlung am %s gemeldet. Wir geben die Bestellung frei, sobald sie eingegangen ist."
+
+msgid "Customer reports the payment as sent (%s)."
+msgstr "Kunde meldet die Zahlung als gesendet (%s)."
+
+msgid "Customer reported via the order page that the payment has been sent."
+msgstr "Kunde hat über die Bestellseite gemeldet, dass die Zahlung gesendet wurde."

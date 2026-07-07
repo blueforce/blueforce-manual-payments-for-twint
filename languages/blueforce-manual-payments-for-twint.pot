@@ -267,3 +267,24 @@ msgstr ""
 
 msgid "Action needed: request %1$s via TWINT from %2$s (order number %3$s as the message)."
 msgstr ""
+
+msgid "Auto-cancel unpaid orders"
+msgstr ""
+
+msgid "Days after which unpaid TWINT orders (on hold or pending) are cancelled automatically and the stock is released. Empty or 0 disables auto-cancelling."
+msgstr ""
+
+msgid "TWINT: automatically cancelled – no payment was received within %d days."
+msgstr ""
+
+msgid "I have sent the payment"
+msgstr ""
+
+msgid "Thanks – you reported your payment on %s. We will release the order as soon as it arrives."
+msgstr ""
+
+msgid "Customer reports the payment as sent (%s)."
+msgstr ""
+
+msgid "Customer reported via the order page that the payment has been sent."
+msgstr ""

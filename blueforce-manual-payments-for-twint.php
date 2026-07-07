@@ -86,6 +86,10 @@ add_action(
 		// «Zahlung erhalten»-Button aus der Bestellansicht (Form-POST).
 		add_action( 'admin_post_bf_twint_mark_paid', array( 'BF_TWINT_Gateway', 'handle_mark_paid' ) );
 
+		// «Ich habe bezahlt»-Meldung des Kunden (Danke-Seite/«Mein Konto», auch als Gast).
+		add_action( 'admin_post_bf_twint_claim_paid', array( 'BF_TWINT_Gateway', 'handle_claim_paid' ) );
+		add_action( 'admin_post_nopriv_bf_twint_claim_paid', array( 'BF_TWINT_Gateway', 'handle_claim_paid' ) );
+
 		// Datenschutz: Kundennummer in Export/Löschung/Datenschutzerklärung einbinden.
 		require_once BF_TWINT_PATH . 'includes/class-bf-twint-privacy.php';
 		BF_TWINT_Privacy::init();
@@ -95,8 +99,24 @@ add_action(
 			require_once BF_TWINT_PATH . 'includes/class-bf-twint-payments-page.php';
 			BF_TWINT_Payments_Page::init();
 		}
+
+		// Auto-Cancel: unbezahlte TWINT-Bestellungen nach konfigurierter Frist stornieren.
+		require_once BF_TWINT_PATH . 'includes/class-bf-twint-auto-cancel.php';
+		BF_TWINT_Auto_Cancel::init();
 	},
 	11
+);
+
+/**
+ * Beim Deaktivieren das Auto-Cancel-Cron-Event entfernen.
+ */
+register_deactivation_hook(
+	__FILE__,
+	static function () {
+		if ( class_exists( 'BF_TWINT_Auto_Cancel' ) ) {
+			BF_TWINT_Auto_Cancel::unschedule();
+		}
+	}
 );
 
 /**
