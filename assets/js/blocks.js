@@ -79,7 +79,7 @@
 				'aria-required': 'true',
 				'aria-describedby': 'bf_twint_phone_hint',
 				onChange: function ( e ) { setValue( e.target.value ); },
-				style: { width: '100%', padding: '10px', marginTop: '4px' },
+				style: { width: '100%', padding: '10px', marginTop: '4px', boxSizing: 'border-box' },
 			} ) );
 			children.push( el( 'span', { key: 'hint', id: 'bf_twint_phone_hint', style: { display: 'block', fontSize: '.9em', color: '#666', marginTop: '4px' } }, __( 'We will send you a TWINT payment request to this number.', 'blueforce-manual-payments-for-twint' ) ) );
 		} else if ( phone ) {
