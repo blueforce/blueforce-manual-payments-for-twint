@@ -265,3 +265,6 @@ msgstr "Richiedi il pagamento (nessun numero registrato)"
 
 msgid "Check for incoming payment with message %s"
 msgstr "Verifica il pagamento in entrata con il messaggio %s"
+
+msgid "Action needed: request %1$s via TWINT from %2$s (order number %3$s as the message)."
+msgstr "Azione richiesta: richiedi %1$s via TWINT da %2$s (numero d'ordine %3$s come messaggio)."

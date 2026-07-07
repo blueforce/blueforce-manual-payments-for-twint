@@ -694,7 +694,8 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 				)
 				: __( 'We will shortly send you a TWINT payment request. Please confirm the payment in your TWINT app.', 'blueforce-manual-payments-for-twint' );
 		} else {
-			$total   = wp_strip_all_tags( $order->get_formatted_order_total() );
+			// Entities dekodieren (Währungssymbol, z. B. CHF) – siehe admin_email_instructions().
+			$total   = wp_strip_all_tags( html_entity_decode( $order->get_formatted_order_total(), ENT_QUOTES, 'UTF-8' ) );
 			$lines[] = $shop_phone
 				? sprintf(
 					/* translators: 1: order total, 2: shop TWINT phone number. */
@@ -804,10 +805,18 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	 * @param bool     $plain_text     Klartext-Variante.
 	 */
 	public function email_instructions( $order, $sent_to_admin, $plain_text = false ) {
-		if ( $sent_to_admin || $order->get_payment_method() !== $this->id ) {
+		if ( $order->get_payment_method() !== $this->id ) {
 			return;
 		}
 		if ( ! $order->has_status( array( 'on-hold', 'pending' ) ) ) {
+			return;
+		}
+
+		// «Neue Bestellung»-Mail an den Shop: Im Ablauf «Ich fordere an» muss der
+		// Shop aktiv werden – Kundennummer, Betrag und Referenz gehören darum
+		// direkt in die Mail, damit der Umweg übers Backend entfällt.
+		if ( $sent_to_admin ) {
+			$this->admin_email_instructions( $order, $plain_text );
 			return;
 		}
 
@@ -817,6 +826,56 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 		}
 
 		echo wp_kses_post( $this->details_html( $order ) );
+	}
+
+	/**
+	 * Handlungshinweis in der «Neue Bestellung»-Mail an den Shop-Betreiber.
+	 *
+	 * Nur im Ablauf «Ich fordere an» und nur, wenn eine Kundennummer vorliegt –
+	 * im Ablauf «Kunde sendet» ist keine Aktion nötig (Eingang abwarten).
+	 *
+	 * @param WC_Order $order      Bestellung.
+	 * @param bool     $plain_text Klartext-Variante.
+	 * @return void
+	 */
+	private function admin_email_instructions( $order, $plain_text = false ) {
+		if ( 'request' !== $this->order_setting( $order, 'mode' ) ) {
+			return;
+		}
+
+		$phone = (string) $order->get_meta( '_bf_twint_customer_phone' );
+		if ( '' === $phone ) {
+			return;
+		}
+
+		// Entities dekodieren: WooCommerce liefert Währungssymbole als HTML-Entities
+		// (CHF = &#067;&#072;&#070;) – ohne Decode stünden sie wörtlich in der
+		// Plain-Text-Mail bzw. würden vom Escaping doppelt kodiert.
+		$total  = wp_strip_all_tags( html_entity_decode( $order->get_formatted_order_total(), ENT_QUOTES, 'UTF-8' ) );
+		$number = '#' . $order->get_order_number();
+
+		if ( $plain_text ) {
+			echo esc_html(
+				sprintf(
+					/* translators: 1: order total, 2: customer TWINT mobile number, 3: order number. */
+					__( 'Action needed: request %1$s via TWINT from %2$s (order number %3$s as the message).', 'blueforce-manual-payments-for-twint' ),
+					$total,
+					$phone,
+					$number
+				)
+			) . "\n\n";
+			return;
+		}
+
+		echo wp_kses_post(
+			'<p>' . sprintf(
+				/* translators: 1: order total, 2: customer TWINT mobile number, 3: order number. */
+				__( 'Action needed: request %1$s via TWINT from %2$s (order number %3$s as the message).', 'blueforce-manual-payments-for-twint' ),
+				'<strong>' . esc_html( $total ) . '</strong>',
+				'<strong>' . esc_html( $phone ) . '</strong>',
+				'<strong>' . esc_html( $number ) . '</strong>'
+			) . '</p>'
+		);
 	}
 
 	/**
