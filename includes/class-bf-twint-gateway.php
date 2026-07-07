@@ -77,6 +77,7 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 		add_action( 'admin_notices', array( $this, 'maybe_show_config_notice' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_assets' ) );
 		add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
+		add_action( 'woocommerce_view_order', array( $this, 'view_order_details' ) );
 		add_action( 'woocommerce_email_after_order_table', array( $this, 'email_instructions' ), 10, 3 );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'admin_order_details' ) );
 
@@ -328,12 +329,16 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	}
 
 	/**
-	 * Lädt das Frontend-CSS auf Checkout- und Danke-Seite.
+	 * Lädt das Frontend-CSS auf Checkout-/Danke-Seite und in «Mein Konto →
+	 * Bestellung ansehen» (dort zeigt view_order_details() die Zahlungsinfos).
 	 *
 	 * @return void
 	 */
 	public function frontend_assets() {
-		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+		$is_checkout   = function_exists( 'is_checkout' ) && is_checkout();
+		$is_view_order = function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'view-order' );
+
+		if ( ! $is_checkout && ! $is_view_order ) {
 			return;
 		}
 		wp_enqueue_style( 'bf-twint-frontend', BF_TWINT_URL . 'assets/css/frontend.css', array(), BF_TWINT_VERSION );
@@ -737,6 +742,38 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 			return;
 		}
 
+		$this->render_details_section( $order );
+	}
+
+	/**
+	 * Zahlungsanweisungen in «Mein Konto → Bestellung ansehen».
+	 *
+	 * Ohne diesen Hook sähe der Kunde Nummer/QR nur auf der Danke-Seite und in
+	 * der E-Mail – schliesst er den Tab und findet die Mail nicht, gäbe es keinen
+	 * Weg zurück zu den Zahlungsinfos. Nur solange die Zahlung aussteht; nach der
+	 * Bestätigung wären die Anweisungen irreführend.
+	 *
+	 * @param int $order_id Bestell-ID.
+	 */
+	public function view_order_details( $order_id ) {
+		$order = wc_get_order( $order_id );
+		if ( ! $order || $order->get_payment_method() !== $this->id ) {
+			return;
+		}
+		if ( ! $order->has_status( array( 'on-hold', 'pending' ) ) ) {
+			return;
+		}
+
+		$this->render_details_section( $order );
+	}
+
+	/**
+	 * Gibt die Zahlungsanweisungen als Sektion aus (Danke-Seite und «Mein Konto»).
+	 *
+	 * @param WC_Order $order Bestellung.
+	 */
+	private function render_details_section( $order ) {
+		wp_enqueue_style( 'bf-twint-frontend', BF_TWINT_URL . 'assets/css/frontend.css', array(), BF_TWINT_VERSION );
 		wp_enqueue_script(
 			'bf-twint-frontend',
 			BF_TWINT_URL . 'assets/js/frontend.js',
