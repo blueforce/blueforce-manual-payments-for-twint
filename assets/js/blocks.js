@@ -81,7 +81,7 @@
 				onChange: function ( e ) { setValue( e.target.value ); },
 				style: { width: '100%', padding: '10px', marginTop: '4px' },
 			} ) );
-			children.push( el( 'span', { key: 'hint', id: 'bf_twint_phone_hint', style: { display: 'block', fontSize: '.9em', color: '#666', marginTop: '4px' } }, __( 'Wir senden dir eine TWINT-Zahlungsanforderung an diese Nummer.', 'blueforce-manual-payments-for-twint' ) ) );
+			children.push( el( 'span', { key: 'hint', id: 'bf_twint_phone_hint', style: { display: 'block', fontSize: '.9em', color: '#666', marginTop: '4px' } }, __( 'We will send you a TWINT payment request to this number.', 'blueforce-manual-payments-for-twint' ) ) );
 		} else if ( phone ) {
 			children.push( el( 'p', { key: 'mphone', style: { marginTop: '8px' } }, sprintf( __( 'Send the amount via TWINT to %s – you will receive the details after ordering.', 'blueforce-manual-payments-for-twint' ), phone ) ) );
 		}
