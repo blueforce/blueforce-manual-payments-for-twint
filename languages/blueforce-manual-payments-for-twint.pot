@@ -216,3 +216,9 @@ msgstr ""
 
 msgid "Send the amount via TWINT to %s – you will receive the details after ordering."
 msgstr ""
+
+msgid "Paid with TWINT on %s"
+msgstr ""
+
+msgid "Paid with TWINT"
+msgstr ""

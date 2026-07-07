@@ -217,3 +217,9 @@ msgstr "Veuillez indiquer votre numéro de mobile TWINT afin que nous puissions 
 
 msgid "Send the amount via TWINT to %s – you will receive the details after ordering."
 msgstr "Envoyez le montant via TWINT au %s – les détails vous seront communiqués après la commande."
+
+msgid "Paid with TWINT on %s"
+msgstr "Payé par TWINT le %s"
+
+msgid "Paid with TWINT"
+msgstr "Payé par TWINT"
