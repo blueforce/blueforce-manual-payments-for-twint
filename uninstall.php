@@ -24,8 +24,12 @@ if ( is_multisite() ) {
 	foreach ( $bf_twint_site_ids as $bf_twint_site_id ) {
 		switch_to_blog( $bf_twint_site_id );
 		delete_option( $bf_twint_option );
+		wp_clear_scheduled_hook( 'bf_twint_cancel_unpaid_orders' );
+		wp_clear_scheduled_hook( 'bf_twint_send_payment_reminders' );
 		restore_current_blog();
 	}
 } else {
 	delete_option( $bf_twint_option );
+	wp_clear_scheduled_hook( 'bf_twint_cancel_unpaid_orders' );
+	wp_clear_scheduled_hook( 'bf_twint_send_payment_reminders' );
 }

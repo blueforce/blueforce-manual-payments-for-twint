@@ -217,3 +217,90 @@ msgstr "Bitte gib deine TWINT-Handynummer an, damit wir die Zahlung anfordern k�
 
 msgid "Send the amount via TWINT to %s – you will receive the details after ordering."
 msgstr "Sende den Betrag via TWINT an %s – Details erhältst du nach der Bestellung."
+
+msgid "Paid with TWINT on %s"
+msgstr "Bezahlt mit TWINT am %s"
+
+msgid "Paid with TWINT"
+msgstr "Bezahlt mit TWINT"
+
+msgid "TWINT payments"
+msgstr "TWINT-Zahlungen"
+
+msgid "Open TWINT payments"
+msgstr "Offene TWINT-Zahlungen"
+
+msgid "All unpaid TWINT orders (on hold or pending). Release an order once you have confirmed the payment in your TWINT app."
+msgstr "Alle unbezahlten TWINT-Bestellungen (in Wartestellung oder ausstehend). Gib eine Bestellung frei, sobald du die Zahlung in deiner TWINT-App bestätigt hast."
+
+msgid "No open TWINT payments – everything is settled."
+msgstr "Keine offenen TWINT-Zahlungen – alles erledigt."
+
+msgid "Order"
+msgstr "Bestellung"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Customer"
+msgstr "Kunde"
+
+msgid "Total"
+msgstr "Betrag"
+
+msgid "Action"
+msgstr "Aktion"
+
+msgid "Guest"
+msgstr "Gast"
+
+msgid "%s ago"
+msgstr "vor %s"
+
+msgid "Request from %s"
+msgstr "Anfordern von %s"
+
+msgid "Request payment (no number on file)"
+msgstr "Betrag anfordern (keine Nummer hinterlegt)"
+
+msgid "Check for incoming payment with message %s"
+msgstr "Zahlungseingang mit Mitteilung %s prüfen"
+
+msgid "Action needed: request %1$s via TWINT from %2$s (order number %3$s as the message)."
+msgstr "Handlung nötig: Fordere %1$s via TWINT von %2$s an (Bestellnummer %3$s als Mitteilung)."
+
+msgid "Auto-cancel unpaid orders"
+msgstr "Unbezahlte Bestellungen automatisch stornieren"
+
+msgid "Days after which unpaid TWINT orders (on hold or pending) are cancelled automatically and the stock is released. Empty or 0 disables auto-cancelling."
+msgstr "Tage, nach denen unbezahlte TWINT-Bestellungen (in Wartestellung oder ausstehend) automatisch storniert werden und der Lagerbestand wieder frei wird. Leer oder 0 deaktiviert das automatische Stornieren."
+
+msgid "TWINT: automatically cancelled – no payment was received within %d days."
+msgstr "TWINT: automatisch storniert – innerhalb von %d Tagen ist keine Zahlung eingegangen."
+
+msgid "I have sent the payment"
+msgstr "Ich habe bezahlt"
+
+msgid "Thanks – you reported your payment on %s. We will release the order as soon as it arrives."
+msgstr "Danke – du hast deine Zahlung am %s gemeldet. Wir geben die Bestellung frei, sobald sie eingegangen ist."
+
+msgid "Customer reports the payment as sent (%s)."
+msgstr "Kunde meldet die Zahlung als gesendet (%s)."
+
+msgid "Customer reported via the order page that the payment has been sent."
+msgstr "Kunde hat über die Bestellseite gemeldet, dass die Zahlung gesendet wurde."
+
+msgid "Payment reminder"
+msgstr "Zahlungserinnerung"
+
+msgid "Days after which the customer receives a one-time email reminder for an unpaid TWINT order, with the payment details again. Empty or 0 disables the reminder."
+msgstr "Tage, nach denen der Kunde einmalig eine Erinnerungs-Mail zu einer unbezahlten TWINT-Bestellung erhält – mit den Zahlungsangaben. Leer oder 0 deaktiviert die Erinnerung."
+
+msgid "Payment reminder for your order %s"
+msgstr "Zahlungserinnerung zu deiner Bestellung %s"
+
+msgid "We have not yet received the TWINT payment for your order %s. Here are the payment details again:"
+msgstr "Wir haben die TWINT-Zahlung zu deiner Bestellung %s noch nicht erhalten. Hier nochmals die Zahlungsangaben:"
+
+msgid "TWINT: payment reminder sent to %s."
+msgstr "TWINT: Zahlungserinnerung an %s gesendet."
