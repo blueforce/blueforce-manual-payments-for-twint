@@ -223,3 +223,45 @@ msgstr "Pagato con TWINT il %s"
 
 msgid "Paid with TWINT"
 msgstr "Pagato con TWINT"
+
+msgid "TWINT payments"
+msgstr "Pagamenti TWINT"
+
+msgid "Open TWINT payments"
+msgstr "Pagamenti TWINT aperti"
+
+msgid "All unpaid TWINT orders (on hold or pending). Release an order once you have confirmed the payment in your TWINT app."
+msgstr "Tutti gli ordini TWINT non pagati (in sospeso). Rilascia un ordine non appena hai confermato il pagamento nella tua app TWINT."
+
+msgid "No open TWINT payments – everything is settled."
+msgstr "Nessun pagamento TWINT aperto – tutto saldato."
+
+msgid "Order"
+msgstr "Ordine"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "Customer"
+msgstr "Cliente"
+
+msgid "Total"
+msgstr "Importo"
+
+msgid "Action"
+msgstr "Azione"
+
+msgid "Guest"
+msgstr "Ospite"
+
+msgid "%s ago"
+msgstr "%s fa"
+
+msgid "Request from %s"
+msgstr "Richiedi a %s"
+
+msgid "Request payment (no number on file)"
+msgstr "Richiedi il pagamento (nessun numero registrato)"
+
+msgid "Check for incoming payment with message %s"
+msgstr "Verifica il pagamento in entrata con il messaggio %s"

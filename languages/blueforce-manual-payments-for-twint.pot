@@ -222,3 +222,45 @@ msgstr ""
 
 msgid "Paid with TWINT"
 msgstr ""
+
+msgid "TWINT payments"
+msgstr ""
+
+msgid "Open TWINT payments"
+msgstr ""
+
+msgid "All unpaid TWINT orders (on hold or pending). Release an order once you have confirmed the payment in your TWINT app."
+msgstr ""
+
+msgid "No open TWINT payments – everything is settled."
+msgstr ""
+
+msgid "Order"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Customer"
+msgstr ""
+
+msgid "Total"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "Guest"
+msgstr ""
+
+msgid "%s ago"
+msgstr ""
+
+msgid "Request from %s"
+msgstr ""
+
+msgid "Request payment (no number on file)"
+msgstr ""
+
+msgid "Check for incoming payment with message %s"
+msgstr ""

@@ -89,6 +89,12 @@ add_action(
 		// Datenschutz: Kundennummer in Export/Löschung/Datenschutzerklärung einbinden.
 		require_once BF_TWINT_PATH . 'includes/class-bf-twint-privacy.php';
 		BF_TWINT_Privacy::init();
+
+		// Admin-Übersicht «TWINT-Zahlungen» (offene Zahlungen abgleichen/freigeben).
+		if ( is_admin() ) {
+			require_once BF_TWINT_PATH . 'includes/class-bf-twint-payments-page.php';
+			BF_TWINT_Payments_Page::init();
+		}
 	},
 	11
 );
