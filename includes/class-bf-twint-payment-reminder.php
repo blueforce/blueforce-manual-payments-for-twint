@@ -160,6 +160,13 @@ final class BF_TWINT_Payment_Reminder {
 		$message = $intro . $gateway->get_payment_details_html( $order );
 		$sent    = $mailer->send( $to, $subject, $mailer->wrap_message( $heading, $message ) );
 
+		// Nur bei erfolgreicher Übergabe als «erinnert» markieren – sonst bekommt
+		// die Bestellung beim nächsten Cron-Lauf einen neuen Versuch (innerhalb
+		// des Kandidaten-Fensters), statt fälschlich übersprungen zu werden.
+		if ( ! $sent ) {
+			return false;
+		}
+
 		$order->update_meta_data( '_bf_twint_reminder_sent', time() );
 		$order->add_order_note(
 			sprintf(
@@ -171,6 +178,6 @@ final class BF_TWINT_Payment_Reminder {
 		);
 		$order->save();
 
-		return (bool) $sent;
+		return true;
 	}
 }

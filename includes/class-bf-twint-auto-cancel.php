@@ -106,6 +106,13 @@ final class BF_TWINT_Auto_Cancel {
 		);
 
 		foreach ( $orders as $order ) {
+			// Hat der Kunde «Ich habe bezahlt» gemeldet, ist manuelles Prüfen
+			// gefragt – nie automatisch stornieren, sonst wird eine womöglich
+			// bezahlte Bestellung storniert, bevor der Shop abgleichen konnte.
+			if ( absint( $order->get_meta( '_bf_twint_paid_claimed' ) ) ) {
+				continue;
+			}
+
 			$order->update_status(
 				'cancelled',
 				sprintf(
