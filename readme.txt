@@ -52,6 +52,14 @@ The plugin itself needs no TWINT API key, acquiring contract or payment service 
 
 No. The incoming payment is checked in the TWINT app and the order is set to "Processing" by hand.
 
+= Do I need to set up a cron job for the reminder or auto-cancelling? =
+
+No. Both run via WP-Cron and manage themselves: as soon as you enter a number of days, the schedule is created; setting it back to 0 (or deactivating the plugin) removes it again. On low-traffic sites WP-Cron runs with the next visit, so the exact time of day may vary – which does not matter for reminders and cancellations.
+
+= When exactly are reminders sent and orders cancelled? =
+
+The plugin checks twice a day. A customer receives the reminder once, after the configured number of days without payment – and never after reporting "I have sent the payment". Auto-cancelling triggers after its own configured number of days and releases the reserved stock. Both options are off by default.
+
 = Is this plugin official TWINT software? =
 
 No. It is an independent community project by Blueforce Digital Solutions and is not affiliated with TWINT AG. "TWINT" is a registered trademark of TWINT AG and is used here only to describe compatibility.
