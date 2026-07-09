@@ -304,3 +304,18 @@ msgstr "Non abbiamo ancora ricevuto il pagamento TWINT per il tuo ordine %s. Ecc
 
 msgid "TWINT: payment reminder sent to %s."
 msgstr "TWINT: promemoria di pagamento inviato a %s."
+
+msgid "Open payments: %1$s (%2$s in total)"
+msgstr "Pagamenti aperti: %1$s (%2$s in totale)"
+
+msgid "Reported as paid by the customer: %s"
+msgstr "Segnalati come pagati dal cliente: %s"
+
+msgid "Oldest open payment: %s"
+msgstr "Pagamento aperto più vecchio: %s"
+
+msgid "Payments received in the last 30 days: %s"
+msgstr "Pagamenti ricevuti negli ultimi 30 giorni: %s"
+
+msgid "Go to the payments overview"
+msgstr "Vai alla panoramica dei pagamenti"
