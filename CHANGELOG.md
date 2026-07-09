@@ -9,6 +9,14 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.6.1] – 2026-07-09
+
+### Behoben
+- Bestellungen wurden auch dann als «erinnert» markiert, wenn der Versand der
+  Erinnerungs-Mail fehlschlug; jetzt gibt es beim nächsten Lauf einen neuen Versuch.
+- Die Auto-Stornierung storniert keine Bestellungen mehr, bei denen der Kunde
+  «Ich habe bezahlt» gemeldet hat – diese verlangen manuelle Prüfung.
+
 ## [1.6.0] – 2026-07-07
 
 ### Neu
