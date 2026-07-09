@@ -94,10 +94,14 @@ add_action(
 		require_once BF_TWINT_PATH . 'includes/class-bf-twint-privacy.php';
 		BF_TWINT_Privacy::init();
 
-		// Admin-Übersicht «TWINT-Zahlungen» (offene Zahlungen abgleichen/freigeben).
+		// Admin-Übersicht «TWINT-Zahlungen» (offene Zahlungen abgleichen/freigeben)
+		// und Dashboard-Widget mit dem Handlungsbedarf auf einen Blick.
 		if ( is_admin() ) {
 			require_once BF_TWINT_PATH . 'includes/class-bf-twint-payments-page.php';
 			BF_TWINT_Payments_Page::init();
+
+			require_once BF_TWINT_PATH . 'includes/class-bf-twint-dashboard-widget.php';
+			BF_TWINT_Dashboard_Widget::init();
 		}
 
 		// Auto-Cancel: unbezahlte TWINT-Bestellungen nach konfigurierter Frist stornieren.

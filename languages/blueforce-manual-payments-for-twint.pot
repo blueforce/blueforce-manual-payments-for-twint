@@ -303,3 +303,18 @@ msgstr ""
 
 msgid "TWINT: payment reminder sent to %s."
 msgstr ""
+
+msgid "Open payments: %1$s (%2$s in total)"
+msgstr ""
+
+msgid "Reported as paid by the customer: %s"
+msgstr ""
+
+msgid "Oldest open payment: %s"
+msgstr ""
+
+msgid "Payments received in the last 30 days: %s"
+msgstr ""
+
+msgid "Go to the payments overview"
+msgstr ""
