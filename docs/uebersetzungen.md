@@ -49,6 +49,37 @@ Deutsch hat auf GlotPress zwei Zweige:
 Beide sind gepflegt. Für ein Checkout-Plugin ist «Sie» durchaus relevant, darum
 wurde auch der formal-Zweig befüllt (komplette du→Sie-Konvertierung).
 
+**Die Sie-Fassung lebt im Repo:** `languages/formal/…-de_DE_formal.po`
+(per `.gitattributes` vom Auslieferungs-ZIP ausgeschlossen – sie existiert nur
+für den GlotPress-Import). Bei jedem neuen String wird sie **zusammen mit den
+gebündelten `.po` gepflegt**; die GlotPress-Lieferung ist dann eine Kopie
+dieser Datei, kein Neubau. Achtung bei der Konvertierung: Der Ablaufname
+«Ich fordere an» ist die Ich-Perspektive des Shops, keine Kundenanrede.
+
+## Eiserne Import-Regeln (nach den Vorfällen vom 2026-07-12)
+
+GlotPress-Importe überschreiben kommentarlos als «current» und überspringen
+unbekannte msgids **stillschweigend**. Daraus folgen fünf Regeln:
+
+1. **Nie Deltas – immer Komplett-Dateien pro Zweig.** Ein Import stellt so
+   deterministisch den ganzen Zweig richtig. (Vorfall: eine Komplett-du-Datei
+   wurde in den formal-Zweig importiert und überschrieb dort alle
+   Sie-Übersetzungen – Delta-Lieferungen hatten die Verwechslung begünstigt.)
+2. **Eine Datei = genau ein Import-Ziel, Ziel im Dateinamen.**
+   Konvention: `twint-<version>-<code|readme>-<locale>-<default|formal>.po`.
+   Nie eine Datei «für beide Zweige» deklarieren, auch bei identischem Inhalt.
+3. **msgid-Quelle ist immer der GlotPress-Export**
+   (`…/export-translations/?format=po`, Fehlbestände mit
+   `&filters[status]=untranslated`) – nie der Wortlaut aus Repo oder readme
+   (HTML-Entities, Markdown→HTML und Quotes weichen sonst ab).
+4. **Erst Sync abwarten, dann importieren.** Nach einem SVN-Release dauert es
+   Stunden, bis GlotPress die neuen Strings eingelesen hat. Ein Import davor
+   läuft für die neuen Strings ins Leere (sie werden kommentarlos übersprungen).
+   Prüfen: erscheint der neue String im untranslated-Export?
+5. **Nach dem Import verifizieren** (Prozent-Stand je Zweig bzw.
+   untranslated-Export) und **die Import-Dateien vom Desktop löschen** –
+   liegengebliebene alte Dateien sind die nächste Verwechslungsquelle.
+
 ## PTE-Status und Import
 
 - **PTE (Project Translation Editor)** für **de_DE** ist vergeben (Account
