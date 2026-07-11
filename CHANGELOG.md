@@ -9,6 +9,14 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.6.2] – 2026-07-09
+
+### Neu
+- **Dashboard-Widget «TWINT-Zahlungen»**: offene Zahlungen (Anzahl, Summe, davon
+  vom Kunden als bezahlt gemeldet, Alter der ältesten) und die erhaltenen
+  Zahlungen der letzten 30 Tage auf einen Blick – mit Direktlink zur
+  Zahlungsübersicht. Erscheint nur bei aktiviertem Gateway.
+
 ## [1.6.1] – 2026-07-09
 
 ### Behoben
