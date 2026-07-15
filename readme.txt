@@ -48,6 +48,10 @@ In both cases the order is set to "On hold" and the incoming payment is confirme
 
 The plugin itself needs no TWINT API key, acquiring contract or payment service provider – it uses the manual TWINT process. Please note that the terms of your TWINT, bank and merchant account still apply: if you accept payments commercially, check your own TWINT and bank conditions for business use.
 
+= Is there a limit on how much I can receive? =
+
+Yes, but not from this plugin. If you use TWINT as a private person, your bank applies a monthly limit on money received from other private persons. The exact amount differs per bank and usually cannot be raised. Check your TWINT app or your bank. If you regularly receive more than that limit, you need a TWINT merchant solution (with a per-transaction fee). This plugin does not change or bypass any limit.
+
 = Is the payment verified automatically? =
 
 No. The incoming payment is checked in the TWINT app and the order is set to "Processing" by hand.
