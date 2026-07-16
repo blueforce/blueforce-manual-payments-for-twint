@@ -102,13 +102,24 @@ final class BF_TWINT_Auto_Cancel {
 				'limit'          => self::BATCH_SIZE,
 				'orderby'        => 'date',
 				'order'          => 'ASC',
+				// Bestellungen mit Kundenmeldung «Ich habe bezahlt» gar nicht
+				// erst laden. Würden sie erst in der Schleife übersprungen,
+				// könnten sie als älteste Bestellungen den ganzen Stapel
+				// belegen und die Stornierung dauerhaft blockieren.
+				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					array(
+						'key'     => '_bf_twint_paid_claimed',
+						'compare' => 'NOT EXISTS',
+					),
+				),
 			)
 		);
 
 		foreach ( $orders as $order ) {
-			// Hat der Kunde «Ich habe bezahlt» gemeldet, ist manuelles Prüfen
-			// gefragt – nie automatisch stornieren, sonst wird eine womöglich
-			// bezahlte Bestellung storniert, bevor der Shop abgleichen konnte.
+			// Sicherheitsnetz: Hat der Kunde «Ich habe bezahlt» gemeldet, ist
+			// manuelles Prüfen gefragt, nie automatisch stornieren. Sonst wird
+			// eine womöglich bezahlte Bestellung storniert, bevor der Shop
+			// abgleichen konnte.
 			if ( absint( $order->get_meta( '_bf_twint_paid_claimed' ) ) ) {
 				continue;
 			}

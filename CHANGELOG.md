@@ -9,6 +9,14 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.6.3] – 2026-07-16
+
+### Behoben
+
+- Auto-Stornierung konnte dauerhaft aussetzen: Bestellungen mit Kundenmeldung «Ich habe bezahlt» wurden erst nach dem Laden übersprungen. Sammelten sich genug davon an, belegten sie als älteste Bestellungen jeden Stapel, und neuere unbezahlte Bestellungen wurden nie storniert. Sie werden jetzt bereits in der Abfrage ausgeschlossen.
+- Zahlungserinnerungen konnten aus demselben Grund bei vielen offenen TWINT-Bestellungen ausbleiben.
+- Die Cron-Events werden beim Deaktivieren zuverlässig entfernt, auch wenn WooCommerce vorher deaktiviert wurde. Zuvor hing das Aufräumen daran, dass die Klassen geladen waren, was ohne WooCommerce nicht der Fall ist.
+
 ## [1.6.2] – 2026-07-09
 
 ### Neu

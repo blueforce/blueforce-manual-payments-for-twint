@@ -3,7 +3,7 @@
  * Plugin Name:       Blueforce Manual Payments for TWINT
  * Plugin URI:        https://blueforce.ch/twint
  * Description:       Manual TWINT payment method for WooCommerce without the TWINT API – payments are reconciled and confirmed by hand.
- * Version:           1.6.2
+ * Version:           1.6.3
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BF_TWINT_VERSION', '1.6.2' );
+define( 'BF_TWINT_VERSION', '1.6.3' );
 define( 'BF_TWINT_FILE', __FILE__ );
 define( 'BF_TWINT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'BF_TWINT_URL', plugin_dir_url( __FILE__ ) );
@@ -117,16 +117,17 @@ add_action(
 
 /**
  * Beim Deaktivieren die Cron-Events des Plugins entfernen.
+ *
+ * Bewusst über die Hook-Namen statt über die Klassen: Ist WooCommerce bereits
+ * deaktiviert, steigt der Loader vor dem Einbinden der Klassen aus, und die
+ * Events blieben verwaist zurück. wp_clear_scheduled_hook() räumt zudem alle
+ * Termine ab, nicht nur den jeweils nächsten.
  */
 register_deactivation_hook(
 	__FILE__,
 	static function () {
-		if ( class_exists( 'BF_TWINT_Auto_Cancel' ) ) {
-			BF_TWINT_Auto_Cancel::unschedule();
-		}
-		if ( class_exists( 'BF_TWINT_Payment_Reminder' ) ) {
-			BF_TWINT_Payment_Reminder::unschedule();
-		}
+		wp_clear_scheduled_hook( 'bf_twint_cancel_unpaid_orders' );
+		wp_clear_scheduled_hook( 'bf_twint_send_payment_reminders' );
 	}
 );
 

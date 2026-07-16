@@ -99,6 +99,10 @@ final class BF_TWINT_Payment_Reminder {
 		}
 
 		// Kandidaten im Fenster [Frist + Nachlauf, Frist] – ältere fallen bewusst raus.
+		// Bereits erinnerte Bestellungen und Kundenmeldungen «Ich habe bezahlt»
+		// werden gar nicht erst geladen: Würden sie erst in der Schleife
+		// übersprungen, könnten sie den Stapel belegen und neuere Bestellungen
+		// blieben unerinnert, bis sie aus dem Fenster fallen.
 		$orders = wc_get_orders(
 			array(
 				'payment_method' => BF_TWINT_GATEWAY_ID,
@@ -107,6 +111,17 @@ final class BF_TWINT_Payment_Reminder {
 				'limit'          => 100,
 				'orderby'        => 'date',
 				'order'          => 'ASC',
+				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					'relation' => 'AND',
+					array(
+						'key'     => '_bf_twint_reminder_sent',
+						'compare' => 'NOT EXISTS',
+					),
+					array(
+						'key'     => '_bf_twint_paid_claimed',
+						'compare' => 'NOT EXISTS',
+					),
+				),
 			)
 		);
 
@@ -115,7 +130,8 @@ final class BF_TWINT_Payment_Reminder {
 			if ( $sent >= self::BATCH_SIZE ) {
 				break;
 			}
-			// Nur einmal erinnern – und nie, wenn der Kunde bereits «bezahlt» gemeldet hat.
+			// Sicherheitsnetz: nur einmal erinnern, und nie, wenn der Kunde
+			// bereits «bezahlt» gemeldet hat.
 			if ( absint( $order->get_meta( '_bf_twint_reminder_sent' ) ) || absint( $order->get_meta( '_bf_twint_paid_claimed' ) ) ) {
 				continue;
 			}
