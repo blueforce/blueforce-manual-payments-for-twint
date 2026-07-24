@@ -134,7 +134,8 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 	 * @param \Automattic\WooCommerce\StoreApi\Payments\PaymentResult  $result  Ergebnis (Referenz).
 	 * @return void
 	 *
-	 * @throws \Exception Wenn im «request»-Ablauf keine gültige Nummer übergeben wird.
+	 * @throws \Automattic\WooCommerce\StoreApi\Exceptions\RouteException Wenn im «request»-Ablauf keine gültige Nummer übergeben wird (Store API, HTTP 400).
+	 * @throws \Exception Fallback, falls die Store-API-Exception-Klasse fehlt.
 	 */
 	public function process_block_payment( $context, $result ) {
 		if ( BF_TWINT_GATEWAY_ID !== $context->payment_method ) {
@@ -157,8 +158,9 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 		// wir bewusst keine personenbezogenen Zahlungsdaten und ignorieren ein
 		// etwaig (auch manipuliert) mitgesendetes Feld serverseitig.
 		if ( 'request' === $mode ) {
-			$data  = is_array( $context->payment_data ) ? $context->payment_data : array();
-			$phone = isset( $data['bf_twint_phone'] ) ? sanitize_text_field( wp_unslash( $data['bf_twint_phone'] ) ) : '';
+			$data = is_array( $context->payment_data ) ? $context->payment_data : array();
+			// is_string() gegen manipulierten Array-Payload (siehe process_payment()).
+			$phone = ( isset( $data['bf_twint_phone'] ) && is_string( $data['bf_twint_phone'] ) ) ? sanitize_text_field( wp_unslash( $data['bf_twint_phone'] ) ) : '';
 
 			if ( $gateway ) {
 				$valid = $gateway->is_valid_phone( $phone );
@@ -167,6 +169,11 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 				$valid  = $digits >= 6 && $digits <= 15;
 			}
 			if ( ! $valid ) {
+				// Store-API-Fehler mit sauberem HTTP 400 und feldnaher Meldung. Fallback
+				// auf die generische Exception nur, falls die Klasse ausnahmsweise fehlt.
+				if ( class_exists( '\Automattic\WooCommerce\StoreApi\Exceptions\RouteException' ) ) {
+					throw new \Automattic\WooCommerce\StoreApi\Exceptions\RouteException( 'bf_twint_invalid_phone', esc_html__( 'Please enter a valid TWINT mobile number so that we can request the payment.', 'blueforce-manual-payments-for-twint' ), 400 );
+				}
 				throw new \Exception( esc_html__( 'Please enter a valid TWINT mobile number so that we can request the payment.', 'blueforce-manual-payments-for-twint' ) );
 			}
 			if ( $gateway ) {

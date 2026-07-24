@@ -297,8 +297,11 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	public function validate_reminder_days_field( $key, $value ) {
-		$value = trim( (string) $value );
-		return '' === $value ? '' : (string) absint( $value );
+		// Nur positive Ganzzahlen aktivieren die Funktion; leer, 0 oder negativ
+		// (auch via manipuliertem POST) bedeuten deaktiviert. absint() würde eine
+		// negative Eingabe wie -3 sonst still in 3 Tage verwandeln.
+		$days = (int) trim( (string) $value );
+		return $days > 0 ? (string) $days : '';
 	}
 
 	/**
@@ -309,8 +312,11 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	public function validate_auto_cancel_days_field( $key, $value ) {
-		$value = trim( (string) $value );
-		return '' === $value ? '' : (string) absint( $value );
+		// Nur positive Ganzzahlen aktivieren die Funktion; leer, 0 oder negativ
+		// (auch via manipuliertem POST) bedeuten deaktiviert. absint() würde eine
+		// negative Eingabe wie -3 sonst still in 3 Tage verwandeln.
+		$days = (int) trim( (string) $value );
+		return $days > 0 ? (string) $days : '';
 	}
 
 	/**
@@ -499,7 +505,9 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	 */
 	public function validate_fields() {
 		if ( 'request' === $this->mode ) {
-			$phone = isset( $_POST['bf_twint_phone'] ) ? sanitize_text_field( wp_unslash( $_POST['bf_twint_phone'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the checkout nonce.
+			// is_string() fängt einen manipulierten Array-Payload (bf_twint_phone[]=x)
+			// ab; sanitize_text_field() würde damit unter PHP 8 einen TypeError werfen.
+			$phone = ( isset( $_POST['bf_twint_phone'] ) && is_string( $_POST['bf_twint_phone'] ) ) ? sanitize_text_field( wp_unslash( $_POST['bf_twint_phone'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the checkout nonce.
 			if ( ! $this->is_valid_phone( $phone ) ) {
 				wc_add_notice( __( 'Please enter a valid TWINT mobile number so that we can request the payment.', 'blueforce-manual-payments-for-twint' ), 'error' );
 				return false;
@@ -604,7 +612,9 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 		$this->store_settings_snapshot( $order );
 
 		if ( 'request' === $this->mode ) {
-			$phone = isset( $_POST['bf_twint_phone'] ) ? sanitize_text_field( wp_unslash( $_POST['bf_twint_phone'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the checkout nonce.
+			// is_string() fängt einen manipulierten Array-Payload (bf_twint_phone[]=x)
+			// ab; sanitize_text_field() würde damit unter PHP 8 einen TypeError werfen.
+			$phone = ( isset( $_POST['bf_twint_phone'] ) && is_string( $_POST['bf_twint_phone'] ) ) ? sanitize_text_field( wp_unslash( $_POST['bf_twint_phone'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the checkout nonce.
 
 			// Block-Checkout liefert die Nummer als paymentMethodData (siehe Blocks-Klasse).
 			if ( '' === $phone ) {
@@ -718,11 +728,11 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 			if ( $qr_image ) {
 				if ( 'thankyou' === $context ) {
 					// Danke-Seite: Grösse und Rahmen kommen aus frontend.css (.bf-twint-qr).
-					$out .= '<p><img src="' . esc_url( $qr_image ) . '" alt="' . esc_attr__( 'TWINT QR code', 'blueforce-manual-payments-for-twint' ) . '" class="bf-twint-qr" /></p>';
+					$out .= '<p><img src="' . esc_url( $qr_image ) . '" alt="' . esc_attr__( 'TWINT QR code', 'blueforce-manual-payments-for-twint' ) . '" class="bf-twint-qr" referrerpolicy="no-referrer" /></p>';
 				} else {
 					// E-Mail: Mail-Clients laden kein externes CSS. Grösse und Rahmen darum
 					// inline setzen, sonst rendert der QR in Originalgrösse und sprengt das Layout.
-					$out .= '<p><img src="' . esc_url( $qr_image ) . '" alt="' . esc_attr__( 'TWINT QR code', 'blueforce-manual-payments-for-twint' ) . '" width="220" style="width:220px;max-width:100%;height:auto;border:1px solid #eee;padding:8px;background:#fff;" /></p>';
+					$out .= '<p><img src="' . esc_url( $qr_image ) . '" alt="' . esc_attr__( 'TWINT QR code', 'blueforce-manual-payments-for-twint' ) . '" width="220" style="width:220px;max-width:100%;height:auto;border:1px solid #eee;padding:8px;background:#fff;" referrerpolicy="no-referrer" /></p>';
 				}
 			}
 		}
@@ -865,6 +875,12 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 			'data-bf-twint-copy' => true,
 			'data-copied'        => true,
 		);
+		// referrerpolicy am QR-Bild erhalten (verhindert, dass die Order-Received-URL
+		// samt order_key per Referer an einen externen QR-Host leakt). Ohne diese
+		// Ergänzung würde wp_kses das Attribut wieder entfernen.
+		if ( isset( $allowed['img'] ) && is_array( $allowed['img'] ) ) {
+			$allowed['img']['referrerpolicy'] = true;
+		}
 
 		echo '<section class="woocommerce-bf-twint">' . wp_kses( $this->details_html( $order, 'thankyou' ), $allowed );
 		$this->render_paid_claim( $order );
@@ -932,7 +948,10 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 		}
 
 		if ( $plain_text ) {
-			echo esc_html( $this->details_text( $order ) ) . "\n\n";
+			// Reiner Text für die Plain-Text-Mail: details_text() liefert bereits
+			// tag-freien Text (wp_strip_all_tags). esc_html() würde hier nur
+			// Entities wie &amp; erzeugen, die im Text-Mail wörtlich stünden.
+			echo $this->details_text( $order ) . "\n\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Plain-text email; details_text() is tag-free.
 			return;
 		}
 
@@ -966,15 +985,18 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 		$number = '#' . $order->get_order_number();
 
 		if ( $plain_text ) {
-			echo esc_html(
-				sprintf(
-					/* translators: 1: order total, 2: customer TWINT mobile number, 3: order number. */
-					__( 'Action needed: request %1$s via TWINT from %2$s (order number %3$s as the message).', 'blueforce-manual-payments-for-twint' ),
-					$total,
-					$phone,
-					$number
-				)
-			) . "\n\n";
+			// Reiner Text für die Plain-Text-Mail: $total ist tag-frei
+			// (wp_strip_all_tags), $phone normalisiert, $number eine Bestellnummer.
+			// esc_html() würde nur Entities wie &amp; erzeugen, die im Text-Mail
+			// wörtlich stünden.
+			$line = sprintf(
+				/* translators: 1: order total, 2: customer TWINT mobile number, 3: order number. */
+				__( 'Action needed: request %1$s via TWINT from %2$s (order number %3$s as the message).', 'blueforce-manual-payments-for-twint' ),
+				$total,
+				$phone,
+				$number
+			);
+			echo $line . "\n\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Plain-text email; parts are tag-free (see above).
 			return;
 		}
 
@@ -1010,7 +1032,7 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 			echo '<p><strong>' . esc_html(
 				sprintf(
 					/* translators: %s: date and time the customer reported the payment. */
-					__( 'Customer reports the payment as sent (%s).', 'blueforce-manual-payments-for-twint' ),
+					__( 'Unverified customer report: payment sent (%s). Confirm the actual receipt in your TWINT app before releasing.', 'blueforce-manual-payments-for-twint' ),
 					wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $claimed )
 				)
 			) . '</strong></p>';
@@ -1109,7 +1131,7 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 		check_admin_referer( 'bf_twint_mark_paid_' . $order_id );
 
 		if ( ! current_user_can( 'edit_shop_orders' ) && ! current_user_can( 'edit_shop_order', $order_id ) ) {
-			wp_die( esc_html__( 'You do not have permission to edit this order.', 'blueforce-manual-payments-for-twint' ) );
+			wp_die( esc_html__( 'You do not have permission to edit this order.', 'blueforce-manual-payments-for-twint' ), '', array( 'response' => 403 ) );
 		}
 
 		$order = $order_id ? wc_get_order( $order_id ) : false;
@@ -1160,7 +1182,7 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 			&& ! absint( $order->get_meta( '_bf_twint_paid_claimed' ) )
 		) {
 			$order->update_meta_data( '_bf_twint_paid_claimed', time() );
-			$order->add_order_note( __( 'Customer reported via the order page that the payment has been sent.', 'blueforce-manual-payments-for-twint' ), false );
+			$order->add_order_note( __( 'Customer reported via the order page that the payment has been sent. This report is unverified and does not confirm that the payment was received.', 'blueforce-manual-payments-for-twint' ), false );
 			$order->save();
 		}
 

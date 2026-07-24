@@ -9,6 +9,30 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.6.5] – 2026-07-24
+
+Härtungs-Release aus einem adversarialen Security-Audit (Kimi-Fan-out + eigene Verifikation). Keine kritischen oder hohen Lücken; die folgenden Low-Findings wurden umgesetzt.
+
+### Sicherheit / Härtung
+
+- Der Checkout ignoriert einen manipulierten Array-Payload für die TWINT-Nummer jetzt sauber, statt unter PHP 8 einen TypeError (HTTP 500) auszulösen. Betrifft klassischen und Block-Checkout.
+- Das TWINT-QR-Bild wird mit «referrerpolicy=no-referrer» ausgegeben, damit die Bestellbestätigungs-URL (inkl. order_key) nicht per Referer an einen externen Bild-Host leakt.
+
+### Geändert
+
+- Die Kundenmeldung «Ich habe bezahlt» wird auf der Bestellung und in der Zahlungsübersicht jetzt ausdrücklich als unbestätigt gekennzeichnet, damit sie nicht mit einem bestätigten Zahlungseingang verwechselt wird.
+- Ungültige TWINT-Nummern im Block-Checkout liefern jetzt einen sauberen Validierungsfehler (HTTP 400) statt eines generischen Serverfehlers (RouteException statt generischer Exception).
+- Der Berechtigungsfehler beim Freigeben einer Bestellung liefert jetzt HTTP 403.
+
+### Behoben
+
+- Plain-Text-Bestell-E-Mails (Kunde und Shop) zeigen in den Zahlungsangaben keine HTML-kodierten Zeichen mehr.
+- Eine negative Tagesangabe bei Erinnerung/Auto-Stornierung deaktiviert die Funktion jetzt, statt still in einen positiven Wert (absint) verwandelt zu werden.
+
+### Entfernt
+
+- Ungenutzte interne `unschedule()`-Methoden in beiden Cron-Klassen (toter Code seit 1.6.3, die Deaktivierung läuft über den Hook in der Hauptdatei).
+
 ## [1.6.4] – 2026-07-24
 
 ### Behoben

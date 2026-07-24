@@ -165,7 +165,7 @@ final class BF_TWINT_Payments_Page {
 			$twint .= '<br><span class="description">✓ ' . esc_html(
 				sprintf(
 					/* translators: %s: date and time the customer reported the payment. */
-					__( 'Customer reports the payment as sent (%s).', 'blueforce-manual-payments-for-twint' ),
+					__( 'Unverified customer report: payment sent (%s).', 'blueforce-manual-payments-for-twint' ),
 					wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $claimed )
 				)
 			) . '</span>';

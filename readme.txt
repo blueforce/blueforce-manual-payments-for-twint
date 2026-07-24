@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.6.4
+Stable tag: 1.6.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,16 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 6. Customers can revisit the payment instructions at any time under My account – View order.
 
 == Changelog ==
+
+= 1.6.5 =
+* Hardening: the checkout now safely ignores a manipulated array payload for the TWINT number instead of triggering a PHP error.
+* Hardening: the TWINT QR image is loaded with "no-referrer" so the order page URL cannot leak to an external image host.
+* Changed: a customer's "I have sent the payment" report is now clearly labelled as unverified on the order and in the payments overview, to avoid it being mistaken for a confirmed payment.
+* Changed: invalid TWINT numbers in the block checkout now return a proper validation error (HTTP 400) instead of a generic server error.
+* Changed: the permission error when releasing an order now returns HTTP 403.
+* Fixed: plain-text order emails (customer and admin) no longer show HTML-encoded characters in the payment details.
+* Fixed: a negative number of days in the reminder/auto-cancel settings now disables the feature instead of being turned into a positive value.
+* Removed: unused internal helper methods (dead code from before 1.6.3).
 
 = 1.6.4 =
 * Fixed: reporting "I have sent the payment" no longer exempts an order from auto-cancelling forever. Auto-cancelling now applies a short grace period from the report (3 days, filter "bf_twint_claim_grace_days") and then proceeds, so a merely claimed but unpaid order can no longer block the stock indefinitely.

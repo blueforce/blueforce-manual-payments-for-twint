@@ -92,18 +92,6 @@ final class BF_TWINT_Auto_Cancel {
 	}
 
 	/**
-	 * Beim Deaktivieren des Plugins das Cron-Event entfernen.
-	 *
-	 * @return void
-	 */
-	public static function unschedule() {
-		$scheduled = wp_next_scheduled( self::CRON_HOOK );
-		if ( $scheduled ) {
-			wp_unschedule_event( $scheduled, self::CRON_HOOK );
-		}
-	}
-
-	/**
 	 * Überfällige unbezahlte TWINT-Bestellungen stornieren (Cron-Callback).
 	 *
 	 * @return void
