@@ -32,6 +32,26 @@ final class BF_TWINT_Auto_Cancel {
 	const BATCH_SIZE = 50;
 
 	/**
+	 * Kulanzfrist in Tagen ab der Kundenmeldung «Ich habe bezahlt».
+	 *
+	 * Meldet der Kunde die Zahlung, wird die Stornierung nicht dauerhaft
+	 * ausgesetzt, sondern nur um diese Frist verschoben, so hat der Shop Zeit
+	 * zum Abgleich, ein bloss behaupteter Zahlungseingang blockiert den
+	 * Lagerbestand aber nicht unbegrenzt. Über den Filter
+	 * «bf_twint_claim_grace_days» anpassbar.
+	 */
+	const CLAIM_GRACE_DAYS = 3;
+
+	/**
+	 * Kulanzfrist ab Kundenmeldung in Tagen (mind. 0).
+	 *
+	 * @return int
+	 */
+	public static function get_claim_grace_days() {
+		return max( 0, absint( apply_filters( 'bf_twint_claim_grace_days', self::CLAIM_GRACE_DAYS ) ) );
+	}
+
+	/**
 	 * Hooks registrieren.
 	 *
 	 * @return void
@@ -94,6 +114,8 @@ final class BF_TWINT_Auto_Cancel {
 			return;
 		}
 
+		$grace_cutoff = time() - self::get_claim_grace_days() * DAY_IN_SECONDS;
+
 		$orders = wc_get_orders(
 			array(
 				'payment_method' => BF_TWINT_GATEWAY_ID,
@@ -102,25 +124,34 @@ final class BF_TWINT_Auto_Cancel {
 				'limit'          => self::BATCH_SIZE,
 				'orderby'        => 'date',
 				'order'          => 'ASC',
-				// Bestellungen mit Kundenmeldung «Ich habe bezahlt» gar nicht
-				// erst laden. Würden sie erst in der Schleife übersprungen,
-				// könnten sie als älteste Bestellungen den ganzen Stapel
-				// belegen und die Stornierung dauerhaft blockieren.
+				// Kundenmeldungen «Ich habe bezahlt» werden nur so lange geladen,
+				// wie ihre Kulanzfrist bereits abgelaufen ist, frische Meldungen
+				// bleiben aussen vor. Das setzt die Stornierung nicht dauerhaft
+				// aus (ein bloss behaupteter Eingang würde sonst den Stapel und
+				// den Lagerbestand unbegrenzt blockieren), gibt dem Shop aber die
+				// Kulanzfrist zum Abgleich.
 				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					'relation' => 'OR',
 					array(
 						'key'     => '_bf_twint_paid_claimed',
 						'compare' => 'NOT EXISTS',
+					),
+					array(
+						'key'     => '_bf_twint_paid_claimed',
+						'value'   => $grace_cutoff,
+						'compare' => '<=',
+						'type'    => 'NUMERIC',
 					),
 				),
 			)
 		);
 
 		foreach ( $orders as $order ) {
-			// Sicherheitsnetz: Hat der Kunde «Ich habe bezahlt» gemeldet, ist
-			// manuelles Prüfen gefragt, nie automatisch stornieren. Sonst wird
-			// eine womöglich bezahlte Bestellung storniert, bevor der Shop
-			// abgleichen konnte.
-			if ( absint( $order->get_meta( '_bf_twint_paid_claimed' ) ) ) {
+			// Sicherheitsnetz: Hat der Kunde «Ich habe bezahlt» gemeldet und liegt
+			// die Meldung noch innerhalb der Kulanzfrist, nicht automatisch
+			// stornieren, der Shop soll erst abgleichen können.
+			$claimed = absint( $order->get_meta( '_bf_twint_paid_claimed' ) );
+			if ( $claimed > 0 && $claimed > $grace_cutoff ) {
 				continue;
 			}
 

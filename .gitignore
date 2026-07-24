@@ -28,3 +28,6 @@ node_modules/
 
 # WordPress.org-Verzeichnis-Assets (Banner/Icon/Screenshots-Werkstatt) – nicht ins Plugin-ZIP/Repo
 /wordpress.org/
+
+# Claude-Code-Projektconfig (lokal, nicht ins Repo/Plugin)
+/.claude/

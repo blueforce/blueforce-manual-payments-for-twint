@@ -26,3 +26,5 @@
 /node_modules/** export-ignore
 /languages/formal export-ignore
 /languages/formal/** export-ignore
+/.claude export-ignore
+/.claude/** export-ignore

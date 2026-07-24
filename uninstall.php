@@ -20,7 +20,14 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 $bf_twint_option = 'woocommerce_bf_twint_settings';
 
 if ( is_multisite() ) {
-	$bf_twint_site_ids = get_sites( array( 'fields' => 'ids' ) );
+	// number => 0 hebt das Standardlimit von 100 auf, damit auf grossen
+	// Netzwerken auch die Sites jenseits der ersten 100 aufgeräumt werden.
+	$bf_twint_site_ids = get_sites(
+		array(
+			'fields' => 'ids',
+			'number' => 0,
+		)
+	);
 	foreach ( $bf_twint_site_ids as $bf_twint_site_id ) {
 		switch_to_blog( $bf_twint_site_id );
 		delete_option( $bf_twint_option );

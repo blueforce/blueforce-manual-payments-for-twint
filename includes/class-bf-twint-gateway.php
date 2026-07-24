@@ -140,6 +140,11 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	 * «bf_twint_is_available» lässt sich das bei Bedarf übersteuern (z. B. in
 	 * Multi-Währungs-Setups, die TWINT bewusst auch anders anbieten).
 	 *
+	 * Filter-Signatur: bf_twint_is_available( bool $available, BF_TWINT_Gateway|null $gateway ).
+	 * Der zweite Parameter ist im klassischen Checkout die Gateway-Instanz, im
+	 * Block-Checkout-Fallback (Gateway-Objekt nicht verfügbar) jedoch null;
+	 * eigene Callbacks müssen ihn darum null-sicher behandeln.
+	 *
 	 * @return bool
 	 */
 	public function is_available() {
@@ -799,6 +804,14 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	public function thankyou_page( $order_id ) {
 		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
+			return;
+		}
+
+		// Zahlungsanweisungen nur solange die Zahlung aussteht. Ruft der Kunde
+		// die Bestellbestätigung später erneut auf, nachdem der Shop die Zahlung
+		// freigegeben hat, wäre ein «Bitte sende CHF X …» irreführend (und lädt
+		// im schlimmsten Fall zur Doppelzahlung ein).
+		if ( ! $order->has_status( array( 'on-hold', 'pending' ) ) ) {
 			return;
 		}
 

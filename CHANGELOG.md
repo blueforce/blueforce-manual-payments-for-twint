@@ -9,6 +9,19 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.6.4] – 2026-07-24
+
+### Behoben
+
+- Die Kundenmeldung «Ich habe bezahlt» nimmt eine Bestellung nicht mehr dauerhaft von der automatischen Stornierung aus. Die Stornierung greift jetzt nach einer kurzen Kulanzfrist ab der Meldung (3 Tage, Filter «bf_twint_claim_grace_days») und läuft dann weiter, sodass ein bloss behaupteter, aber unbezahlter Fall den Lagerbestand nicht mehr unbegrenzt blockiert. Aufgedeckt bei einem Code-Audit.
+- Die Danke-Seite zeigt die Zahlungsanweisungen nicht mehr an, sobald die Bestellung bezahlt oder storniert ist (verhindert irreführende «Bitte sende …»-Hinweise und mögliche Doppelzahlungen).
+- Multisite: Bei der Deinstallation werden Einstellungen und Cron-Events jetzt auf allen Sites entfernt, nicht nur auf den ersten 100.
+
+### Geändert
+
+- Der Admin-Hinweis «WooCommerce erforderlich» wird nur noch Nutzern gezeigt, die Plugins verwalten dürfen.
+- Dokumentation: Der Filter «bf_twint_is_available» erhält als zweiten Parameter die Gateway-Instanz oder null (Block-Checkout-Fallback); eigene Callbacks müssen ihn null-sicher behandeln.
+
 ## [1.6.3] – 2026-07-16
 
 ### Behoben

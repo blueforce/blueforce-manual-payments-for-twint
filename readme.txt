@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.6.3
+Stable tag: 1.6.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,13 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 6. Customers can revisit the payment instructions at any time under My account – View order.
 
 == Changelog ==
+
+= 1.6.4 =
+* Fixed: reporting "I have sent the payment" no longer exempts an order from auto-cancelling forever. Auto-cancelling now applies a short grace period from the report (3 days, filter "bf_twint_claim_grace_days") and then proceeds, so a merely claimed but unpaid order can no longer block the stock indefinitely.
+* Fixed: the thank-you page no longer shows the payment instructions once the order has been paid or cancelled.
+* Fixed: on multisite, uninstalling now cleans up settings and cron events on all sites, not just the first 100.
+* Changed: the "WooCommerce required" admin notice is now only shown to users who can manage plugins.
+* Docs: clarified that the "bf_twint_is_available" filter receives the gateway instance or null (block checkout fallback).
 
 = 1.6.3 =
 * Fixed: auto-cancelling could stop working permanently. Orders with a customer payment report were skipped only after loading, so once enough of them piled up they filled every batch and newer unpaid orders were never cancelled. They are now excluded from the query itself.

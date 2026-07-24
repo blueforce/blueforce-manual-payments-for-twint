@@ -71,6 +71,8 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 			}
 		}
 
+		// Zweiter Parameter bewusst null: In diesem Fallback existiert keine
+		// Gateway-Instanz (siehe Filter-Signatur in BF_TWINT_Gateway::is_available()).
 		return (bool) apply_filters( 'bf_twint_is_available', $available, null );
 	}
 
