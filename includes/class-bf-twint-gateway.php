@@ -329,7 +329,35 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	public function get_payment_details_html( $order ) {
-		return wp_kses_post( $this->details_html( $order, 'email' ) );
+		return wp_kses( $this->details_html( $order, 'email' ), $this->allowed_html() );
+	}
+
+	/**
+	 * Erlaubte HTML-Tags für die Zahlungsangaben (Danke-Seite, «Mein Konto», E-Mails).
+	 *
+	 * Erweitert wp_kses_post() um zwei Dinge, die WordPress selbst nicht erlaubt:
+	 * den Kopier-Button samt data-Attributen und «referrerpolicy» am QR-Bild.
+	 * Letzteres verhindert, dass die Bestellseiten-URL samt order_key per Referer
+	 * an einen externen Bild-Host gelangt; ohne diesen Eintrag würde wp_kses das
+	 * Attribut wieder entfernen.
+	 *
+	 * @return array
+	 */
+	private function allowed_html() {
+		$allowed           = wp_kses_allowed_html( 'post' );
+		$allowed['button'] = array(
+			'type'               => true,
+			'class'              => true,
+			'aria-label'         => true,
+			'aria-live'          => true,
+			'data-bf-twint-copy' => true,
+			'data-copied'        => true,
+		);
+		if ( isset( $allowed['img'] ) && is_array( $allowed['img'] ) ) {
+			$allowed['img']['referrerpolicy'] = true;
+		}
+
+		return $allowed;
 	}
 
 	/**
@@ -865,24 +893,7 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 			true
 		);
 
-		// Kopier-Button (data-Attribute) zusätzlich zu wp_kses_post erlauben.
-		$allowed           = wp_kses_allowed_html( 'post' );
-		$allowed['button'] = array(
-			'type'               => true,
-			'class'              => true,
-			'aria-label'         => true,
-			'aria-live'          => true,
-			'data-bf-twint-copy' => true,
-			'data-copied'        => true,
-		);
-		// referrerpolicy am QR-Bild erhalten (verhindert, dass die Order-Received-URL
-		// samt order_key per Referer an einen externen QR-Host leakt). Ohne diese
-		// Ergänzung würde wp_kses das Attribut wieder entfernen.
-		if ( isset( $allowed['img'] ) && is_array( $allowed['img'] ) ) {
-			$allowed['img']['referrerpolicy'] = true;
-		}
-
-		echo '<section class="woocommerce-bf-twint">' . wp_kses( $this->details_html( $order, 'thankyou' ), $allowed );
+		echo '<section class="woocommerce-bf-twint">' . wp_kses( $this->details_html( $order, 'thankyou' ), $this->allowed_html() );
 		$this->render_paid_claim( $order );
 		echo '</section>';
 	}
@@ -955,7 +966,7 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 			return;
 		}
 
-		echo wp_kses_post( $this->details_html( $order ) );
+		echo wp_kses( $this->details_html( $order ), $this->allowed_html() );
 	}
 
 	/**

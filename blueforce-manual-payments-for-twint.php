@@ -15,7 +15,7 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  *
  * WC requires at least: 7.0
- * WC tested up to:       10.8
+ * WC tested up to:       11.0
  *
  * Note: This plugin is an independent community project by Blueforce Digital
  * Solutions and is not affiliated with TWINT AG. "TWINT" is a registered trademark
