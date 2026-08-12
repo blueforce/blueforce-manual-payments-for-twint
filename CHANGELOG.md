@@ -7,6 +7,10 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 ## [Unreleased]
 
+_Noch keine unveröffentlichten Änderungen._
+
+## [1.6.6] – 2026-08-11
+
 ### Neu
 
 - Dezenter Bewertungshinweis auf der Seite «TWINT-Zahlungen»: erscheint erst, wenn über das Plugin mindestens 10 Zahlungen freigegeben wurden, und bietet «Bewertung schreiben», «Habe ich schon» und «Später» (blendet 90 Tage aus). Die Entscheidung gilt pro Benutzer, nicht pro Shop, und der Hinweis erscheint ausschliesslich auf der Plugin-eigenen Seite, nie im übrigen Backend.

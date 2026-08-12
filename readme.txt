@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.6.5
+Stable tag: 1.6.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,11 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 6. Customers can revisit the payment instructions at any time under My account – View order.
 
 == Changelog ==
+
+= 1.6.6 =
+* New: an unobtrusive review prompt on the "TWINT payments" screen, shown only after you have released at least 10 payments with the plugin. It offers "Write a review", "I already did" and "Maybe later", is dismissed per user and never appears anywhere else in the admin.
+* Changed: the "no-referrer" policy on the TWINT QR image now also applies in emails, not just on the thank-you page.
+* Changed: tested up to WooCommerce 11.0.
 
 = 1.6.5 =
 * Hardening: the checkout now safely ignores a manipulated array payload for the TWINT number instead of triggering a PHP error.
