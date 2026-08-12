@@ -89,6 +89,12 @@ final class BF_TWINT_Payments_Page {
 		echo '<h1>' . esc_html__( 'Open TWINT payments', 'blueforce-manual-payments-for-twint' ) . '</h1>';
 		echo '<p>' . esc_html__( 'All unpaid TWINT orders (on hold or pending). Release an order once you have confirmed the payment in your TWINT app.', 'blueforce-manual-payments-for-twint' ) . '</p>';
 
+		// Dezenter Bewertungshinweis, nur auf dieser Plugin-eigenen Seite und
+		// erst nach genügend freigegebenen Zahlungen (siehe Klasse).
+		if ( class_exists( 'BF_TWINT_Review_Prompt' ) ) {
+			BF_TWINT_Review_Prompt::maybe_render();
+		}
+
 		if ( empty( $orders ) ) {
 			echo '<p><strong>' . esc_html__( 'No open TWINT payments – everything is settled.', 'blueforce-manual-payments-for-twint' ) . '</strong></p></div>';
 			return;

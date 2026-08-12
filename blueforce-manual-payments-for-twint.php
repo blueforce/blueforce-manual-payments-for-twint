@@ -107,6 +107,11 @@ add_action(
 
 			require_once BF_TWINT_PATH . 'includes/class-bf-twint-dashboard-widget.php';
 			BF_TWINT_Dashboard_Widget::init();
+
+			// Bewertungshinweis auf der Zahlungsübersicht (erst nach genügend
+			// freigegebenen Zahlungen, pro Benutzer wegklickbar).
+			require_once BF_TWINT_PATH . 'includes/class-bf-twint-review-prompt.php';
+			BF_TWINT_Review_Prompt::init();
 		}
 
 		// Auto-Cancel: unbezahlte TWINT-Bestellungen nach konfigurierter Frist stornieren.

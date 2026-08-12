@@ -7,7 +7,14 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 ## [Unreleased]
 
-_Noch keine unveröffentlichten Änderungen._
+### Neu
+
+- Dezenter Bewertungshinweis auf der Seite «TWINT-Zahlungen»: erscheint erst, wenn über das Plugin mindestens 10 Zahlungen freigegeben wurden, und bietet «Bewertung schreiben», «Habe ich schon» und «Später» (blendet 90 Tage aus). Die Entscheidung gilt pro Benutzer, nicht pro Shop, und der Hinweis erscheint ausschliesslich auf der Plugin-eigenen Seite, nie im übrigen Backend.
+
+### Geändert
+
+- Das «referrerpolicy=no-referrer» am QR-Bild wirkt jetzt auch in den E-Mails, nicht nur auf der Danke-Seite (die kses-Allowlist steckt in einer gemeinsamen Methode).
+- «WC tested up to» auf 11.0 angehoben (gegen WooCommerce 11.0.0 und WordPress 7.0.3 getestet, keine Befunde).
 
 ## [1.6.5] – 2026-07-24
 

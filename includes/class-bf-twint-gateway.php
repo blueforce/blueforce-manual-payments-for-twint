@@ -1162,6 +1162,11 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 				false
 			);
 			$order->payment_complete();
+
+			// Reiner Zähler für den Bewertungshinweis (kein Personenbezug).
+			if ( class_exists( 'BF_TWINT_Review_Prompt' ) ) {
+				BF_TWINT_Review_Prompt::count_release();
+			}
 		}
 
 		wp_safe_redirect( wp_get_referer() ? wp_get_referer() : admin_url( 'admin.php?page=wc-orders' ) );
