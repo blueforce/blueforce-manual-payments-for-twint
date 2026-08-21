@@ -258,7 +258,7 @@ Härtungs-Release aus einem adversarialen Security-Audit (Kimi-Fan-out + eigene 
 - **«Zahlung erhalten»-Button** in der Bestellansicht: Setzt eine TWINT-Bestellung
   per Klick auf bezahlt (`payment_complete`) und hinterlegt eine Notiz – ohne
   manuellen Statuswechsel. Reiner Form-POST mit Nonce und Berechtigungs-Check.
-- **Französische (fr_CH) und italienische (it_CH) Übersetzung** für die
+- **Französische und italienische Übersetzung** für die
   Westschweiz und das Tessin – inklusive Block-Checkout (JS).
 - **Kopier-Button für die Bestellnummer** auf der Danke-Seite (Ablauf «Kunde
   sendet»): Der Kunde übernimmt die TWINT-Mitteilung mit einem Klick – weniger

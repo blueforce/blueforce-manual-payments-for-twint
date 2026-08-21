@@ -175,7 +175,7 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 
 = 1.2.0 =
 * "Mark as paid" button in the order screen: release a TWINT order as paid with one click.
-* French (fr_CH) and Italian (it_CH) translations – including block checkout.
+* French and Italian translations – including block checkout.
 * Copy button for the order number on the thank-you page (fewer typos in the TWINT message).
 * TWINT is only shown when the shop currency is CHF (filter "bf_twint_is_available" to override).
 

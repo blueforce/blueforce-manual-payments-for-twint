@@ -47,7 +47,7 @@ In beiden Fällen findet **kein automatischer API-Call** statt – der Zahlungse
 - ✅ Klassischer **und** Block-Checkout (Cart/Checkout-Blocks, Store-API)
 - ✅ Optionaler TWINT-QR-Code auf Danke-Seite und in der E-Mail
 - ✅ Anweisungen auf der Danke-Seite, in der Bestell-E-Mail und im Backend
-- ✅ Vollständig übersetzbar (Text-Domain `blueforce-manual-payments-for-twint`; de, en, fr_CH, it_CH)
+- ✅ Vollständig übersetzbar (Text-Domain `blueforce-manual-payments-for-twint`; de, en, fr, it)
 - ✅ Kompatibel mit **HPOS** (High-Performance Order Storage)
 - ✅ **Updates über das offizielle WordPress-Plugin-Verzeichnis**
 - ✅ Kein Build-Step, kein Tracking, keine externen Aufrufe
