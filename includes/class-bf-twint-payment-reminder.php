@@ -171,12 +171,14 @@ final class BF_TWINT_Payment_Reminder {
 			return false;
 		}
 
+		// Adresse in der Notiz nur maskiert: Notizen überleben die
+		// Datenschutz-Löschung, die Rechnungsadresse der Bestellung nicht.
 		$order->update_meta_data( '_bf_twint_reminder_sent', time() );
 		$order->add_order_note(
 			sprintf(
 				/* translators: %s: customer email address. */
 				__( 'TWINT: payment reminder sent to %s.', 'blueforce-manual-payments-for-twint' ),
-				$to
+				BF_TWINT_Gateway::mask_email( $to )
 			),
 			false
 		);

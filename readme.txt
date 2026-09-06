@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.6.6
+Stable tag: 1.6.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,11 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 6. Customers can revisit the payment instructions at any time under My account – View order.
 
 == Changelog ==
+
+= 1.6.7 =
+* Security: hardening release. Stricter validation of customer input at checkout and safer handling of redirects. No configuration changes needed, updating is recommended.
+* Privacy: order notes no longer contain the full customer phone number or email address. The full values stay in the order itself and remain covered by the personal-data export and erasure.
+* Fixed: uninstalling the plugin now also removes the review-prompt counter and the per-user dismissal.
 
 = 1.6.6 =
 * New: an unobtrusive review prompt on the "TWINT payments" screen, shown only after you have released at least 10 payments with the plugin. It offers "Write a review", "I already did" and "Maybe later", is dismissed per user and never appears anywhere else in the admin.

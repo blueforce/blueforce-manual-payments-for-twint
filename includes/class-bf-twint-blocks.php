@@ -165,8 +165,10 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 			if ( $gateway ) {
 				$valid = $gateway->is_valid_phone( $phone );
 			} else {
+				// Dieselben Grenzen wie BF_TWINT_Gateway::is_valid_phone(), inkl.
+				// Gesamtlänge (die Ziffernzahl allein begrenzt die Eingabe nicht).
 				$digits = strlen( (string) preg_replace( '/\D+/', '', $phone ) );
-				$valid  = $digits >= 6 && $digits <= 15;
+				$valid  = $digits >= 6 && $digits <= 15 && strlen( $phone ) <= BF_TWINT_Gateway::PHONE_MAX_LENGTH;
 			}
 			if ( ! $valid ) {
 				// Store-API-Fehler mit sauberem HTTP 400 und feldnaher Meldung. Fallback

@@ -9,6 +9,23 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.6.7] - 2026-09-06
+
+Härtungs-Release aus einem eigenen Code-Audit (gesamter Plugin-Code, alle Eingabepfade). Keine kritischen oder hohen Lücken. Die Befunde sind behoben; Fundorte werden bewusst nicht benannt.
+
+### Sicherheit
+
+- Strengere Validierung der Kundeneingabe im Checkout (klassisch und Block-Checkout).
+- Sicherere Behandlung von Weiterleitungen und Objekttypen in den Bestätigungs-Handlern.
+
+### Datenschutz
+
+- Order-Notizen enthalten Kundennummer und E-Mail-Adresse nur noch maskiert. WooCommerce anonymisiert Notizen bei einer Datenschutz-Löschung nicht; die vollständigen Werte stehen in der Bestellung selbst und sind dort von Export und Löschung abgedeckt.
+
+### Behoben
+
+- Die Deinstallation entfernt jetzt auch den Zähler des Bewertungshinweises und die Entscheidung pro Benutzer.
+
 ## [1.6.6] – 2026-08-11
 
 ### Neu

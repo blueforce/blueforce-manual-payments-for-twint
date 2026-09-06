@@ -17,7 +17,10 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-$bf_twint_option = 'woocommerce_bf_twint_settings';
+$bf_twint_options = array(
+	'woocommerce_bf_twint_settings',
+	'bf_twint_released_count', // Zähler für den Bewertungshinweis.
+);
 
 if ( is_multisite() ) {
 	// number => 0 hebt das Standardlimit von 100 auf, damit auf grossen
@@ -30,13 +33,21 @@ if ( is_multisite() ) {
 	);
 	foreach ( $bf_twint_site_ids as $bf_twint_site_id ) {
 		switch_to_blog( $bf_twint_site_id );
-		delete_option( $bf_twint_option );
+		foreach ( $bf_twint_options as $bf_twint_option ) {
+			delete_option( $bf_twint_option );
+		}
 		wp_clear_scheduled_hook( 'bf_twint_cancel_unpaid_orders' );
 		wp_clear_scheduled_hook( 'bf_twint_send_payment_reminders' );
 		restore_current_blog();
 	}
 } else {
-	delete_option( $bf_twint_option );
+	foreach ( $bf_twint_options as $bf_twint_option ) {
+		delete_option( $bf_twint_option );
+	}
 	wp_clear_scheduled_hook( 'bf_twint_cancel_unpaid_orders' );
 	wp_clear_scheduled_hook( 'bf_twint_send_payment_reminders' );
 }
+
+// Entscheidung zum Bewertungshinweis (pro Benutzer). Die usermeta-Tabelle ist
+// netzwerkweit, darum einmal ausserhalb der Site-Schleife.
+delete_metadata( 'user', 0, '_bf_twint_review_prompt', '', true );

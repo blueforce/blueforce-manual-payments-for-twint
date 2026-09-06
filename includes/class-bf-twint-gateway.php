@@ -23,6 +23,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 class BF_TWINT_Gateway extends WC_Payment_Gateway {
 
 	/**
+	 * Maximale Länge einer Kundennummer nach der Normalisierung (Zeichen).
+	 *
+	 * E.164 erlaubt höchstens 15 Ziffern; mit Vorwahl-Plus, Leerzeichen und
+	 * Klammern ist eine echte Nummer nie länger als rund 25 Zeichen. Ohne diese
+	 * Obergrenze liesse sich über das Checkout-Feld beliebig viel Text in die
+	 * Bestellung, die Admin-Mails und die Bestellansicht drücken.
+	 */
+	const PHONE_MAX_LENGTH = 32;
+
+	/**
 	 * Gewählter Ablauf: «send» oder «request».
 	 *
 	 * @var string
@@ -563,13 +573,67 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	/**
 	 * Prüft, ob eine Handynummer plausibel ist (6–15 Ziffern, E.164-Rahmen).
 	 *
+	 * Zusätzlich zur Ziffernzahl wird die Gesamtlänge der normalisierten Nummer
+	 * begrenzt: Die Ziffernprüfung allein liesse beliebig viele Formatierungs-
+	 * zeichen durch.
+	 *
 	 * @param string $phone Rohwert.
 	 * @return bool
 	 */
 	public function is_valid_phone( $phone ) {
-		$digits = preg_replace( '/\D+/', '', (string) $phone );
+		$phone = $this->normalize_phone( $phone );
+		if ( strlen( $phone ) > self::PHONE_MAX_LENGTH ) {
+			return false;
+		}
+
+		$digits = preg_replace( '/\D+/', '', $phone );
 		$len    = strlen( (string) $digits );
 		return $len >= 6 && $len <= 15;
+	}
+
+	/**
+	 * Maskiert eine Handynummer für Protokolle (Order-Notizen).
+	 *
+	 * Behält nur die letzten drei Ziffern. Die vollständige Nummer steht in der
+	 * Order-Meta und wird bei einer Datenschutz-Löschung mit entfernt; Notizen
+	 * anonymisiert WooCommerce dagegen nicht, darum gehört dort keine
+	 * vollständige Nummer hinein.
+	 *
+	 * @param string $phone Normalisierte Nummer.
+	 * @return string
+	 */
+	public static function mask_phone( $phone ) {
+		$phone = (string) $phone;
+		$keep  = 3;
+		$seen  = 0;
+		$out   = '';
+
+		for ( $i = strlen( $phone ) - 1; $i >= 0; $i-- ) {
+			$char = $phone[ $i ];
+			if ( ctype_digit( $char ) ) {
+				$out = ( $seen < $keep ? $char : '*' ) . $out;
+				++$seen;
+			} else {
+				$out = $char . $out;
+			}
+		}
+
+		return $out;
+	}
+
+	/**
+	 * Maskiert eine E-Mail-Adresse für Protokolle (Order-Notizen).
+	 *
+	 * @param string $email E-Mail-Adresse.
+	 * @return string
+	 */
+	public static function mask_email( $email ) {
+		$email = (string) $email;
+		$at    = strrpos( $email, '@' );
+		if ( false === $at || $at < 1 ) {
+			return '***';
+		}
+		return substr( $email, 0, 1 ) . '***' . substr( $email, $at );
 	}
 
 	/**
@@ -658,12 +722,14 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 			$phone = $this->normalize_phone( $phone );
 			$order->update_meta_data( '_bf_twint_customer_phone', $phone );
 
+			// In der Notiz nur maskiert: Notizen überleben die Datenschutz-Löschung.
+			// Die vollständige Nummer zeigt die TWINT-Box in der Bestellansicht.
 			$order->update_status(
 				'on-hold',
 				sprintf(
 					/* translators: %s: customer TWINT phone number. */
 					__( 'TWINT: send a payment request to %s.', 'blueforce-manual-payments-for-twint' ),
-					$phone ? $phone : __( '(no number provided)', 'blueforce-manual-payments-for-twint' )
+					$phone ? self::mask_phone( $phone ) : __( '(no number provided)', 'blueforce-manual-payments-for-twint' )
 				)
 			);
 		} else {
@@ -1145,9 +1211,11 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 			wp_die( esc_html__( 'You do not have permission to edit this order.', 'blueforce-manual-payments-for-twint' ), '', array( 'response' => 403 ) );
 		}
 
+		// instanceof statt blossem Truthy-Check: wc_get_order() liefert für eine
+		// Rückerstattungs-ID ein WC_Order_Refund ohne die hier benötigten Methoden.
 		$order = $order_id ? wc_get_order( $order_id ) : false;
 
-		if ( $order
+		if ( $order instanceof WC_Order
 			&& BF_TWINT_GATEWAY_ID === $order->get_payment_method()
 			&& $order->has_status( array( 'on-hold', 'pending' ) )
 		) {
@@ -1190,11 +1258,21 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 		$key   = isset( $_POST['order_key'] ) ? sanitize_text_field( wp_unslash( $_POST['order_key'] ) ) : '';
 		$order = $order_id ? wc_get_order( $order_id ) : false;
 
-		if ( $order
-			&& $key
+		// Der Bestellschlüssel ist die eigentliche Autorisierung (die Nonce ist
+		// für Gäste nicht personengebunden). Erst nach bestandener Prüfung darf
+		// irgendetwas mit der Bestellung geschehen, auch kein Redirect auf eine
+		// URL, die den Schlüssel enthält.
+		$authorized = $order instanceof WC_Order
+			&& '' !== $key
 			&& hash_equals( (string) $order->get_order_key(), $key )
-			&& BF_TWINT_GATEWAY_ID === $order->get_payment_method()
-			&& $order->has_status( array( 'on-hold', 'pending' ) )
+			&& BF_TWINT_GATEWAY_ID === $order->get_payment_method();
+
+		if ( ! $authorized ) {
+			wp_safe_redirect( home_url( '/' ) );
+			exit;
+		}
+
+		if ( $order->has_status( array( 'on-hold', 'pending' ) )
 			&& ! absint( $order->get_meta( '_bf_twint_paid_claimed' ) )
 		) {
 			$order->update_meta_data( '_bf_twint_paid_claimed', time() );
@@ -1202,8 +1280,14 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 			$order->save();
 		}
 
-		$fallback = $order ? $order->get_checkout_order_received_url() : home_url( '/' );
-		wp_safe_redirect( wp_get_referer() ? wp_get_referer() : $fallback );
+		// Zurück zur aufrufenden Seite (Danke-Seite oder «Mein Konto»). Ein
+		// fremder oder fehlender Referer führt auf die Bestellseite statt, wie
+		// bei wp_safe_redirect() üblich, auf die Admin-Anmeldung.
+		$fallback = $order->get_checkout_order_received_url();
+		$referer  = (string) wp_get_referer();
+		// wp_validate_redirect() gibt bei leerem Wert '' zurück, nicht den Fallback.
+		$target = '' !== $referer ? wp_validate_redirect( $referer, $fallback ) : $fallback;
+		wp_safe_redirect( '' !== $target ? $target : $fallback );
 		exit;
 	}
 }
