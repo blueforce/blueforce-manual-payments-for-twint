@@ -176,8 +176,13 @@ fi
 say "6/6  Gegen den Server verifizieren"
 
 CHECK_TAG="${VERSION:-$STABLE}"
-tagver=$("$SVN_BIN" cat "$SVN_URL/tags/$CHECK_TAG/$SLUG.php" 2>/dev/null | grep -m1 '^ \* Version:' | sed 's/.*Version: *//' | tr -d ' \r')
-tagstb=$("$SVN_BIN" cat "$SVN_URL/tags/$CHECK_TAG/readme.txt" 2>/dev/null | grep -m1 '^Stable tag:' | sed 's/Stable tag: *//' | tr -d ' \r')
+# Erst komplett einlesen, dann filtern: «grep -m1» direkt hinter «svn cat»
+# schliesst die Pipe früh, svn bekommt SIGPIPE, und pipefail + set -e beenden
+# das Skript stumm, bevor fail() überhaupt etwas melden kann.
+tagphp=$("$SVN_BIN" cat "$SVN_URL/tags/$CHECK_TAG/$SLUG.php" 2>/dev/null || true)
+tagrdm=$("$SVN_BIN" cat "$SVN_URL/tags/$CHECK_TAG/readme.txt" 2>/dev/null || true)
+tagver=$(printf '%s\n' "$tagphp" | grep -m1 '^ \* Version:' | sed 's/.*Version: *//' | tr -d ' \r' || true)
+tagstb=$(printf '%s\n' "$tagrdm" | grep -m1 '^Stable tag:' | sed 's/Stable tag: *//' | tr -d ' \r' || true)
 [ "$tagver" = "$CHECK_TAG" ] || fail "tags/$CHECK_TAG trägt Version '$tagver'"
 [ "$tagstb" = "$CHECK_TAG" ] || fail "tags/$CHECK_TAG hat Stable tag '$tagstb'"
 ok "tags/$CHECK_TAG serverseitig korrekt"
