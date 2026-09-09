@@ -12,7 +12,7 @@ Manual TWINT payment method for WooCommerce – the plugin needs no TWINT API or
 
 == Description ==
 
-This plugin adds a TWINT payment method to WooCommerce. The **plugin itself** needs no TWINT API, no acquiring contract and no payment service provider – it uses the manual TWINT process (send or request money by mobile number) and is therefore suited to small shops, clubs and sole traders. You remain responsible for complying with your own TWINT, bank and business terms for commercial use.
+This plugin adds a TWINT payment method to WooCommerce. The **plugin itself** needs no TWINT API, no acquiring contract and no payment service provider – it uses the manual TWINT process (send or request money by mobile number) and is therefore suited to small shops, clubs and sole traders. It runs on any hosting: no PHP extensions, no certificate, PHP 7.4 or newer. You remain responsible for complying with your own TWINT, bank and business terms for commercial use.
 
 TWINT does not offer its payment API publicly. An automated integration is only possible through a TWINT acquiring contract or a payment service provider. This plugin deliberately takes the manual route, so you can start without a TWINT integration contract while still meeting your own TWINT and bank conditions.
 
@@ -35,8 +35,9 @@ In both cases the order is set to "On hold" and the incoming payment is confirme
 * Customers can report "I have sent the payment" – shown on the order and in the payments overview
 * "Paid with TWINT" note on PDF invoices (with WooCommerce PDF Invoices & Packing Slips)
 * HPOS compatible
-* Translation-ready; German (Germany and Switzerland), French (Switzerland) and Italian (Switzerland) translations included
+* Translation-ready; German (Germany and Switzerland) included, French and Italian via translate.wordpress.org
 * No external dependencies, no tracking, no phone-home calls
+* Runs on any hosting: no PHP extensions required, no certificate, PHP 7.4 or newer
 
 == Installation ==
 
