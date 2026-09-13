@@ -134,6 +134,7 @@ final class BF_TWINT_Auto_Cancel {
 			)
 		);
 
+		$cancelled = array();
 		foreach ( $orders as $order ) {
 			// Sicherheitsnetz: Hat der Kunde «Ich habe bezahlt» gemeldet und liegt
 			// die Meldung noch innerhalb der Kulanzfrist, nicht automatisch
@@ -150,6 +151,23 @@ final class BF_TWINT_Auto_Cancel {
 					__( 'TWINT: automatically cancelled – no payment was received within %d days.', 'blueforce-manual-payments-for-twint' ),
 					$days
 				)
+			);
+			$cancelled[] = '#' . $order->get_order_number();
+		}
+
+		// Lauf-Protokoll unter WooCommerce → Status → Protokolle (Quelle bf-twint).
+		// Beantwortet «läuft der Cron?» und «warum wurde Bestellung X storniert?»,
+		// ohne dass jemand in die Datenbank muss.
+		if ( function_exists( 'wc_get_logger' ) ) {
+			wc_get_logger()->info(
+				sprintf(
+					'Auto-cancel run: %d candidates older than %d days, %d cancelled%s.',
+					count( $orders ),
+					$days,
+					count( $cancelled ),
+					$cancelled ? ' (' . implode( ', ', $cancelled ) . ')' : ''
+				),
+				array( 'source' => 'bf-twint' )
 			);
 		}
 	}

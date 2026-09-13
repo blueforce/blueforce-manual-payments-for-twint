@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.6.7
+Stable tag: 1.6.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,7 +37,9 @@ In both cases the order is set to "On hold" and the incoming payment is confirme
 * HPOS compatible
 * Translation-ready; German (Germany and Switzerland) included, French and Italian via translate.wordpress.org
 * No external dependencies, no tracking, no phone-home calls
-* Runs on any hosting: no PHP extensions required, no certificate, PHP 7.4 or newer
+* Runs on any hosting: no PHP extensions, no shell access, no certificate, PHP 7.4 or newer
+* Site Health checks (Tools > Site Health): shop currency, payment details and scheduled tasks
+* Run log for auto-cancelling and payment reminders (WooCommerce > Status > Logs, source "bf-twint")
 
 == Installation ==
 
@@ -85,6 +87,11 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 6. Customers can revisit the payment instructions at any time under My account – View order.
 
 == Changelog ==
+
+= 1.6.8 =
+* New: three checks under Tools > Site Health (shop currency, payment details, scheduled tasks), so a silent misconfiguration becomes visible where WordPress collects such findings.
+* New: an admin notice when the shop currency is not CHF. Until now the payment method simply disappeared from the checkout without explanation.
+* New: every auto-cancel and reminder run is logged under WooCommerce > Status > Logs (source "bf-twint"), including which orders were cancelled.
 
 = 1.6.7 =
 * Security: hardening release. Stricter validation of customer input at checkout and safer handling of redirects. No configuration changes needed, updating is recommended.

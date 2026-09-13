@@ -9,6 +9,16 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.6.8] - 2026-09-13
+
+Ergebnis einer Analyse des offiziellen TWINT-Plugins: drei Dinge, die dort gut gelöst sind und auch dem manuellen Verfahren nützen.
+
+### Neu
+
+- Drei Prüfungen unter Werkzeuge > Website-Zustand: Shop-Währung CHF, Zahlungsziel im Ablauf «Kunde sendet», Cron-Events für Auto-Stornierung und Zahlungserinnerung (geplant und nicht überfällig). Eine stille Fehlkonfiguration wird damit dort sichtbar, wo WordPress solche Befunde ohnehin sammelt.
+- Backend-Hinweis, wenn die Shop-Währung nicht CHF ist. Bisher verschwand TWINT in diesem Fall kommentarlos aus dem Checkout.
+- Lauf-Protokoll für Auto-Stornierung und Zahlungserinnerung unter WooCommerce > Status > Protokolle (Quelle «bf-twint»), inklusive der stornierten Bestellnummern.
+
 ## [1.6.7] - 2026-09-06
 
 Härtungs-Release aus einem eigenen Code-Audit (gesamter Plugin-Code, alle Eingabepfade). Keine kritischen oder hohen Lücken. Die Befunde sind behoben; Fundorte werden bewusst nicht benannt.

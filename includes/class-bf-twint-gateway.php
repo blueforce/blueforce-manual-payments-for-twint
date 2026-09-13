@@ -199,6 +199,21 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 		if ( 'yes' !== $this->enabled ) {
 			return;
 		}
+
+		// Falsche Währung: is_available() blendet TWINT dann aus, und ohne
+		// Hinweis sähe der Shop nur, dass die Methode «einfach fehlt».
+		if ( 'CHF' !== get_woocommerce_currency() ) {
+			$url = admin_url( 'admin.php?page=wc-settings&tab=general' );
+			echo '<div class="notice notice-warning"><p>';
+			printf(
+				/* translators: 1: current shop currency code, 2: URL to the WooCommerce general settings. */
+				wp_kses_post( __( '<strong>Blueforce Manual Payments for TWINT:</strong> TWINT only works in Swiss francs, but the shop currency is %1$s. The payment method is hidden at checkout until you <a href="%2$s">change the currency</a> to CHF.', 'blueforce-manual-payments-for-twint' ) ),
+				esc_html( get_woocommerce_currency() ),
+				esc_url( $url )
+			);
+			echo '</p></div>';
+		}
+
 		if ( 'send' !== $this->mode || $this->has_send_target() ) {
 			return;
 		}

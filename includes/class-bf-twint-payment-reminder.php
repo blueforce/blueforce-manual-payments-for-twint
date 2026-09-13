@@ -113,7 +113,8 @@ final class BF_TWINT_Payment_Reminder {
 			)
 		);
 
-		$sent = 0;
+		$sent   = 0;
+		$failed = 0;
 		foreach ( $orders as $order ) {
 			if ( $sent >= self::BATCH_SIZE ) {
 				break;
@@ -125,7 +126,17 @@ final class BF_TWINT_Payment_Reminder {
 			}
 			if ( self::send_reminder( $order ) ) {
 				++$sent;
+			} else {
+				++$failed;
 			}
+		}
+
+		// Lauf-Protokoll unter WooCommerce → Status → Protokolle (Quelle bf-twint).
+		if ( function_exists( 'wc_get_logger' ) ) {
+			wc_get_logger()->info(
+				sprintf( 'Reminder run: %d candidates, %d reminders sent, %d not sent (no e-mail address or mailer refused).', count( $orders ), $sent, $failed ),
+				array( 'source' => 'bf-twint' )
+			);
 		}
 	}
 
