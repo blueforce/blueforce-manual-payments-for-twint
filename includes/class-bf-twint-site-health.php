@@ -5,9 +5,8 @@
  * Das Plugin hat zwei stille Abhängigkeiten: Auto-Stornierung und
  * Zahlungserinnerung laufen über WP-Cron, und TWINT erscheint nur bei
  * Shop-Währung CHF. Fällt eines davon weg, passiert einfach nichts, und im
- * Backend weist nichts darauf hin. Diese Tests machen das an der Stelle
- * sichtbar, an der WordPress solche Befunde ohnehin sammelt, ohne eigene
- * Diagnose-Seite.
+ * Backend weist nichts darauf hin. Diese Tests machen das im WordPress-Bereich
+ * «Website-Zustand» sichtbar, ohne eigene Diagnose-Seite.
  *
  * @package Blueforce_Manual_Payments_For_TWINT
  */

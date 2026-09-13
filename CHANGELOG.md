@@ -15,7 +15,7 @@ Ergebnis einer Analyse des offiziellen TWINT-Plugins: drei Dinge, die dort gut g
 
 ### Neu
 
-- Drei Prüfungen unter Werkzeuge > Website-Zustand: Shop-Währung CHF, Zahlungsziel im Ablauf «Kunde sendet», Cron-Events für Auto-Stornierung und Zahlungserinnerung (geplant und nicht überfällig). Eine stille Fehlkonfiguration wird damit dort sichtbar, wo WordPress solche Befunde ohnehin sammelt.
+- Drei Prüfungen unter Werkzeuge > Website-Zustand: Shop-Währung CHF, Zahlungsziel im Ablauf «Kunde sendet», Cron-Events für Auto-Stornierung und Zahlungserinnerung (geplant und nicht überfällig). Eine Fehlkonfiguration wird damit im WordPress-Bereich sichtbar.
 - Backend-Hinweis, wenn die Shop-Währung nicht CHF ist. Bisher verschwand TWINT in diesem Fall kommentarlos aus dem Checkout.
 - Lauf-Protokoll für Auto-Stornierung und Zahlungserinnerung unter WooCommerce > Status > Protokolle (Quelle «bf-twint»), inklusive der stornierten Bestellnummern.
 
