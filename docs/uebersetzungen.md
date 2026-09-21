@@ -108,10 +108,14 @@ Die Verzeichnis-Seite kommt aus der `readme.txt` und ist ein **separates
 GlotPress-Projekt** («Stable Readme» / «Development Readme»), getrennt von den
 Code-Strings.
 
-- Übersetzt werden nur die **inhaltlichen Abschnitte** (Beschreibung, Abläufe,
-  Features, Installation, FAQ, Datenschutz). Der **Changelog bleibt englisch** –
-  Konvention im ganzen Verzeichnis, fällt automatisch auf Englisch zurück. Ein
-  vollständig übersetztes Readme erreicht darum nur ~44 %; das ist der Soll-Zustand.
+- Übersetzt wird die **ganze readme, inklusive Changelog**. Soll-Zustand ist
+  100 Prozent in allen Readme-Zweigen (stable und dev, je de, de formal, de-ch).
+  Neue Changelog-Einträge werden nach jedem Release mit dem Skill
+  `twint-glotpress` nachgezogen.
+- Bis Juli 2026 blieb der Changelog bewusst englisch, die readme stand damit bei
+  rund 44 Prozent. Seit August 2026 wird er mitübersetzt, damit die readme nach
+  einem Release nicht als offen dasteht. Stand 21.09.2026: alle sechs deutschen
+  Readme-Zweige bei 0 offen.
 - **Matching-Fallstrick beim Import:** WordPress.org wandelt Markdown in der
   `readme.txt` (`**fett**`, `` `code` ``) in **HTML** um (`<strong>`, `<code>`).
   Eine `.po` mit Markdown-`msgid` **matcht nicht** – die betroffenen Strings mit
