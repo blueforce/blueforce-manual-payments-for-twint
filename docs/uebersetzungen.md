@@ -22,14 +22,32 @@ Es gibt **zwei parallele Übersetzungs-Kanäle**:
 **gewinnt** gegen die gebündelte Datei im Plugin-Ordner. Sobald ein Sprachpaket
 existiert, sehen Nutzer also die GlotPress-Version, nicht die gebündelte.
 
-## de_DE vs. de_CH – die «ß»/«ss»-Regel
+## de_DE vs. de_CH: «ß»/«ss» UND die umgekehrte Anrede
 
-- **de_DE** (Deutschland) verlangt **«ß»**. Das ist die **Hauptvariante** – fast
+- **de_DE** (Deutschland) verlangt **«ß»**. Das ist die **Hauptvariante**, fast
   alle deutschsprachigen Nutzer, auch Schweizer, haben WordPress auf «Deutsch»
   (de_DE), nicht «Deutsch (Schweiz)» (de_CH).
-- **de_CH** (Schweiz) nutzt **«ss»**. Wird vom **Konvertierungs-Skript des de_CH-
-  Teams** automatisch aus de_DE abgeleitet – man muss de_CH nicht selbst pflegen.
-- Praktisch heisst das: **de_DE mit «ß» pflegen**, de_CH dem Team überlassen.
+- **de_CH** (Schweiz) nutzt **«ss»**, abgeleitet aus de_DE (offizielles Werkzeug:
+  PO Converter de_DE > de_CH, `po.wpswitzerland.ch`).
+
+**⛔ Die Anrede ist bei der Schweiz umgekehrt zu Deutschland (festgestellt 26.09.2026):**
+
+| Katalog | Anrede | Schreibung | GlotPress-Ziel |
+|---|---|---|---|
+| `…-de_DE.po` | du | «ß» | `de/default` |
+| `…-de_DE_formal.po` | Sie | «ß» | `de/formal` |
+| `…-de_CH.po` | **Sie** | «ss» | `de-ch/default` |
+| `…-de_CH_informal.po` | **du** | «ss» | `de-ch/informal` |
+
+Nachprüfbar am Core-Export: `de-ch/default` sagt «Geben Sie Ihr Anwendungspasswort
+ein», `de-ch/informal` «Gib dein Anwendungspasswort ein». Bis zum 26.09.2026 lag in
+`…-de_CH.po` die du-Fassung, ein Shop mit «Deutsch (Schweiz)» sah also die du-Anrede,
+obwohl WordPress dort die Sie-Form erwartet. Korrigiert: `de_CH` kommt neu aus der
+Sie-Fassung, `de_CH_informal` ist dazugekommen, beide mit «ss», dazu je eine
+`.json` für die Block-Checkout-Texte. Auf GlotPress sind beide Schweizer Zweige
+ebenfalls richtiggestellt (alle vier Sprachen, code und readme, Stand 26.09.2026).
+
+Ablauf und Fallen stehen im Skill `twint-glotpress`.
 
 **Getrennt seit `[Unreleased]` (geht mit 1.5.1 live):** Die gebündelten Dateien
 sind jetzt sauber getrennt – `…-de_DE.po/.mo` («ß») + `…-de_CH.po/.mo/.json` («ss»).
@@ -140,4 +158,4 @@ Code-Strings.
    GlotPress importieren (stable **und** dev).
 3. fr/it neue Strings als **waiting** nachreichen.
 4. Readme-Änderungen ins «Readme»-Projekt (HTML-Matching beachten).
-5. ✅ Gebündelte Dateien sind auf `de_DE`(ß) + `de_CH`(ss) getrennt (seit 1.5.1).
+5. ✅ Gebündelte Dateien: `de_DE`(du, ß), `de_DE_formal`(Sie, ß), `de_CH`(Sie, ss), `de_CH_informal`(du, ss).

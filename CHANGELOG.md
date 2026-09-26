@@ -7,7 +7,8 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 ## [Unreleased]
 
-_Noch keine unveröffentlichten Änderungen._
+### Geändert
+- **Schweizer Übersetzung: richtige Anrede, beide Fassungen.** Bei der Schweiz ist die Anrede umgekehrt zu Deutschland, `de_CH` ist die Sie-Fassung und `de_CH_informal` die du-Fassung. Bisher lag im Schweizer Katalog die du-Fassung, ein Shop mit «Deutsch (Schweiz)» sah also die du-Anrede, obwohl WordPress dort die Sie-Form erwartet. Neu liegen beide Kataloge bei, jeder mit der richtigen Anrede und mit «ss», samt der Datei für die Texte im Block-Checkout.
 
 ## [1.6.8] - 2026-09-13
 
