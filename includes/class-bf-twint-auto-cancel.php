@@ -32,6 +32,20 @@ final class BF_TWINT_Auto_Cancel {
 	const BATCH_SIZE = 50;
 
 	/**
+	 * Grösse einer Kandidaten-Seite.
+	 */
+	const PAGE_SIZE = 50;
+
+	/**
+	 * Obergrenze der Seiten pro Lauf.
+	 *
+	 * Bestellungen mit frischer Kundenmeldung «Ich habe bezahlt» bleiben Treffer
+	 * der Abfrage, bis ihre Kulanzfrist abgelaufen ist. Damit sie den Stapel nicht
+	 * belegen, wird über sie hinweggeblättert.
+	 */
+	const MAX_PAGES = 10;
+
+	/**
 	 * Kulanzfrist in Tagen ab der Kundenmeldung «Ich habe bezahlt».
 	 *
 	 * Meldet der Kunde die Zahlung, wird die Stornierung nicht dauerhaft
@@ -104,55 +118,64 @@ final class BF_TWINT_Auto_Cancel {
 
 		$grace_cutoff = time() - self::get_claim_grace_days() * DAY_IN_SECONDS;
 
-		$orders = wc_get_orders(
-			array(
-				'payment_method' => BF_TWINT_GATEWAY_ID,
-				'status'         => array( 'on-hold', 'pending' ),
-				'date_created'   => '<' . ( time() - $days * DAY_IN_SECONDS ),
-				'limit'          => self::BATCH_SIZE,
-				'orderby'        => 'date',
-				'order'          => 'ASC',
-				// Kundenmeldungen «Ich habe bezahlt» werden nur so lange geladen,
-				// wie ihre Kulanzfrist bereits abgelaufen ist, frische Meldungen
-				// bleiben aussen vor. Das setzt die Stornierung nicht dauerhaft
-				// aus (ein bloss behaupteter Eingang würde sonst den Stapel und
-				// den Lagerbestand unbegrenzt blockieren), gibt dem Shop aber die
-				// Kulanzfrist zum Abgleich.
-				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-					'relation' => 'OR',
-					array(
-						'key'     => '_bf_twint_paid_claimed',
-						'compare' => 'NOT EXISTS',
-					),
-					array(
-						'key'     => '_bf_twint_paid_claimed',
-						'value'   => $grace_cutoff,
-						'compare' => '<=',
-						'type'    => 'NUMERIC',
-					),
-				),
-			)
+		// Gefiltert wird in PHP, nicht per «meta_query»: Die klassische Bestelltabelle
+		// (Shops ohne HPOS) unterstützt das Argument in wc_get_orders() nicht.
+		// WooCommerce verwirft es dort stillschweigend und meldet zusätzlich
+		// «doing it wrong», und das bei jedem Cron-Lauf.
+		$args = array(
+			'payment_method' => BF_TWINT_GATEWAY_ID,
+			'status'         => array( 'on-hold', 'pending' ),
+			'date_created'   => '<' . ( time() - $days * DAY_IN_SECONDS ),
+			'limit'          => self::PAGE_SIZE,
+			'orderby'        => 'date',
+			'order'          => 'ASC',
 		);
 
-		$cancelled = array();
-		foreach ( $orders as $order ) {
-			// Sicherheitsnetz: Hat der Kunde «Ich habe bezahlt» gemeldet und liegt
-			// die Meldung noch innerhalb der Kulanzfrist, nicht automatisch
-			// stornieren, der Shop soll erst abgleichen können.
-			$claimed = absint( $order->get_meta( '_bf_twint_paid_claimed' ) );
-			if ( $claimed > 0 && $claimed > $grace_cutoff ) {
-				continue;
+		$cancelled  = array();
+		$candidates = 0;
+		$skipped    = 0;
+
+		for ( $page = 1; $page <= self::MAX_PAGES; $page++ ) {
+			// Geblättert wird über «offset» in Höhe der übersprungenen Bestellungen,
+			// nicht über «page»: Eine stornierte Bestellung verlässt den Status
+			// «on-hold/pending» und damit die Treffermenge. Mit Seitenzahlen würde
+			// die Abfrage um genau diese Zahl weiterrutschen und Bestellungen
+			// überspringen. Übrig bleiben vorne nur die übersprungenen.
+			$orders = wc_get_orders( array_merge( $args, array( 'offset' => $skipped ) ) );
+			if ( empty( $orders ) ) {
+				break;
+			}
+			$candidates += count( $orders );
+
+			foreach ( $orders as $order ) {
+				// Sicherheitsnetz: Hat der Kunde «Ich habe bezahlt» gemeldet und liegt
+				// die Meldung noch innerhalb der Kulanzfrist, nicht automatisch
+				// stornieren, der Shop soll erst abgleichen können.
+				$claimed = absint( $order->get_meta( '_bf_twint_paid_claimed' ) );
+				if ( $claimed > 0 && $claimed > $grace_cutoff ) {
+					++$skipped;
+					continue;
+				}
+
+				$order->update_status(
+					'cancelled',
+					sprintf(
+						/* translators: %d: number of days without payment. */
+						__( 'TWINT: automatically cancelled – no payment was received within %d days.', 'blueforce-manual-payments-for-twint' ),
+						$days
+					)
+				);
+				$cancelled[] = '#' . $order->get_order_number();
+
+				if ( count( $cancelled ) >= self::BATCH_SIZE ) {
+					break 2;
+				}
 			}
 
-			$order->update_status(
-				'cancelled',
-				sprintf(
-					/* translators: %d: number of days without payment. */
-					__( 'TWINT: automatically cancelled – no payment was received within %d days.', 'blueforce-manual-payments-for-twint' ),
-					$days
-				)
-			);
-			$cancelled[] = '#' . $order->get_order_number();
+			// Letzte Seite erreicht.
+			if ( count( $orders ) < self::PAGE_SIZE ) {
+				break;
+			}
 		}
 
 		// Lauf-Protokoll unter WooCommerce → Status → Protokolle (Quelle bf-twint).
@@ -162,7 +185,7 @@ final class BF_TWINT_Auto_Cancel {
 			wc_get_logger()->info(
 				sprintf(
 					'Auto-cancel run: %d candidates older than %d days, %d cancelled%s.',
-					count( $orders ),
+					$candidates,
 					$days,
 					count( $cancelled ),
 					$cancelled ? ' (' . implode( ', ', $cancelled ) . ')' : ''

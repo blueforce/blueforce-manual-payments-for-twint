@@ -25,10 +25,11 @@ final class BF_TWINT_Payments_Page {
 	const PAGE_SLUG = 'bf-twint-payments';
 
 	/**
-	 * Obergrenze der angezeigten Bestellungen (defensiv; die Zielgruppe sind
-	 * kleine Shops – mehr als das deutet auf ein anderes Problem hin).
+	 * Bestellungen pro Seite (defensiv; die Zielgruppe sind kleine Shops, mehr
+	 * als das deutet auf ein anderes Problem hin). Was darüber hinausgeht, ist
+	 * über die Blätterfunktion erreichbar und wird nicht mehr verschwiegen.
 	 */
-	const MAX_ORDERS = 250;
+	const PER_PAGE = 250;
 
 	/**
 	 * Hooks registrieren.
@@ -56,20 +57,37 @@ final class BF_TWINT_Payments_Page {
 	}
 
 	/**
-	 * Offene TWINT-Bestellungen laden (älteste zuerst – die warten am längsten).
+	 * Eine Seite offener TWINT-Bestellungen laden, älteste zuerst, die warten am
+	 * längsten.
 	 *
-	 * @return WC_Order[]
+	 * Mit «paginate» liefert WooCommerce zusätzlich die echte Gesamtzahl. Vorher
+	 * endete die Seite stumm bei 250 Treffern, ohne Hinweis und ohne Weg zum Rest.
+	 *
+	 * @param int $page Seitenzahl, ab 1.
+	 * @return object Mit den Feldern orders, total und max_num_pages.
 	 */
-	private static function get_open_orders() {
+	private static function get_open_orders( $page = 1 ) {
 		return wc_get_orders(
 			array(
 				'payment_method' => BF_TWINT_GATEWAY_ID,
 				'status'         => array( 'on-hold', 'pending' ),
-				'limit'          => self::MAX_ORDERS,
+				'limit'          => self::PER_PAGE,
+				'page'           => max( 1, (int) $page ),
+				'paginate'       => true,
 				'orderby'        => 'date',
 				'order'          => 'ASC',
 			)
 		);
+	}
+
+	/**
+	 * Gateway-Instanz holen, für die bestellbezogenen Einstellungen.
+	 *
+	 * @return WC_Payment_Gateway|null
+	 */
+	private static function get_gateway() {
+		$gateways = WC()->payment_gateways() ? WC()->payment_gateways->payment_gateways() : array();
+		return isset( $gateways[ BF_TWINT_GATEWAY_ID ] ) ? $gateways[ BF_TWINT_GATEWAY_ID ] : null;
 	}
 
 	/**
@@ -82,8 +100,25 @@ final class BF_TWINT_Payments_Page {
 			return;
 		}
 
-		$orders   = self::get_open_orders();
-		$can_edit = current_user_can( 'edit_shop_orders' );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur die Seitenzahl einer lesenden Admin-Ansicht.
+		$paged  = isset( $_GET['paged'] ) ? max( 1, absint( wp_unslash( $_GET['paged'] ) ) ) : 1;
+		$result = self::get_open_orders( $paged );
+
+		// Seitenzahl aus einem alten Lesezeichen zeigt ins Leere, sobald der Shop
+		// aufgeräumt hat. Dann auf die erste Seite zurück, statt «alles erledigt»
+		// zu melden, obwohl noch Zahlungen offen sind. Die Gesamtzahl taugt dafür
+		// nicht als Prüfung: Liegt die Seite ausserhalb, liefert WooCommerce auch
+		// total und max_num_pages als 0.
+		if ( empty( $result->orders ) && $paged > 1 ) {
+			$paged  = 1;
+			$result = self::get_open_orders( $paged );
+		}
+
+		$orders    = $result->orders;
+		$total     = (int) $result->total;
+		$max_pages = (int) $result->max_num_pages;
+		$can_edit  = current_user_can( 'edit_shop_orders' );
+		$gateway   = self::get_gateway();
 
 		echo '<div class="wrap">';
 		echo '<h1>' . esc_html__( 'Open TWINT payments', 'blueforce-manual-payments-for-twint' ) . '</h1>';
@@ -100,6 +135,17 @@ final class BF_TWINT_Payments_Page {
 			return;
 		}
 
+		if ( $max_pages > 1 ) {
+			echo '<p>' . esc_html(
+				sprintf(
+					/* translators: 1: number of payments on this page, 2: total number of open payments. */
+					__( 'Showing %1$s of %2$s open payments, oldest first.', 'blueforce-manual-payments-for-twint' ),
+					number_format_i18n( count( $orders ) ),
+					number_format_i18n( $total )
+				)
+			) . '</p>';
+		}
+
 		echo '<table class="widefat striped">';
 		echo '<thead><tr>';
 		echo '<th>' . esc_html__( 'Order', 'blueforce-manual-payments-for-twint' ) . '</th>';
@@ -111,21 +157,46 @@ final class BF_TWINT_Payments_Page {
 		echo '</tr></thead><tbody>';
 
 		foreach ( $orders as $order ) {
-			self::render_row( $order, $can_edit );
+			self::render_row( $order, $can_edit, $gateway );
 		}
 
 		echo '</tbody></table>';
+
+		// Blätterfunktion. Die Beschriftungen kommen aus WordPress selbst, dafür
+		// braucht es keine eigenen Texte.
+		if ( $max_pages > 1 ) {
+			$links = paginate_links(
+				array(
+					'base'    => add_query_arg(
+						array(
+							'page'  => self::PAGE_SLUG,
+							'paged' => '%#%',
+						),
+						admin_url( 'admin.php' )
+					),
+					'format'  => '',
+					'total'   => $max_pages,
+					'current' => $paged,
+					'type'    => 'plain',
+				)
+			);
+			if ( $links ) {
+				echo '<div class="tablenav bottom"><div class="tablenav-pages">' . wp_kses_post( $links ) . '</div></div>';
+			}
+		}
+
 		echo '</div>';
 	}
 
 	/**
 	 * Eine Bestell-Zeile rendern.
 	 *
-	 * @param WC_Order $order    Bestellung.
-	 * @param bool     $can_edit Ob der Nutzer Bestellungen freigeben darf.
+	 * @param WC_Order                $order    Bestellung.
+	 * @param bool                    $can_edit Ob der Nutzer Bestellungen freigeben darf.
+	 * @param WC_Payment_Gateway|null $gateway  Gateway für die bestellbezogenen Einstellungen.
 	 * @return void
 	 */
-	private static function render_row( $order, $can_edit ) {
+	private static function render_row( $order, $can_edit, $gateway ) {
 		$order_id = $order->get_id();
 		$number   = $order->get_order_number();
 
@@ -145,9 +216,13 @@ final class BF_TWINT_Payments_Page {
 			)
 			: '';
 
-		// Modus-gerechte Abgleich-Anweisung (Snapshot der Bestellung, nicht die
-		// aktuellen Einstellungen – analog zu Danke-Seite/E-Mail).
-		$mode = (string) $order->get_meta( '_bf_twint_mode' );
+		// Modus-gerechte Abgleich-Anweisung, über denselben Weg wie Danke-Seite und
+		// E-Mail: bevorzugt aus dem Order-Snapshot, bei Altbestellungen ohne
+		// Snapshot aus den aktuellen Einstellungen. Das rohe Meta allein hätte
+		// dort immer «Kunde sendet» ergeben, samt fehlender Kundennummer.
+		$mode = $gateway
+			? (string) $gateway->order_setting( $order, 'mode' )
+			: (string) $order->get_meta( '_bf_twint_mode' );
 		if ( 'request' === $mode ) {
 			$phone = (string) $order->get_meta( '_bf_twint_customer_phone' );
 			$twint = $phone

@@ -7,8 +7,21 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-10-29
+
+Vier Befunde aus einer statischen Codeprüfung, jeder gegen den Code von WooCommerce 11.1.1 geprüft, der erste zusätzlich in der Testinstanz nachgestellt.
+
+### Behoben
+
+- **Zahlungserinnerung und Auto-Stornierung konnten sich auf Shops ohne HPOS verzögern.** Die klassische Bestelltabelle unterstützt «meta_query» in `wc_get_orders()` nicht: WooCommerce verwirft das Argument dort stillschweigend und meldet zusätzlich bei jedem Cron-Lauf «doing it wrong». Bereits erinnerte Bestellungen, und bei der Stornierung frische Kundenmeldungen «Ich habe bezahlt», belegten dadurch den Stapel, statt aus der Abfrage zu fallen, und verzögerten die neueren. Dauerhaft ausfallen konnten die Erinnerungen nicht, dafür sorgen die Prüfungen in der Schleife. Gefiltert wird neu in PHP, und beide Läufe blättern über die Kandidaten, bis der Stapel voll ist. Die Erinnerung blättert dafür über «page», die Stornierung über «offset», weil eine stornierte Bestellung die Treffermenge verlässt und Seitenzahlen dann weiterrutschen würden.
+- **Die Zahlungsübersicht zeigte bei Altbestellungen den falschen Ablauf.** Sie las den Modus roh aus dem Bestell-Meta, statt wie Danke-Seite und E-Mail über den Rückfall auf die aktuellen Einstellungen zu gehen. Fehlte der Snapshot, galt immer «Kunde sendet»: bei «Ich fordere an» fehlten damit die Kundennummer und die richtige Handlungsanweisung.
+- **Reine Textmails nannten kein Zahlungsziel, wenn nur ein QR-Code hinterlegt war.** Dieser Fall ist zulässig, der Checkout verlangt Nummer oder QR-Code. Das Bild selbst lässt sich in reinem Text nicht darstellen, seine Adresse schon: sie steht neu in der Mail.
+- **Zahlungsübersicht und Dashboard endeten stumm bei 250 Bestellungen.** Die Übersicht hat neu eine Blätterfunktion und nennt die Gesamtzahl. Das Dashboard zählt die offenen Zahlungen vollständig und weist Summe und Kundenmeldungen ausdrücklich als Teilmenge aus, sobald die Grenze greift. Vorher stand dort bei 400 offenen Zahlungen «250».
+
 ### Geändert
+
 - **Schweizer Übersetzung: richtige Anrede, beide Fassungen.** Bei der Schweiz ist die Anrede umgekehrt zu Deutschland, `de_CH` ist die Sie-Fassung und `de_CH_informal` die du-Fassung. Bisher lag im Schweizer Katalog die du-Fassung, ein Shop mit «Deutsch (Schweiz)» sah also die du-Anrede, obwohl WordPress dort die Sie-Form erwartet. Neu liegen beide Kataloge bei, jeder mit der richtigen Anrede und mit «ss», samt der Datei für die Texte im Block-Checkout.
+- Die Abfrage der erhaltenen Zahlungen im Dashboard-Widget zählt neu über «paginate», statt mit «limit => -1» sämtliche Bestell-IDs der letzten 30 Tage zu laden.
 
 ## [1.6.8] - 2026-09-13
 

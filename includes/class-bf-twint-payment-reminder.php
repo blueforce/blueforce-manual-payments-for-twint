@@ -39,6 +39,20 @@ final class BF_TWINT_Payment_Reminder {
 	const BATCH_SIZE = 20;
 
 	/**
+	 * Grösse einer Kandidaten-Seite.
+	 *
+	 * Bewusst getrennt von BATCH_SIZE: Bereits erinnerte Bestellungen bleiben bis
+	 * zum Ende des Fensters Treffer der Abfrage. Sie dürfen den Stapel nicht
+	 * belegen, darum blättert send_due_reminders() weiter.
+	 */
+	const PAGE_SIZE = 100;
+
+	/**
+	 * Obergrenze der Seiten pro Lauf (verhindert Timeouts bei grossen Rückständen).
+	 */
+	const MAX_PAGES = 10;
+
+	/**
 	 * Hooks registrieren.
 	 *
 	 * @return void
@@ -86,55 +100,63 @@ final class BF_TWINT_Payment_Reminder {
 			return;
 		}
 
-		// Kandidaten im Fenster [Frist + Nachlauf, Frist] – ältere fallen bewusst raus.
-		// Bereits erinnerte Bestellungen und Kundenmeldungen «Ich habe bezahlt»
-		// werden gar nicht erst geladen: Würden sie erst in der Schleife
-		// übersprungen, könnten sie den Stapel belegen und neuere Bestellungen
-		// blieben unerinnert, bis sie aus dem Fenster fallen.
-		$orders = wc_get_orders(
-			array(
-				'payment_method' => BF_TWINT_GATEWAY_ID,
-				'status'         => array( 'on-hold', 'pending' ),
-				'date_created'   => ( time() - ( $days + self::WINDOW_DAYS ) * DAY_IN_SECONDS ) . '...' . ( time() - $days * DAY_IN_SECONDS ),
-				'limit'          => 100,
-				'orderby'        => 'date',
-				'order'          => 'ASC',
-				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-					'relation' => 'AND',
-					array(
-						'key'     => '_bf_twint_reminder_sent',
-						'compare' => 'NOT EXISTS',
-					),
-					array(
-						'key'     => '_bf_twint_paid_claimed',
-						'compare' => 'NOT EXISTS',
-					),
-				),
-			)
+		// Kandidaten im Fenster [Frist + Nachlauf, Frist], ältere fallen bewusst raus.
+		//
+		// Gefiltert wird in PHP, nicht per «meta_query»: Die klassische Bestelltabelle
+		// (Shops ohne HPOS) unterstützt das Argument in wc_get_orders() nicht.
+		// WooCommerce verwirft es dort stillschweigend und meldet zusätzlich
+		// «doing it wrong», und das bei jedem Cron-Lauf. Damit bereits erinnerte
+		// Bestellungen den Stapel trotzdem nicht belegen und neuere Bestellungen
+		// unerinnert blieben, wird seitenweise weitergeblättert.
+		$args = array(
+			'payment_method' => BF_TWINT_GATEWAY_ID,
+			'status'         => array( 'on-hold', 'pending' ),
+			'date_created'   => ( time() - ( $days + self::WINDOW_DAYS ) * DAY_IN_SECONDS ) . '...' . ( time() - $days * DAY_IN_SECONDS ),
+			'limit'          => self::PAGE_SIZE,
+			'orderby'        => 'date',
+			'order'          => 'ASC',
 		);
 
-		$sent   = 0;
-		$failed = 0;
-		foreach ( $orders as $order ) {
-			if ( $sent >= self::BATCH_SIZE ) {
+		$sent       = 0;
+		$failed     = 0;
+		$candidates = 0;
+
+		for ( $page = 1; $page <= self::MAX_PAGES; $page++ ) {
+			// Blättern über «page» ist hier gefahrlos: Eine versendete Erinnerung
+			// setzt nur Meta, die Treffermenge der Abfrage verschiebt sich dadurch
+			// nicht. Beide Bestelltabellen kennen «page».
+			$orders = wc_get_orders( array_merge( $args, array( 'page' => $page ) ) );
+			if ( empty( $orders ) ) {
 				break;
 			}
-			// Sicherheitsnetz: nur einmal erinnern, und nie, wenn der Kunde
-			// bereits «bezahlt» gemeldet hat.
-			if ( absint( $order->get_meta( '_bf_twint_reminder_sent' ) ) || absint( $order->get_meta( '_bf_twint_paid_claimed' ) ) ) {
-				continue;
+			$candidates += count( $orders );
+
+			foreach ( $orders as $order ) {
+				// Nur einmal erinnern, und nie, wenn der Kunde bereits
+				// «bezahlt» gemeldet hat.
+				if ( absint( $order->get_meta( '_bf_twint_reminder_sent' ) ) || absint( $order->get_meta( '_bf_twint_paid_claimed' ) ) ) {
+					continue;
+				}
+				if ( self::send_reminder( $order ) ) {
+					++$sent;
+				} else {
+					++$failed;
+				}
+				if ( $sent >= self::BATCH_SIZE ) {
+					break 2;
+				}
 			}
-			if ( self::send_reminder( $order ) ) {
-				++$sent;
-			} else {
-				++$failed;
+
+			// Letzte Seite erreicht.
+			if ( count( $orders ) < self::PAGE_SIZE ) {
+				break;
 			}
 		}
 
 		// Lauf-Protokoll unter WooCommerce → Status → Protokolle (Quelle bf-twint).
 		if ( function_exists( 'wc_get_logger' ) ) {
 			wc_get_logger()->info(
-				sprintf( 'Reminder run: %d candidates, %d reminders sent, %d not sent (no e-mail address or mailer refused).', count( $orders ), $sent, $failed ),
+				sprintf( 'Reminder run: %d candidates, %d reminders sent, %d not sent (no e-mail address or mailer refused).', $candidates, $sent, $failed ),
 				array( 'source' => 'bf-twint' )
 			);
 		}

@@ -678,11 +678,15 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	 * Liest eine bestellrelevante Einstellung – bevorzugt aus dem Order-Snapshot,
 	 * sonst aus den aktuellen Plugin-Einstellungen (Altbestellungen ohne Snapshot).
 	 *
+	 * Öffentlich, weil auch die Zahlungsübersicht im Backend denselben Rückfall
+	 * braucht: Las sie den Modus roh aus dem Meta, galt bei Altbestellungen ohne
+	 * Snapshot immer «Kunde sendet».
+	 *
 	 * @param WC_Order $order Bestellung.
 	 * @param string   $key   Einer von: mode, shop_phone, account_name, qr_image, instructions.
 	 * @return string
 	 */
-	private function order_setting( $order, $key ) {
+	public function order_setting( $order, $key ) {
 		if ( '' !== (string) $order->get_meta( '_bf_twint_snapshot' ) ) {
 			return (string) $order->get_meta( '_bf_twint_' . $key );
 		}
@@ -865,6 +869,7 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 		$mode         = $this->order_setting( $order, 'mode' );
 		$shop_phone   = $this->order_setting( $order, 'shop_phone' );
 		$account_name = $this->order_setting( $order, 'account_name' );
+		$qr_image     = $this->order_setting( $order, 'qr_image' );
 		$instructions = $this->order_setting( $order, 'instructions' );
 
 		if ( 'request' === $mode ) {
@@ -900,12 +905,23 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 				);
 			}
 
+			// Das QR-Bild selbst ist in reinem Text nicht darstellbar, seine Adresse
+			// schon. Ohne sie hätte eine Textmail kein Zahlungsziel, sobald der Shop
+			// nur einen QR-Code und keine Nummer hinterlegt hat: is_available()
+			// lässt genau diesen Fall zu.
+			if ( $qr_image ) {
+				$lines[] = sprintf(
+					/* translators: %s: URL of the TWINT QR code image. */
+					__( 'TWINT QR code (open the link and scan the code in your TWINT app): %s', 'blueforce-manual-payments-for-twint' ),
+					$qr_image
+				);
+			}
+
 			$lines[] = sprintf(
 				/* translators: %s: order number. */
 				__( 'Use your order number %s as the message.', 'blueforce-manual-payments-for-twint' ),
 				'#' . $order->get_order_number()
 			);
-			// Der QR-Code wird in der Plain-Text-Mail bewusst weggelassen (nicht darstellbar).
 		}
 
 		if ( $instructions ) {

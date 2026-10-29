@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.6.8
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,13 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 6. Customers can revisit the payment instructions at any time under My account – View order.
 
 == Changelog ==
+
+= 1.7.0 =
+* Fixed: on shops that still use the classic order table (without HPOS), WooCommerce silently ignores the meta filter in the order query. Orders that had already been reminded, and for auto-cancellation fresh "I have paid" reports, could therefore fill the batch and delay newer orders. Both runs now page through the candidates, and the "doing it wrong" notice they triggered on every scheduled run is gone.
+* Fixed: the payments overview showed the wrong flow for older orders without a settings snapshot. It always fell back to "Customer sends", so with "I request" the customer's TWINT number and the matching instruction were missing.
+* Fixed: plain-text order emails now carry the address of the TWINT QR image. A shop with a QR code and no mobile number used to send an email with an amount and a reference, but without any payment target.
+* Fixed: the payments overview and the dashboard widget stopped silently at 250 orders. The overview now has pagination and states the real total, and the widget no longer presents a partial count and sum as the full figures.
+* Changed: Swiss translation with the right form of address, in both variants. In Switzerland it is the other way round from Germany: de_CH is the formal one, de_CH_informal the informal one.
 
 = 1.6.8 =
 * New: three checks under Tools > Site Health (shop currency, payment details, scheduled tasks), so a silent misconfiguration becomes visible where WordPress collects such findings.
