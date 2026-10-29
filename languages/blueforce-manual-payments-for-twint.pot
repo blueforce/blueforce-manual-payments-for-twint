@@ -1,320 +1,706 @@
 # Copyright (C) 2026 Blueforce Digital Solutions
-# This file is distributed under the GPL-2.0-or-later license.
+# This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Blueforce Manual Payments for TWINT 1.6.2\n"
-"Report-Msgid-Bugs-To: info@blueforce.ch\n"
+"Project-Id-Version: Blueforce Manual Payments for TWINT 1.7.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/plg-twint\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: 2026-10-29T18:23:35+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: blueforce-manual-payments-for-twint\n"
 
-msgid "Blueforce Manual Payments for TWINT requires WooCommerce to be active."
-msgstr ""
-
-msgid "Settings"
-msgstr ""
-
-msgid "TWINT"
-msgstr ""
-
-msgid "TWINT as an offline payment – no TWINT API or acquiring contract. Flow \"Customer sends\" (your TWINT number/QR is shown) or \"I request\" (customer enters their TWINT number). Incoming payments are confirmed manually."
-msgstr ""
-
-msgid "<strong>Blueforce Manual Payments for TWINT:</strong> The \"Customer sends\" flow is active, but neither a TWINT mobile number nor a QR code is set. The payment method is hidden at checkout until you <a href=\"%s\">add the details</a>."
-msgstr ""
-
-msgid "Enable"
-msgstr ""
-
-msgid "Enable TWINT as a payment method"
-msgstr ""
-
-msgid "Title"
-msgstr ""
-
-msgid "Name shown at checkout."
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
-msgid "Short text shown below the method name at checkout."
-msgstr ""
-
-msgid "Pay easily and securely with TWINT."
-msgstr ""
-
-msgid "Flow"
-msgstr ""
-
-msgid "\"Customer sends\": your TWINT number is shown. \"I request\": the customer enters their TWINT number and you request the amount."
-msgstr ""
-
-msgid "Customer sends to my TWINT number"
-msgstr ""
-
-msgid "I request the amount (customer enters number)"
-msgstr ""
-
-msgid "Your TWINT mobile number"
-msgstr ""
-
-msgid "Only for \"Customer sends\": the number the amount is sent to (e.g. +41 79 123 45 67)."
-msgstr ""
-
-msgid "Account holder name"
-msgstr ""
-
-msgid "Optional. Shown to the customer for verification (e.g. company or person name)."
-msgstr ""
-
-msgid "TWINT QR image"
-msgstr ""
-
-msgid "Optional, only for \"Customer sends\". In the TWINT app under \"Receive money\", save your QR code as an image and select it here from the media library. The customer can then scan it directly."
-msgstr ""
-
-msgid "Additional notes"
-msgstr ""
-
-msgid "Shown on the thank-you page and in the order email."
-msgstr ""
-
-msgid "We will process your order as soon as the payment has been received."
-msgstr ""
-
-msgid "Choose TWINT QR image"
-msgstr ""
-
-msgid "Use this image"
-msgstr ""
-
-msgid "Select image"
-msgstr ""
-
-msgid "Remove"
-msgstr ""
-
-msgid "TWINT mobile number"
-msgstr ""
-
-msgid "Required field"
-msgstr ""
-
-msgid "We will send you a TWINT payment request to this number."
-msgstr ""
-
-msgid "Send the amount via TWINT to %s – you will receive the exact details after ordering."
-msgstr ""
-
-msgid "Please enter a valid TWINT mobile number so that we can request the payment."
-msgstr ""
-
-msgid "TWINT: send a payment request to %s."
-msgstr ""
-
-msgid "(no number provided)"
-msgstr ""
-
-msgid "TWINT: awaiting incoming payment (customer sends)."
-msgstr ""
-
-msgid "We will shortly send you a <strong>TWINT payment request</strong>%s. Please confirm the payment in your TWINT app."
-msgstr ""
-
-msgid "to %s"
-msgstr ""
-
-msgid "Please send %1$s via <strong>TWINT</strong>%2$s."
-msgstr ""
-
-msgid "Account holder: %s"
-msgstr ""
-
-msgid "Copied!"
-msgstr ""
-
-msgid "Copy order number"
-msgstr ""
-
-msgid "Copy"
-msgstr ""
-
-msgid "Use your order number %s as the message."
-msgstr ""
-
-msgid "TWINT QR code"
-msgstr ""
-
-msgid "We will shortly send you a TWINT payment request to %s. Please confirm the payment in your TWINT app."
-msgstr ""
-
-msgid "We will shortly send you a TWINT payment request. Please confirm the payment in your TWINT app."
-msgstr ""
-
-msgid "Please send %1$s via TWINT to %2$s."
-msgstr ""
-
-msgid "Please send %s via TWINT."
-msgstr ""
-
-msgid "TWINT mobile number (customer):"
-msgstr ""
-
-msgid "none"
-msgstr ""
-
-msgid "Procedure:"
-msgstr ""
-
-msgid "1. In the TWINT app, request the amount (%1$s) from this number – order number %2$s as the message."
-msgstr ""
-
-msgid "2. After payment is received: set the status to \"Processing\"."
-msgstr ""
-
-msgid "3. After shipping: \"Completed\"."
-msgstr ""
-
-msgid "TWINT flow:"
-msgstr ""
-
-msgid "The customer sends the amount themselves."
-msgstr ""
-
-msgid "1. In the TWINT app, check for the incoming payment of %1$s with message %2$s."
-msgstr ""
-
-msgid "Payment received – release order"
-msgstr ""
-
-msgid "You do not have permission to edit this order."
-msgstr ""
-
-msgid "unknown"
-msgstr ""
-
-msgid "TWINT payment manually confirmed as received (by %s)."
-msgstr ""
-
-msgid "TWINT mobile number (for payment request)"
-msgstr ""
-
-msgid "If you choose TWINT with the \"I request the amount\" flow at checkout, we store the TWINT mobile number you provide with your order. We use it solely to request payment via the TWINT app. The number is included in the export and erasure of your personal data."
-msgstr ""
-
+#. Plugin Name of the plugin
+#: blueforce-manual-payments-for-twint.php
+#: includes/class-bf-twint-privacy.php:99
 msgid "Blueforce Manual Payments for TWINT"
 msgstr ""
 
-msgid "TWINT is currently not fully configured. Please choose another payment method or try again later."
+#. Plugin URI of the plugin
+#: blueforce-manual-payments-for-twint.php
+msgid "https://blueforce.ch/twint"
 msgstr ""
 
-msgid "Please enter your TWINT mobile number so we can request the payment."
+#. Description of the plugin
+#: blueforce-manual-payments-for-twint.php
+msgid "Manual TWINT payment method for WooCommerce without the TWINT API – payments are reconciled and confirmed by hand."
 msgstr ""
 
-msgid "Send the amount via TWINT to %s – you will receive the details after ordering."
+#. Author of the plugin
+#: blueforce-manual-payments-for-twint.php
+msgid "Blueforce Digital Solutions"
 msgstr ""
 
-msgid "Paid with TWINT on %s"
+#. Author URI of the plugin
+#: blueforce-manual-payments-for-twint.php
+msgid "https://blueforce.ch"
 msgstr ""
 
-msgid "Paid with TWINT"
+#: blueforce-manual-payments-for-twint.php:52
+msgid "Blueforce Manual Payments for TWINT requires WooCommerce to be active."
 msgstr ""
 
-msgid "TWINT payments"
+#: blueforce-manual-payments-for-twint.php:155
+msgid "Settings"
 msgstr ""
 
-msgid "Open TWINT payments"
-msgstr ""
-
-msgid "All unpaid TWINT orders (on hold or pending). Release an order once you have confirmed the payment in your TWINT app."
-msgstr ""
-
-msgid "No open TWINT payments – everything is settled."
-msgstr ""
-
-msgid "Order"
-msgstr ""
-
-msgid "Date"
-msgstr ""
-
-msgid "Customer"
-msgstr ""
-
-msgid "Total"
-msgstr ""
-
-msgid "Action"
-msgstr ""
-
-msgid "Guest"
-msgstr ""
-
-msgid "%s ago"
-msgstr ""
-
-msgid "Request from %s"
-msgstr ""
-
-msgid "Request payment (no number on file)"
-msgstr ""
-
-msgid "Check for incoming payment with message %s"
-msgstr ""
-
-msgid "Action needed: request %1$s via TWINT from %2$s (order number %3$s as the message)."
-msgstr ""
-
-msgid "Auto-cancel unpaid orders"
-msgstr ""
-
-msgid "Days after which unpaid TWINT orders (on hold or pending) are cancelled automatically and the stock is released. Empty or 0 disables auto-cancelling."
-msgstr ""
-
+#. translators: %d: number of days without payment.
+#: includes/class-bf-twint-auto-cancel.php:164
+#, php-format
 msgid "TWINT: automatically cancelled – no payment was received within %d days."
 msgstr ""
 
-msgid "I have sent the payment"
+#: includes/class-bf-twint-blocks.php:122
+#: includes/class-bf-twint-gateway.php:75
+#: includes/class-bf-twint-gateway.php:109
+#: includes/class-bf-twint-gateway.php:246
+#: includes/class-bf-twint-payments-page.php:155
+#: assets/js/blocks.js:24
+msgid "TWINT"
 msgstr ""
 
-msgid "Thanks – you reported your payment on %s. We will release the order as soon as it arrives."
+#: includes/class-bf-twint-blocks.php:177
+#: includes/class-bf-twint-blocks.php:179
+#: includes/class-bf-twint-gateway.php:565
+#: includes/class-bf-twint-gateway.php:737
+msgid "Please enter a valid TWINT mobile number so that we can request the payment."
 msgstr ""
 
-msgid "Customer reports the payment as sent (%s)."
+#: includes/class-bf-twint-dashboard-widget.php:59
+#: includes/class-bf-twint-payments-page.php:51
+#: includes/class-bf-twint-payments-page.php:52
+msgid "TWINT payments"
 msgstr ""
 
-msgid "Customer reported via the order page that the payment has been sent."
+#: includes/class-bf-twint-dashboard-widget.php:87
+#: includes/class-bf-twint-payments-page.php:134
+msgid "No open TWINT payments – everything is settled."
 msgstr ""
 
-msgid "Payment reminder"
+#. translators: 1: total number of open payments, 2: formatted amount, 3: number of orders that amount covers.
+#: includes/class-bf-twint-dashboard-widget.php:102
+#, php-format
+msgid "Open payments: %1$s (%2$s in total for the %3$s oldest)"
 msgstr ""
 
-msgid "Days after which the customer receives a one-time email reminder for an unpaid TWINT order, with the payment details again. Empty or 0 disables the reminder."
-msgstr ""
-
-msgid "Payment reminder for your order %s"
-msgstr ""
-
-msgid "We have not yet received the TWINT payment for your order %s. Here are the payment details again:"
-msgstr ""
-
-msgid "TWINT: payment reminder sent to %s."
-msgstr ""
-
+#. translators: 1: number of open payments, 2: formatted total amount.
+#: includes/class-bf-twint-dashboard-widget.php:109
+#, php-format
 msgid "Open payments: %1$s (%2$s in total)"
 msgstr ""
 
+#. translators: 1: number of orders reported as paid, 2: number of orders that were checked.
+#: includes/class-bf-twint-dashboard-widget.php:120
+#, php-format
+msgid "Reported as paid by the customer: %1$s (of the %2$s oldest checked)"
+msgstr ""
+
+#. translators: %s: number of orders the customer reported as paid.
+#: includes/class-bf-twint-dashboard-widget.php:126
+#, php-format
 msgid "Reported as paid by the customer: %s"
 msgstr ""
 
+#. translators: %s: human-readable age of the oldest open payment (e.g. "3 days ago").
+#: includes/class-bf-twint-dashboard-widget.php:137
+#, php-format
 msgid "Oldest open payment: %s"
 msgstr ""
 
+#. translators: %s: human-readable time difference (e.g. "3 days").
+#: includes/class-bf-twint-dashboard-widget.php:140
+#: includes/class-bf-twint-payments-page.php:214
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#. translators: %s: number of payments received in the last 30 days.
+#: includes/class-bf-twint-dashboard-widget.php:164
+#, php-format
 msgid "Payments received in the last 30 days: %s"
 msgstr ""
 
+#: includes/class-bf-twint-dashboard-widget.php:169
 msgid "Go to the payments overview"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:76
+msgid "TWINT as an offline payment – no TWINT API or acquiring contract. Flow \"Customer sends\" (your TWINT number/QR is shown) or \"I request\" (customer enters their TWINT number). Incoming payments are confirmed manually."
+msgstr ""
+
+#. translators: 1: current shop currency code, 2: URL to the WooCommerce general settings.
+#: includes/class-bf-twint-gateway.php:210
+#, php-format
+msgid "<strong>Blueforce Manual Payments for TWINT:</strong> TWINT only works in Swiss francs, but the shop currency is %1$s. The payment method is hidden at checkout until you <a href=\"%2$s\">change the currency</a> to CHF."
+msgstr ""
+
+#. translators: %s: URL to the TWINT settings page.
+#: includes/class-bf-twint-gateway.php:225
+#, php-format
+msgid "<strong>Blueforce Manual Payments for TWINT:</strong> The \"Customer sends\" flow is active, but neither a TWINT mobile number nor a QR code is set. The payment method is hidden at checkout until you <a href=\"%s\">add the details</a>."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:237
+msgid "Enable"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:239
+msgid "Enable TWINT as a payment method"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:243
+msgid "Title"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:245
+msgid "Name shown at checkout."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:250
+msgid "Description"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:252
+msgid "Short text shown below the method name at checkout."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:253
+msgid "Pay easily and securely with TWINT."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:256
+msgid "Flow"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:258
+msgid "\"Customer sends\": your TWINT number is shown. \"I request\": the customer enters their TWINT number and you request the amount."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:261
+msgid "Customer sends to my TWINT number"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:262
+msgid "I request the amount (customer enters number)"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:267
+msgid "Your TWINT mobile number"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:269
+msgid "Only for \"Customer sends\": the number the amount is sent to (e.g. +41 79 123 45 67)."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:274
+msgid "Account holder name"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:276
+msgid "Optional. Shown to the customer for verification (e.g. company or person name)."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:281
+msgid "TWINT QR image"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:283
+msgid "Optional, only for \"Customer sends\". In the TWINT app under \"Receive money\", save your QR code as an image and select it here from the media library. The customer can then scan it directly."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:287
+msgid "Additional notes"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:289
+msgid "Shown on the thank-you page and in the order email."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:290
+msgid "We will process your order as soon as the payment has been received."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:293
+#: includes/class-bf-twint-payment-reminder.php:184
+msgid "Payment reminder"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:295
+msgid "Days after which the customer receives a one-time email reminder for an unpaid TWINT order, with the payment details again. Empty or 0 disables the reminder."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:304
+msgid "Auto-cancel unpaid orders"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:306
+msgid "Days after which unpaid TWINT orders (on hold or pending) are cancelled automatically and the stock is released. Empty or 0 disables auto-cancelling."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:448
+msgid "Choose TWINT QR image"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:449
+msgid "Use this image"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:502
+msgid "Select image"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:503
+msgid "Remove"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:538
+#: assets/js/blocks.js:68
+msgid "TWINT mobile number"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:538
+#: assets/js/blocks.js:69
+msgid "Required field"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:540
+#: assets/js/blocks.js:84
+msgid "We will send you a TWINT payment request to this number."
+msgstr ""
+
+#. translators: %s: TWINT phone number of the shop.
+#: includes/class-bf-twint-gateway.php:547
+#, php-format
+msgid "Send the amount via TWINT to %s – you will receive the exact details after ordering."
+msgstr ""
+
+#. translators: %s: customer TWINT phone number.
+#: includes/class-bf-twint-gateway.php:750
+#, php-format
+msgid "TWINT: send a payment request to %s."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:751
+msgid "(no number provided)"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:758
+msgid "TWINT is currently not fully configured. Please choose another payment method or try again later."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:761
+msgid "TWINT: awaiting incoming payment (customer sends)."
+msgstr ""
+
+#. translators: %s: customer phone number (may be empty).
+#: includes/class-bf-twint-gateway.php:798
+#, php-format
+msgid "We will shortly send you a <strong>TWINT payment request</strong>%s. Please confirm the payment in your TWINT app."
+msgstr ""
+
+#. translators: %s: phone number.
+#: includes/class-bf-twint-gateway.php:801
+#: includes/class-bf-twint-gateway.php:812
+#, php-format
+msgid "to %s"
+msgstr ""
+
+#. translators: 1: order total, 2: shop TWINT phone (may be empty).
+#: includes/class-bf-twint-gateway.php:808
+#, php-format
+msgid "Please send %1$s via <strong>TWINT</strong>%2$s."
+msgstr ""
+
+#. translators: %s: account holder name.
+#: includes/class-bf-twint-gateway.php:820
+#: includes/class-bf-twint-gateway.php:903
+#, php-format
+msgid "Account holder: %s"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:829
+msgid "Copied!"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:831
+msgid "Copy order number"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:832
+msgid "Copy"
+msgstr ""
+
+#. translators: %s: order number.
+#: includes/class-bf-twint-gateway.php:837
+#: includes/class-bf-twint-gateway.php:922
+#, php-format
+msgid "Use your order number %s as the message."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:844
+#: includes/class-bf-twint-gateway.php:848
+msgid "TWINT QR code"
+msgstr ""
+
+#. translators: %s: customer TWINT phone number.
+#: includes/class-bf-twint-gateway.php:880
+#, php-format
+msgid "We will shortly send you a TWINT payment request to %s. Please confirm the payment in your TWINT app."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:883
+msgid "We will shortly send you a TWINT payment request. Please confirm the payment in your TWINT app."
+msgstr ""
+
+#. translators: 1: order total, 2: shop TWINT phone number.
+#: includes/class-bf-twint-gateway.php:890
+#, php-format
+msgid "Please send %1$s via TWINT to %2$s."
+msgstr ""
+
+#. translators: %s: order total.
+#: includes/class-bf-twint-gateway.php:896
+#, php-format
+msgid "Please send %s via TWINT."
+msgstr ""
+
+#. translators: %s: URL of the TWINT QR code image.
+#: includes/class-bf-twint-gateway.php:915
+#, php-format
+msgid "TWINT QR code (open the link and scan the code in your TWINT app): %s"
+msgstr ""
+
+#. translators: %s: date and time the customer reported the payment.
+#: includes/class-bf-twint-gateway.php:1019
+#, php-format
+msgid "Thanks – you reported your payment on %s. We will release the order as soon as it arrives."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:1031
+msgid "I have sent the payment"
+msgstr ""
+
+#. translators: 1: order total, 2: customer TWINT mobile number, 3: order number.
+#: includes/class-bf-twint-gateway.php:1102
+#: includes/class-bf-twint-gateway.php:1114
+#, php-format
+msgid "Action needed: request %1$s via TWINT from %2$s (order number %3$s as the message)."
+msgstr ""
+
+#. translators: %s: date and time the customer reported the payment.
+#: includes/class-bf-twint-gateway.php:1143
+#, php-format
+msgid "Unverified customer report: payment sent (%s). Confirm the actual receipt in your TWINT app before releasing."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:1151
+msgid "TWINT mobile number (customer):"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:1151
+msgid "none"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:1152
+#: includes/class-bf-twint-gateway.php:1163
+msgid "Procedure:"
+msgstr ""
+
+#. translators: 1: amount, 2: order number.
+#: includes/class-bf-twint-gateway.php:1155
+#, php-format
+msgid "1. In the TWINT app, request the amount (%1$s) from this number – order number %2$s as the message."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:1159
+#: includes/class-bf-twint-gateway.php:1170
+msgid "2. After payment is received: set the status to \"Processing\"."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:1160
+#: includes/class-bf-twint-gateway.php:1171
+msgid "3. After shipping: \"Completed\"."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:1162
+msgid "TWINT flow:"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:1162
+msgid "The customer sends the amount themselves."
+msgstr ""
+
+#. translators: 1: amount, 2: order number.
+#: includes/class-bf-twint-gateway.php:1166
+#, php-format
+msgid "1. In the TWINT app, check for the incoming payment of %1$s with message %2$s."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:1182
+#: includes/class-bf-twint-payments-page.php:268
+msgid "Payment received – release order"
+msgstr ""
+
+#. translators: %s: payment date.
+#: includes/class-bf-twint-gateway.php:1219
+#, php-format
+msgid "Paid with TWINT on %s"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:1222
+msgid "Paid with TWINT"
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:1242
+msgid "You do not have permission to edit this order."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:1254
+msgid "unknown"
+msgstr ""
+
+#. translators: %s: display name of the admin who confirmed the payment.
+#: includes/class-bf-twint-gateway.php:1258
+#, php-format
+msgid "TWINT payment manually confirmed as received (by %s)."
+msgstr ""
+
+#: includes/class-bf-twint-gateway.php:1310
+msgid "Customer reported via the order page that the payment has been sent. This report is unverified and does not confirm that the payment was received."
+msgstr ""
+
+#. translators: %s: order number.
+#: includes/class-bf-twint-payment-reminder.php:187
+#, php-format
+msgid "Payment reminder for your order %s"
+msgstr ""
+
+#. translators: %s: order number.
+#: includes/class-bf-twint-payment-reminder.php:193
+#, php-format
+msgid "We have not yet received the TWINT payment for your order %s. Here are the payment details again:"
+msgstr ""
+
+#. translators: %s: customer email address.
+#: includes/class-bf-twint-payment-reminder.php:213
+#, php-format
+msgid "TWINT: payment reminder sent to %s."
+msgstr ""
+
+#: includes/class-bf-twint-payments-page.php:124
+msgid "Open TWINT payments"
+msgstr ""
+
+#: includes/class-bf-twint-payments-page.php:125
+msgid "All unpaid TWINT orders (on hold or pending). Release an order once you have confirmed the payment in your TWINT app."
+msgstr ""
+
+#. translators: 1: number of payments on this page, 2: total number of open payments.
+#: includes/class-bf-twint-payments-page.php:142
+#, php-format
+msgid "Showing %1$s of %2$s open payments, oldest first."
+msgstr ""
+
+#: includes/class-bf-twint-payments-page.php:151
+msgid "Order"
+msgstr ""
+
+#: includes/class-bf-twint-payments-page.php:152
+msgid "Date"
+msgstr ""
+
+#: includes/class-bf-twint-payments-page.php:153
+msgid "Customer"
+msgstr ""
+
+#: includes/class-bf-twint-payments-page.php:154
+msgid "Total"
+msgstr ""
+
+#: includes/class-bf-twint-payments-page.php:156
+msgid "Action"
+msgstr ""
+
+#: includes/class-bf-twint-payments-page.php:206
+msgid "Guest"
+msgstr ""
+
+#. translators: %s: customer TWINT mobile number.
+#: includes/class-bf-twint-payments-page.php:231
+#, php-format
+msgid "Request from %s"
+msgstr ""
+
+#: includes/class-bf-twint-payments-page.php:234
+msgid "Request payment (no number on file)"
+msgstr ""
+
+#. translators: %s: order number used as the payment message.
+#: includes/class-bf-twint-payments-page.php:238
+#, php-format
+msgid "Check for incoming payment with message %s"
+msgstr ""
+
+#. translators: %s: date and time the customer reported the payment.
+#: includes/class-bf-twint-payments-page.php:249
+#, php-format
+msgid "Unverified customer report: payment sent (%s)."
+msgstr ""
+
+#: includes/class-bf-twint-privacy.php:53
+msgid "TWINT mobile number (for payment request)"
+msgstr ""
+
+#: includes/class-bf-twint-privacy.php:95
+msgid "If you choose TWINT with the \"I request the amount\" flow at checkout, we store the TWINT mobile number you provide with your order. We use it solely to request payment via the TWINT app. The number is included in the export and erasure of your personal data."
+msgstr ""
+
+#: includes/class-bf-twint-review-prompt.php:111
+msgid "Enjoying Blueforce Manual Payments for TWINT?"
+msgstr ""
+
+#. translators: %s: number of payments released with the plugin.
+#: includes/class-bf-twint-review-prompt.php:115
+#, php-format
+msgid "You have released %s payment with this plugin so far. A short review helps other small shops find it."
+msgid_plural "You have released %s payments with this plugin so far. A short review helps other small shops find it."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-bf-twint-review-prompt.php:126
+msgid "Write a review"
+msgstr ""
+
+#: includes/class-bf-twint-review-prompt.php:128
+msgid "I already did"
+msgstr ""
+
+#: includes/class-bf-twint-review-prompt.php:130
+msgid "Maybe later"
+msgstr ""
+
+#: includes/class-bf-twint-review-prompt.php:164
+msgid "You do not have permission to do this."
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:47
+msgid "TWINT: shop currency"
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:51
+msgid "TWINT: payment details"
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:55
+msgid "TWINT: scheduled tasks"
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:96
+msgid "Payments"
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:112
+msgid "Open the TWINT settings"
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:121
+msgid "TWINT is available at checkout"
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:124
+msgid "TWINT is not enabled"
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:124
+msgid "The TWINT payment method is switched off, so no further checks apply."
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:132
+msgid "TWINT is hidden because the shop currency is not CHF"
+msgstr ""
+
+#. translators: %s: current shop currency code.
+#: includes/class-bf-twint-site-health.php:136
+#, php-format
+msgid "TWINT only works in Swiss francs. Your shop currency is %s, so the payment method is enabled but never shown to customers."
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:139
+msgid "Change the shop currency"
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:143
+msgid "The shop currency is CHF."
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:156
+#: includes/class-bf-twint-site-health.php:171
+msgid "TWINT payment details are complete"
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:156
+msgid "Nothing to check for the current flow."
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:164
+msgid "TWINT is hidden because no payment details are set"
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:166
+msgid "The \"Customer sends\" flow is active, but neither a TWINT mobile number nor a QR code is set. Customers would not know where to send the money, so the payment method stays hidden."
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:171
+msgid "A TWINT mobile number or QR code is set for the \"Customer sends\" flow."
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:186
+msgid "auto-cancelling unpaid orders"
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:189
+msgid "payment reminders"
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:193
+msgid "TWINT scheduled tasks are not in use"
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:193
+msgid "Neither auto-cancelling nor payment reminders are enabled, so no scheduled task is needed."
+msgstr ""
+
+#. translators: %s: comma-separated list of affected features.
+#: includes/class-bf-twint-site-health.php:209
+#, php-format
+msgid "The scheduled task for %s is missing or overdue. WP-Cron seems not to be running, so these features are silently inactive. Make sure WP-Cron works or set up a real server cron that calls wp-cron.php."
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:213
+msgid "DISABLE_WP_CRON is set on this site, so a server cron is required."
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:215
+msgid "TWINT scheduled tasks are not running"
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:218
+msgid "TWINT scheduled tasks are running"
+msgstr ""
+
+#: includes/class-bf-twint-site-health.php:218
+msgid "The scheduled tasks for auto-cancelling and payment reminders are planned and on time."
+msgstr ""
+
+#: assets/js/blocks.js:48
+msgid "Please enter your TWINT mobile number so we can request the payment."
+msgstr ""
+
+#: assets/js/blocks.js:86
+#, js-format
+msgid "Send the amount via TWINT to %s – you will receive the details after ordering."
 msgstr ""

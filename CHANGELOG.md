@@ -7,6 +7,9 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 ## [Unreleased]
 
+### Geändert
+- **Mitgelieferte deutsche Kataloge auf den Stand von GlotPress gebracht.** `de_DE`, `de_CH` (Sie), `de_CH_informal` (du) und die Referenz `de_DE_formal` stammen jetzt aus dem vollständigen Export von translate.wordpress.org: 145 von 145 Texten, darunter 44, die seit den 1.6er-Versionen nur über die Sprachpakete kamen. `.mo` neu gebaut, `.pot` aus dem aktuellen Code erzeugt. Wirkt dort, wo ein Shop kein Sprachpaket geladen hat.
+
 ## [1.7.0] - 2026-10-29
 
 Vier Befunde aus einer statischen Codeprüfung, jeder gegen den Code von WooCommerce 11.1.1 geprüft, der erste zusätzlich in der Testinstanz nachgestellt.
