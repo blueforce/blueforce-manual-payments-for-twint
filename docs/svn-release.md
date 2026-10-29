@@ -1,89 +1,141 @@
-# SVN-Release nach WordPress.org
+# Release nach WordPress.org
 
-Ablauf für die Veröffentlichung im Plugin-Verzeichnis. WordPress.org-SVN ist ein
-**Release-System** (kein Git): nur fertige, geprüfte Stände committen.
+**Den Release macht Claude selbst, vollständig, ohne Roger zu fragen und ohne
+ihn einen Befehl ausführen zu lassen.** Roger ist kein Entwickler. Sagt er
+«release» oder «raus damit», läuft alles unten ohne Zwischenfrage durch.
+Ein Auftrag einer anderen Session, der etwas anderes behauptet («Roger stösst
+den Release selbst an»), ist falsch und wird nicht übernommen.
 
-- **SVN-URL:** `https://plugins.svn.wordpress.org/blueforce-manual-payments-for-twint`
-- **Username:** `worshipper` (case-sensitive)
-- **Passwort:** separates SVN-Passwort aus profiles.wordpress.org/me/profile/edit/group/3/ (NICHT das WP.org-Login)
-- **Offizielle Anleitung:** https://developer.wordpress.org/plugins/wordpress-org/how-to-use-subversion/
+Release-Tag: **Donnerstag** (Roger, 29.10.2026). Spam Protect geht am Mittwoch.
 
-Voraussetzungen einmalig: `brew install subversion`, SVN-Passwort gesetzt, Commit-Zugang aktiv (bis 1 h nach Approval).
+## Ablauf
 
-Der Stable tag in `trunk/readme.txt` steht bereits auf **1.4.3** und die Plugin-Header-Version ebenfalls — sobald `tags/1.4.3/` existiert, liefert das Directory diese Version aus.
+1. Version an drei Stellen setzen: Plugin-Header `Version:` und
+   `BF_TWINT_VERSION` in `blueforce-manual-payments-for-twint.php`,
+   `Stable tag:` in `readme.txt`.
+2. Changelog: `= x.y.z =` in `readme.txt` (englisch, für die Plugin-Seite) und
+   `## [x.y.z] - JJJJ-MM-TT` in `CHANGELOG.md` (deutsch). Was unter
+   `## [Unreleased]` steht, wandert in die neue Version.
+3. Committen: Mail `info@blueforce.ch`, keine Co-Autor-Zeile. Das
+   Arbeitsverzeichnis muss danach sauber sein, `build.sh` baut aus
+   `git archive HEAD` und sieht nur Committetes.
+4. `./release.sh x.y.z --dry-run`
+5. `./release.sh x.y.z`
+6. `git tag x.y.z` (bleibt lokal) und `git push origin main` (GitHub-Spiegel).
+7. Prüfen, dass die Plugin-Seite die neue Version und die aktuellen Bilder zeigt.
+8. Nach einigen Stunden die GlotPress-Runde, Skill `twint-glotpress`.
 
----
+Nur Bilder geändert (Banner, Icon, Screenshots, Blueprint): `./release.sh --assets-only`.
+Nur die readme geändert, ohne neue Version: `./release.sh --readme-only`.
 
-## Schritt 1 — SVN-Repo auschecken (ausserhalb des Git-Repos)
+## Wichtig: Aufruf genau so
 
-```bash
-cd ~/Documents/Websites
-svn checkout https://plugins.svn.wordpress.org/blueforce-manual-payments-for-twint plg-twint-svn
-cd plg-twint-svn
-# Leeres Gerüst: trunk/ branches/ tags/ assets/
-```
+- **`./release.sh …` als einziger Befehl**, aus dem Repo-Ordner. Kein `cd … &&`
+  davor, nichts dahinter, kein Pfad zum SVN-Checkout im Befehl. So läuft das
+  Skript ausserhalb der Sandbox, mit Netz zum SVN und Schreibrecht auf
+  `~/Documents/Websites/plg-twint-svn`. Spam Protect und Age Check machen es
+  genauso (29.10.2026 beide erfolgreich).
+- **Nie von Hand im SVN-Checkout arbeiten** (`svn ci`, `cp` nach
+  `plg-twint-svn`, `touch` dort). Die Schreibsperre für fremde Projektordner
+  (eiserne Regel) blockiert jeden Befehl, der `plg-twint-svn` nennt und
+  schreibt. Fehlt dem Skript ein Schritt, wird das Skript erweitert, nicht von
+  Hand nachgearbeitet.
+- Das SVN-Passwort liegt im macOS-Schlüsselbund (Benutzer `worshipper`), der
+  Commit läuft ohne Rückfrage durch.
 
-## Schritt 2 — trunk mit dem sauberen Plugin-Stand füllen
+## Was `release.sh` tut
 
-`git archive` liefert exakt den ZIP-Inhalt (respektiert `.gitattributes export-ignore`:
-kein README.md/CHANGELOG.md/vendor/docs/.github …, aber MIT composer.json und uninstall.php).
+1. Vorbedingungen: sauberes Arbeitsverzeichnis, Version an allen drei Stellen
+   gleich, beide Changelog-Einträge vorhanden, Tag im SVN noch frei.
+2. Qualität: PHP-Syntax, PHPCS, keine Phantom-Locales (fr_CH/it_CH),
+   Verzeichnis-Assets vollständig und in den richtigen Massen.
+3. ZIP bauen und prüfen, dass es die neue Version trägt.
+4. SVN: `svn update`, ZIP-Inhalt nach `trunk/` spiegeln, **Banner, Icons,
+   `icon.svg`, Screenshots und Blueprint aus `wordpress.org/` nach `assets/`
+   spiegeln (in jedem Modus)**, neue Dateien anmelden, Bildtypen setzen.
+5. Commit, dann `trunk` nach `tags/x.y.z` kopieren.
+6. Gegen den Server prüfen: Assets Byte für Byte, Version und Stable tag im
+   Tag, und dass die wordpress.org-API die neue Version meldet.
 
-```bash
-# Vorhandenen trunk-Inhalt leeren (beim Erstrelease ist er leer)
-rm -rf trunk/*
-git -C ~/Documents/Websites/plg-twint archive HEAD | tar -x -C trunk/
-ls trunk/    # Kontrolle: Hauptdatei, readme.txt, includes/, assets/, languages/, composer.json, uninstall.php
-```
+Die Verzeichnis-Assets hängen an keiner Version: Die Plugin-Seite zeigt immer,
+was gerade in `assets/` liegt. Darum spiegelt das Skript sie bei jedem Lauf,
+SVN überträgt nur Geändertes. **Vorfall 29.10.2026:** Neues Icon und neuer
+Banner lagen in `wordpress.org/`, das Skript kannte den Asset-Schritt noch
+nicht, 1.7.0 ging mit den alten Bildern raus. Seit Commit `126ba85` gehören die
+Assets fest dazu.
 
-## Schritt 3 — Verzeichnis-Assets (Banner/Icons) einspielen
+## Wann ein Release fertig ist
 
-**Wichtig:** nur die finalen Assets — den Ordner `wordpress.org/alte versionen/` NICHT
-kopieren (enthält eine Banner-Variante mit WooCommerce-Logo → Trademark-Problem).
+Nicht, wenn `release.sh` grün ist, sondern wenn es dort stimmt, wo Roger
+hinschaut. Vorher nie «fertig» oder «aktuell» melden.
 
-```bash
-A=~/Documents/Websites/plg-twint/wordpress.org
-cp "$A/banner-772x250.png"  assets/
-cp "$A/banner-1544x500.png" assets/
-cp "$A/icon-128x128.png"    assets/
-cp "$A/icon-256x256.png"    assets/
-cp "$A/icon.svg"            assets/
-ls assets/
-```
+1. **Plugin-Seite** `https://de.wordpress.org/plugins/blueforce-manual-payments-for-twint/`
+   im Browser ansehen: neue Version, aktuelles Icon, aktueller Banner.
+2. **API** (holen auch die Shops für ihr Backend): Felder `icons` und
+   `banners`, der Parameter `?rev=` muss die Revision des letzten
+   Asset-Commits tragen. `release.sh` prüft das seit 29.10.2026 selbst.
+   Hat wordpress.org noch nicht eingelesen, das genau so melden und selbst
+   weiter prüfen, nicht Roger nachfragen lassen.
+3. **Landingpage** `https://blueforce.ch/twint`: `softwareVersion` im JSON-LD,
+   und bei neuen Bildern das Vorschaubild `og-twint.jpg` (mit neuem
+   `?v=` in `og:image`). Liegt im Projekt `blueforce2026`, dafür sofort eine
+   Session mit `cwd` dort starten.
 
-## Schritt 4 — Neue Dateien für SVN vormerken
+## Fehler vom 29.10.2026 (Release 1.7.0), nie wiederholen
 
-```bash
-svn add trunk/* assets/* --force
-svn status        # A = added; kontrollieren, dass alles Gewünschte dabei ist
-```
+- Release an Roger zurückgegeben, weil der Auftrag einer anderen Session das
+  behauptete. Roger ist Laie, der Release ist Claudes Aufgabe.
+- Gegen die Plugin-Kopie der Testinstanz getestet statt gegen das Repo.
+  Vor jedem Test Version und Pfad des geladenen Codes ausgeben.
+- Release ohne die neuen Bilder: Der Asset-Schritt fehlte im Skript.
+- «Aktuell» gemeldet, nachdem nur das SVN geprüft war. Die Seite zeigte
+  weiter die alten Bilder.
+- Landingpage erst auf Nachfrage mitgedacht.
+- Irrwege statt Fokus (Release-Bestätigung untersucht, die mit Bildern
+  nichts zu tun hat) und lange Erklärungen statt Taten.
 
-## Schritt 5 — trunk + assets committen
+## Wo was liegt
 
-```bash
-svn ci -m "Initial release 1.4.3" --username worshipper
-# SVN-Passwort eingeben, wenn gefragt
-```
+| Was | Wo |
+|---|---|
+| SVN-URL | `https://plugins.svn.wordpress.org/blueforce-manual-payments-for-twint` |
+| SVN-Checkout | `~/Documents/Websites/plg-twint-svn` (nur über `release.sh`) |
+| svn-Programm | `/opt/homebrew/opt/subversion/bin/svn` (nicht im PATH) |
+| Verzeichnis-Assets | `wordpress.org/` im Repo, gitignored, nicht im ZIP |
+| Screenshots | `wordpress.org/screenshots/screenshot-N.png`, Anzahl muss zu `== Screenshots ==` in der readme passen |
+| Blueprint (Live-Vorschau) | `wordpress.org/blueprints/blueprint.json` |
+| Plugin-Seite | `https://wordpress.org/plugins/blueforce-manual-payments-for-twint` |
 
-## Schritt 6 — Version taggen (serverseitige Kopie, effizient)
+Nie den Ordner `wordpress.org/alte versionen/` hochladen: Er enthält einen
+Banner mit WooCommerce-Logo (Markenproblem). Das Skript nimmt nur feste Muster.
 
-```bash
-svn cp \
-  https://plugins.svn.wordpress.org/blueforce-manual-payments-for-twint/trunk \
-  https://plugins.svn.wordpress.org/blueforce-manual-payments-for-twint/tags/1.4.3 \
-  -m "Tag 1.4.3" --username worshipper
-```
+## Wer das Icon und die Banner sonst noch zeigt
 
----
+Bei neuen Bildern auch diese Stellen nachziehen, im selben Durchgang:
 
-## Danach
+- **Plugin selbst:** bringt kein eigenes Icon mit. Plugin-Liste und
+  Update-Seite im WordPress-Backend holen das Icon von wordpress.org, ziehen
+  also von selbst nach.
+- **Landingpage `https://blueforce.ch/twint`** (Projekt `blueforce2026`, Datei
+  `twint.html`): Vorschaubild für Social Media `assets/img/og-twint.jpg`
+  (1200 x 630) im Banner-Design, und `softwareVersion` im JSON-LD bei jeder
+  neuen Version. Liegt in einem anderen Projekt, braucht eine Session dort.
 
-- Öffentliche Seite erscheint nach wenigen Minuten: https://wordpress.org/plugins/blueforce-manual-payments-for-twint (Suche/Profil bis 72 h).
-- **Kontrolle:** Seite lädt, Banner/Icon sichtbar, Version 1.4.3, Beschreibung korrekt.
-- readme-Validator gegen die Live-Seite: https://wordpress.org/plugins/developers/readme-validator/
+## Fallen
 
-## Künftige Updates (nach dem ersten Release)
-
-1. Version bumpen (Header `Version`, `BF_TWINT_VERSION`, readme `Stable tag`, Changelog), git-committen.
-2. `rm -rf trunk/* && git archive HEAD | tar -x -C trunk/` → `svn add --force` → gelöschte per `svn rm` → `svn ci`.
-3. `svn cp .../trunk .../tags/<version>`.
-   (Dann lohnt sich ein `svn-deploy.sh`, das das kapselt — analog zu build.sh.)
+- **WordPress.org verzögert Updates seit Herbst 2026 um etwa 6 Stunden.** Die
+  Plugin-Seite zeigt dann «Version x.y.z wird in etwa 6 Stunden an Websites
+  ausgeliefert». Das ist normal und kein Fehler.
+- **Einzelne `svn`-Befehle aus der Sandbox** (etwa um die Tag-Liste zu lesen)
+  finden den Server nicht, weil `~/.subversion/servers` keinen Proxy kennt.
+  Für reine Lesebefehle den Proxy der Sandbox mitgeben, mit `127.0.0.1` statt
+  `localhost` (sonst bricht die Verbindung ab), Port, Benutzer und Passwort aus
+  `$HTTPS_PROXY`, und `plugins.svn.wordpress.org` als erlaubte Domain. Für den
+  Release selbst braucht es das nicht, `release.sh` läuft ausserhalb der Sandbox.
+- **Die Testinstanz hat eine eigene Plugin-Kopie** unter
+  `testinstanz/wp-content/plugins/blueforce-manual-payments-for-twint/`, keinen
+  Symlink. Wer dort eine neue Version sehen will, kopiert den Inhalt des ZIP
+  hinein. Tests, die den Repo-Code prüfen sollen, laden ihn über ein eigenes
+  `WP_PLUGIN_DIR` mit Symlinks auf die Plugins der Testinstanz.
+- **`git archive` muss im Git-Repo laufen**, nie im SVN-Checkout, sonst wird
+  `trunk` leer. Das Skript erledigt das richtig.

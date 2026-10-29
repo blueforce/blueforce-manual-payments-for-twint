@@ -249,8 +249,36 @@ for name in banner-1544x500.png banner-772x250.png icon-256x256.png icon-128x128
 done
 ok "Banner und Icons serverseitig aktuell"
 
+# Sichtbar sind neue Bilder erst, wenn wordpress.org den Commit eingelesen hat:
+# Plugin-Seite und Shop-Backends holen sie über URLs mit «?rev=», erst die neue
+# Revision umgeht die Caches. Vorfall 29.10.2026: Das SVN war aktuell, die Seite
+# zeigte weiter die alten Bilder, und es wurde zu früh «fertig» gemeldet. Darum
+# hier gegen die API prüfen, die auch die Shops abfragen, nicht nur gegen das SVN.
+icon_file="icon-256x256.png"
+[ -f "$ASSET_DIR/icon.svg" ] && icon_file="icon.svg"
+want_icon=$("$SVN_BIN" info --show-item last-changed-revision "$SVN_URL/assets/$icon_file" 2>/dev/null | tr -d ' ' || true)
+want_banner=$("$SVN_BIN" info --show-item last-changed-revision "$SVN_URL/assets/banner-1544x500.png" 2>/dev/null | tr -d ' ' || true)
+seen=""
+for i in $(seq 1 20); do
+	seen=$(curl -s -G "https://api.wordpress.org/plugins/info/1.2/" \
+		--data-urlencode "action=plugin_information" \
+		--data-urlencode "request[slug]=$SLUG" \
+		--data-urlencode "request[fields][icons]=1" \
+		--data-urlencode "request[fields][banners]=1" \
+		| python3 -c 'import sys,json; d=json.load(sys.stdin); print(json.dumps(d.get("icons")), json.dumps(d.get("banners")))' 2>/dev/null || true)
+	if printf '%s' "$seen" | grep -q "$icon_file?rev=$want_icon" && printf '%s' "$seen" | grep -q "banner-1544x500.png?rev=$want_banner"; then
+		ok "wordpress.org zeigt das aktuelle Icon (r$want_icon) und den aktuellen Banner (r$want_banner)"
+		break
+	fi
+	if [ "$i" = "20" ]; then
+		warn "wordpress.org zeigt nach 10 Minuten noch ältere Bilder als r$want_icon/r$want_banner."
+		warn "Nicht als erledigt melden. Später erneut prüfen (API-Feld icons/banners, Parameter ?rev=)."
+	fi
+	sleep 30
+done
+
 if [ "$MODE" = "assets" ]; then
-	say "Fertig. Die Plugin-Seite zeigt die neuen Bilder nach wenigen Minuten."
+	say "Fertig."
 	exit 0
 fi
 

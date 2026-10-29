@@ -4,6 +4,7 @@
 /build.sh export-ignore
 /release.sh export-ignore
 /CONTRIBUTING.md export-ignore
+/CLAUDE.md export-ignore
 /README.md export-ignore
 /CHANGELOG.md export-ignore
 /phpcs.xml.dist export-ignore
