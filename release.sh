@@ -8,7 +8,14 @@
 # Verwendung:
 #   ./release.sh 1.6.4              # Vollrelease: trunk + neuer Tag + Stable tag
 #   ./release.sh --readme-only      # nur readme.txt nachziehen, ohne Versionssprung
+#   ./release.sh --assets-only      # nur Banner, Icons, Screenshots, Blueprint nachziehen
 #   ./release.sh 1.6.4 --dry-run    # alles prüfen und bauen, nichts veröffentlichen
+#
+# Die Verzeichnis-Assets aus wordpress.org/ (Banner, Icons, Screenshots,
+# Blueprint) werden bei JEDEM Lauf nach assets/ gespiegelt, in jedem Modus.
+# SVN überträgt nur, was sich wirklich geändert hat. Ein neues Icon geht also
+# mit dem nächsten Lauf automatisch raus; ist nur ein Bild neu, reicht
+# --assets-only.
 #
 # Warum readme-only ein eigener Modus ist: Die Plugin-Seite liest die readme
 # ausschliesslich aus dem Verzeichnis, auf das «Stable tag» zeigt. Nur trunk zu
@@ -35,6 +42,7 @@ DRY_RUN=0
 for arg in "$@"; do
 	case "$arg" in
 		--readme-only) MODE="readme" ;;
+		--assets-only) MODE="assets" ;;
 		--dry-run)     DRY_RUN=1 ;;
 		--*)           echo "Unbekannte Option: $arg" >&2; exit 1 ;;
 		*)             VERSION="$arg" ;;
@@ -103,6 +111,28 @@ if [ -n "$phantom" ]; then
 fi
 ok "Keine Phantom-Locales (fr_CH/it_CH)"
 
+# Verzeichnis-Assets: Banner, Icons und Screenshots liegen im SVN neben trunk und
+# tags, nicht im Plugin-ZIP. Falsche Masse nimmt wordpress.org stillschweigend
+# nicht an, darum hier messen. Die Screenshot-Nummern müssen zur Liste in der
+# readme passen, sonst zeigt die Plugin-Seite leere Bilder. (Wie bei Spam
+# Protect und Age Check; bei TWINT liegen die Screenshots in einem Unterordner.)
+ASSET_DIR="$REPO/wordpress.org"
+for pair in "banner-1544x500.png:1544x500" "banner-772x250.png:772x250" "icon-256x256.png:256x256" "icon-128x128.png:128x128"; do
+	name="${pair%%:*}"; want="${pair#*:}"
+	[ -f "$ASSET_DIR/$name" ] || fail "Asset fehlt: wordpress.org/$name"
+	got=$(sips -g pixelWidth -g pixelHeight "$ASSET_DIR/$name" 2>/dev/null | awk '/pixelWidth/{w=$2} /pixelHeight/{h=$2} END{print w"x"h}')
+	[ "$got" = "$want" ] || fail "wordpress.org/$name ist $got, erwartet $want"
+done
+shots=$(awk '/^== Screenshots ==/{f=1;next} /^== /{f=0} f && /^[0-9]+\./{n++} END{print n+0}' readme.txt)
+i=1
+while [ "$i" -le "$shots" ]; do
+	[ -f "$ASSET_DIR/screenshots/screenshot-$i.png" ] || fail "readme nennt Screenshot $i, wordpress.org/screenshots/screenshot-$i.png fehlt"
+	i=$(( i + 1 ))
+done
+files=$(ls "$ASSET_DIR"/screenshots/screenshot-*.png 2>/dev/null | wc -l | tr -d ' ')
+[ "$files" = "$shots" ] || fail "$files Screenshot-Dateien, aber $shots in der readme beschrieben"
+ok "Verzeichnis-Assets vollständig (2 Banner, 2 Icons, $shots Screenshots)"
+
 # ─────────────────────────────────────────────────────────────────────────────
 say "3/6  ZIP bauen"
 
@@ -132,6 +162,9 @@ if [ "$MODE" = "readme" ]; then
 	TARGETS=("$SVN_DIR/trunk/readme.txt" "$SVN_DIR/tags/$STABLE/readme.txt")
 	MSG="readme nachgezogen (trunk + tag $STABLE, keine Codeaenderung)"
 	ok "readme.txt in trunk und tags/$STABLE gelegt"
+elif [ "$MODE" = "assets" ]; then
+	TARGETS=()
+	MSG="Verzeichnis-Assets nachgezogen (keine Codeaenderung)"
 else
 	TMP=$(mktemp -d)
 	trap 'rm -rf "$TMP"' EXIT
@@ -142,15 +175,48 @@ else
 	ok "ZIP-Inhalt nach trunk gespiegelt"
 fi
 
+# Die Verzeichnis-Assets hängen an keiner Version: Die Plugin-Seite zeigt immer,
+# was gerade in assets/ liegt. Darum bei jedem Lauf mitspiegeln, in jedem Modus.
+# Vorfall 29.10.2026: Neues Icon und neuer Banner lagen in wordpress.org/, das
+# Skript kannte diesen Schritt nicht, 1.7.0 ging mit den alten Bildern raus.
+# Nie den Ordner «wordpress.org/alte versionen/» mitnehmen (Banner mit
+# WooCommerce-Logo), darum nur diese Muster.
+mkdir -p "$SVN_DIR/assets/blueprints"
+for f in "$ASSET_DIR"/banner-*.png "$ASSET_DIR"/icon-*.png "$ASSET_DIR"/icon.svg "$ASSET_DIR"/screenshots/screenshot-*.png; do
+	[ -e "$f" ] || continue
+	cp "$f" "$SVN_DIR/assets/"
+done
+if [ -f "$ASSET_DIR/blueprints/blueprint.json" ]; then
+	cp "$ASSET_DIR/blueprints/blueprint.json" "$SVN_DIR/assets/blueprints/"
+fi
+TARGETS+=("$SVN_DIR/assets")
+ok "Banner, Icons, Screenshots und Blueprint nach assets/ gelegt"
+
 # Neue und gelöschte Dateien anmelden, sonst fehlen sie im Release.
 cd "$SVN_DIR"
-"$SVN_BIN" status trunk | awk '/^\?/{print $2}' | while read -r f; do "$SVN_BIN" add "$f" >/dev/null; done
-"$SVN_BIN" status trunk | awk '/^!/{print $2}' | while read -r f; do "$SVN_BIN" delete "$f" >/dev/null; done
+"$SVN_BIN" status trunk assets | awk '/^\?/{print $2}' | while read -r f; do "$SVN_BIN" add "$f" >/dev/null; done
+"$SVN_BIN" status trunk assets | awk '/^!/{print $2}' | while read -r f; do "$SVN_BIN" delete "$f" >/dev/null; done
+
+# Ohne den Typ meldet SVN neue Bilder als application/octet-stream an, und die
+# Plugin-Seite bietet sie zum Herunterladen an, statt sie zu zeigen.
+for f in assets/*.png; do
+	[ -e "$f" ] || continue
+	[ "$("$SVN_BIN" propget svn:mime-type "$f" 2>/dev/null)" = "image/png" ] || "$SVN_BIN" propset -q svn:mime-type image/png "$f"
+done
+for f in assets/*.svg; do
+	[ -e "$f" ] || continue
+	[ "$("$SVN_BIN" propget svn:mime-type "$f" 2>/dev/null)" = "image/svg+xml" ] || "$SVN_BIN" propset -q svn:mime-type image/svg+xml "$f"
+done
+ok "Bildtypen für alle Assets gesetzt"
 
 say "Diese Änderungen gehen raus:"
 "$SVN_BIN" status trunk "${TARGETS[@]}" 2>/dev/null | sort -u || true
 if [ -z "$("$SVN_BIN" status trunk)" ] && [ "$MODE" = "release" ]; then
 	warn "Keine Änderungen im trunk. Nichts zu tun."
+	exit 0
+fi
+if [ "$MODE" = "assets" ] && [ -z "$("$SVN_BIN" status assets)" ]; then
+	ok "Assets im SVN sind bereits aktuell. Nichts zu tun."
 	exit 0
 fi
 
@@ -174,6 +240,19 @@ fi
 # Pflicht, analog zum Post-Deploy-200-Check der Websites: Ein Release gilt erst
 # als erfolgreich, wenn der Server bestätigt, was wir glauben hochgeladen zu haben.
 say "6/6  Gegen den Server verifizieren"
+
+# Assets: Was auf dem Server liegt, muss Byte für Byte der lokalen Datei gleichen.
+for name in banner-1544x500.png banner-772x250.png icon-256x256.png icon-128x128.png icon.svg; do
+	[ -f "$ASSET_DIR/$name" ] || continue
+	srv=$("$SVN_BIN" cat "$SVN_URL/assets/$name" 2>/dev/null | md5 -q || true)
+	[ "$srv" = "$(md5 -q "$ASSET_DIR/$name")" ] || fail "assets/$name auf dem Server weicht von wordpress.org/$name ab"
+done
+ok "Banner und Icons serverseitig aktuell"
+
+if [ "$MODE" = "assets" ]; then
+	say "Fertig. Die Plugin-Seite zeigt die neuen Bilder nach wenigen Minuten."
+	exit 0
+fi
 
 CHECK_TAG="${VERSION:-$STABLE}"
 # Erst komplett einlesen, dann filtern: «grep -m1» direkt hinter «svn cat»
