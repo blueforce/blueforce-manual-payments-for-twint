@@ -34,7 +34,11 @@ final class BF_TWINT_Payment_Reminder {
 	const WINDOW_DAYS = 30;
 
 	/**
-	 * Obergrenze versendeter Mails pro Cron-Lauf.
+	 * Obergrenze der Mail-Übergaben pro Cron-Lauf, gelungen oder nicht.
+	 *
+	 * Zählt jeden Versuch, nicht nur die gelungenen: Verweigert der Mailversand
+	 * wiederholt, liefe ein Lauf sonst durch alle Kandidaten, bei langsamer
+	 * Mailverbindung bis zum Abbruch.
 	 */
 	const BATCH_SIZE = 20;
 
@@ -105,20 +109,35 @@ final class BF_TWINT_Payment_Reminder {
 		// Gefiltert wird in PHP, nicht per «meta_query»: Die klassische Bestelltabelle
 		// (Shops ohne HPOS) unterstützt das Argument in wc_get_orders() nicht.
 		// WooCommerce verwirft es dort stillschweigend und meldet zusätzlich
-		// «doing it wrong», und das bei jedem Cron-Lauf. Damit bereits erinnerte
-		// Bestellungen den Stapel trotzdem nicht belegen und neuere Bestellungen
-		// unerinnert blieben, wird seitenweise weitergeblättert.
+		// «doing it wrong», und das bei jedem Cron-Lauf.
+		//
+		// Neueste zuerst: Frisch fällig gewordene Bestellungen stehen so immer auf
+		// der ersten Seite. Bereits erinnerte sind älter und bleiben bis zum Ende
+		// des Fensters Treffer. Aufsteigend sortiert konnten mehr als
+		// MAX_PAGES × PAGE_SIZE davon die neuen bei jedem Lauf verdecken.
 		$args = array(
 			'payment_method' => BF_TWINT_GATEWAY_ID,
 			'status'         => array( 'on-hold', 'pending' ),
 			'date_created'   => ( time() - ( $days + self::WINDOW_DAYS ) * DAY_IN_SECONDS ) . '...' . ( time() - $days * DAY_IN_SECONDS ),
 			'limit'          => self::PAGE_SIZE,
 			'orderby'        => 'date',
-			'order'          => 'ASC',
+			'order'          => 'DESC',
 		);
+
+		// Gateway einmal pro Lauf holen. Fehlt es, kann keine Erinnerung die
+		// Zahlungsangaben enthalten, dann gar nicht erst durch die Kandidaten gehen.
+		$gateways = WC()->payment_gateways() ? WC()->payment_gateways->payment_gateways() : array();
+		$gateway  = isset( $gateways[ BF_TWINT_GATEWAY_ID ] ) ? $gateways[ BF_TWINT_GATEWAY_ID ] : null;
+		if ( ! $gateway ) {
+			if ( function_exists( 'wc_get_logger' ) ) {
+				wc_get_logger()->warning( 'Reminder run skipped: the TWINT payment method is not available.', array( 'source' => 'bf-twint' ) );
+			}
+			return;
+		}
 
 		$sent       = 0;
 		$failed     = 0;
+		$attempts   = 0;
 		$candidates = 0;
 
 		for ( $page = 1; $page <= self::MAX_PAGES; $page++ ) {
@@ -134,15 +153,33 @@ final class BF_TWINT_Payment_Reminder {
 			foreach ( $orders as $order ) {
 				// Nur einmal erinnern, und nie, wenn der Kunde bereits
 				// «bezahlt» gemeldet hat.
-				if ( absint( $order->get_meta( '_bf_twint_reminder_sent' ) ) || absint( $order->get_meta( '_bf_twint_paid_claimed' ) ) ) {
+				if ( self::is_done( $order ) ) {
 					continue;
 				}
-				if ( self::send_reminder( $order ) ) {
+
+				// Unmittelbar vor dem Versand frisch lesen: Hat der Shop den
+				// Zahlungseingang inzwischen bestätigt oder der Kunde «bezahlt»
+				// gemeldet, geht keine Erinnerung mehr raus.
+				$current = BF_TWINT_Gateway::fresh_order( $order->get_id() );
+				if ( ! $current
+					|| ! $current->has_status( array( 'on-hold', 'pending' ) )
+					|| BF_TWINT_GATEWAY_ID !== $current->get_payment_method()
+					|| self::is_done( $current )
+				) {
+					continue;
+				}
+
+				$result = self::send_reminder( $current, $gateway );
+				if ( 'sent' === $result ) {
 					++$sent;
 				} else {
 					++$failed;
 				}
-				if ( $sent >= self::BATCH_SIZE ) {
+				// Eine Bestellung ohne Adresse kostet keinen Versuch beim Mailversand.
+				if ( 'no_address' !== $result ) {
+					++$attempts;
+				}
+				if ( $attempts >= self::BATCH_SIZE ) {
 					break 2;
 				}
 			}
@@ -163,21 +200,28 @@ final class BF_TWINT_Payment_Reminder {
 	}
 
 	/**
-	 * Erinnerungs-Mail für eine Bestellung versenden und protokollieren.
+	 * Ob eine Bestellung keine Erinnerung (mehr) braucht.
+	 *
+	 * Nur einmal erinnern, und nie, wenn der Kunde bereits «bezahlt» gemeldet hat.
 	 *
 	 * @param WC_Order $order Bestellung.
-	 * @return bool Ob die Mail übergeben wurde.
+	 * @return bool
 	 */
-	private static function send_reminder( $order ) {
+	private static function is_done( $order ) {
+		return absint( $order->get_meta( '_bf_twint_reminder_sent' ) ) || absint( $order->get_meta( '_bf_twint_paid_claimed' ) );
+	}
+
+	/**
+	 * Erinnerungs-Mail für eine Bestellung versenden und protokollieren.
+	 *
+	 * @param WC_Order           $order   Bestellung.
+	 * @param WC_Payment_Gateway $gateway TWINT-Gateway.
+	 * @return string «sent», «failed» (Mailversand hat abgelehnt) oder «no_address».
+	 */
+	private static function send_reminder( $order, $gateway ) {
 		$to = $order->get_billing_email();
 		if ( ! $to ) {
-			return false;
-		}
-
-		$gateways = WC()->payment_gateways() ? WC()->payment_gateways->payment_gateways() : array();
-		$gateway  = isset( $gateways[ BF_TWINT_GATEWAY_ID ] ) ? $gateways[ BF_TWINT_GATEWAY_ID ] : null;
-		if ( ! $gateway ) {
-			return false;
+			return 'no_address';
 		}
 
 		$mailer  = WC()->mailer();
@@ -201,7 +245,7 @@ final class BF_TWINT_Payment_Reminder {
 		// die Bestellung beim nächsten Cron-Lauf einen neuen Versuch (innerhalb
 		// des Kandidaten-Fensters), statt fälschlich übersprungen zu werden.
 		if ( ! $sent ) {
-			return false;
+			return 'failed';
 		}
 
 		// Adresse in der Notiz nur maskiert: Notizen überleben die
@@ -217,6 +261,6 @@ final class BF_TWINT_Payment_Reminder {
 		);
 		$order->save();
 
-		return true;
+		return 'sent';
 	}
 }

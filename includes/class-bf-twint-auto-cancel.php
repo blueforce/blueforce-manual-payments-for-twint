@@ -134,6 +134,7 @@ final class BF_TWINT_Auto_Cancel {
 		$cancelled  = array();
 		$candidates = 0;
 		$skipped    = 0;
+		$changed    = 0;
 
 		for ( $page = 1; $page <= self::MAX_PAGES; $page++ ) {
 			// Geblättert wird über «offset» in Höhe der übersprungenen Bestellungen,
@@ -148,16 +149,31 @@ final class BF_TWINT_Auto_Cancel {
 			$candidates += count( $orders );
 
 			foreach ( $orders as $order ) {
+				// Unmittelbar vor dem Stornieren frisch lesen. Zwischen der Abfrage und
+				// diesem Punkt können Minuten liegen, denn jede Stornierung verschickt
+				// Mails und bucht Lager zurück. Hat der Shop inzwischen den
+				// Zahlungseingang bestätigt, darf der Lauf den neueren Status nicht mit
+				// «cancelled» überschreiben.
+				$current = BF_TWINT_Gateway::fresh_order( $order->get_id() );
+				if ( ! $current
+					|| ! $current->has_status( array( 'on-hold', 'pending' ) )
+					|| BF_TWINT_GATEWAY_ID !== $current->get_payment_method()
+				) {
+					// Hat die Treffermenge verlassen, «offset» bleibt darum unverändert.
+					++$changed;
+					continue;
+				}
+
 				// Sicherheitsnetz: Hat der Kunde «Ich habe bezahlt» gemeldet und liegt
 				// die Meldung noch innerhalb der Kulanzfrist, nicht automatisch
 				// stornieren, der Shop soll erst abgleichen können.
-				$claimed = absint( $order->get_meta( '_bf_twint_paid_claimed' ) );
+				$claimed = absint( $current->get_meta( '_bf_twint_paid_claimed' ) );
 				if ( $claimed > 0 && $claimed > $grace_cutoff ) {
 					++$skipped;
 					continue;
 				}
 
-				$order->update_status(
+				$current->update_status(
 					'cancelled',
 					sprintf(
 						/* translators: %d: number of days without payment. */
@@ -165,7 +181,7 @@ final class BF_TWINT_Auto_Cancel {
 						$days
 					)
 				);
-				$cancelled[] = '#' . $order->get_order_number();
+				$cancelled[] = '#' . $current->get_order_number();
 
 				if ( count( $cancelled ) >= self::BATCH_SIZE ) {
 					break 2;
@@ -184,11 +200,12 @@ final class BF_TWINT_Auto_Cancel {
 		if ( function_exists( 'wc_get_logger' ) ) {
 			wc_get_logger()->info(
 				sprintf(
-					'Auto-cancel run: %d candidates older than %d days, %d cancelled%s.',
+					'Auto-cancel run: %d candidates older than %d days, %d cancelled%s, %d left alone because they changed during the run.',
 					$candidates,
 					$days,
 					count( $cancelled ),
-					$cancelled ? ' (' . implode( ', ', $cancelled ) . ')' : ''
+					$cancelled ? ' (' . implode( ', ', $cancelled ) . ')' : '',
+					$changed
 				),
 				array( 'source' => 'bf-twint' )
 			);

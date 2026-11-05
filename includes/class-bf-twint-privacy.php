@@ -45,11 +45,12 @@ final class BF_TWINT_Privacy {
 	 * @return array
 	 */
 	public static function export_props( $props, $order ) {
-		// Nur für TWINT-Bestellungen, bei denen tatsächlich eine Nummer vorliegt –
-		// sonst entstünden leere/irrelevante Felder im Datenexport.
-		if ( BF_TWINT_GATEWAY_ID === $order->get_payment_method()
-			&& '' !== (string) $order->get_meta( self::META_KEY )
-		) {
+		// Massgebend ist allein, ob eine Nummer gespeichert ist, nicht die aktuelle
+		// Zahlungsart. Der Block-Checkout speichert die Nummer schon vor der
+		// Zahlungsabwicklung. Wechselt der Kunde danach die Zahlungsart oder
+		// bricht ab, bleibt sie in der Bestellung und muss im Export erscheinen,
+		// die Löschung erfasst sie ohnehin immer.
+		if ( '' !== (string) $order->get_meta( self::META_KEY ) ) {
 			$props['bf_twint_customer_phone'] = __( 'TWINT mobile number (for payment request)', 'blueforce-manual-payments-for-twint' );
 		}
 		return $props;

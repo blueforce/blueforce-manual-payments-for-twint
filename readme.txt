@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.7.0
+Stable tag: 1.7.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,14 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 6. Customers can revisit the payment instructions at any time under My account – View order.
 
 == Changelog ==
+
+= 1.7.1 =
+* Fixed: auto-cancellation could cancel an order that was confirmed as paid while the scheduled run was in progress, and put its stock back. Each order is now read fresh from the database right before it is cancelled.
+* Fixed: payment reminders could get stuck behind more than 1,000 orders that had already been reminded. The run now starts with the newest due orders.
+* Fixed: the limit of 20 reminders per run only counted emails that went out. If the mail handover kept failing, one run could try up to 1,000 emails. The limit now counts every attempt.
+* Fixed: no payment reminder goes out to an order that was confirmed as paid during the run.
+* Fixed: the personal data export left out a stored TWINT mobile number once the order's payment method had changed. The number is now exported whenever it is stored.
+* Changed: the bundled German translations are now the complete set from translate.wordpress.org. This matters for shops that have not loaded a language pack.
 
 = 1.7.0 =
 * Fixed: on shops that still use the classic order table (without HPOS), WooCommerce silently ignores the meta filter in the order query. Orders that had already been reminded, and for auto-cancellation fresh "I have paid" reports, could therefore fill the batch and delay newer orders. Both runs now page through the candidates, and the "doing it wrong" notice they triggered on every scheduled run is gone.
@@ -219,6 +227,9 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.7.1 =
+Recommended: fixes a case where auto-cancellation could cancel an order that had just been confirmed as paid.
 
 = 1.4.0 =
 Renamed and prepared for the WordPress.org plugin directory; the GitHub-based update mechanism was removed (no more external calls). No functional changes.

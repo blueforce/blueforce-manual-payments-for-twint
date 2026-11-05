@@ -652,6 +652,44 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	}
 
 	/**
+	 * Lädt eine Bestellung frisch aus der Datenbank, am Cache dieses Laufs vorbei.
+	 *
+	 * Für Cron-Läufe, die eine Bestellung erst Sekunden oder Minuten nach ihrer
+	 * Abfrage bearbeiten: Ein anderer Request, etwa der Shop, der den
+	 * Zahlungseingang bestätigt, kann sie inzwischen geändert haben. wc_get_orders()
+	 * füllt dabei Post-, Meta- und je nach Einstellung den Bestell-Cache, ein
+	 * erneutes wc_get_order() lieferte sonst den alten Stand.
+	 *
+	 * @param int $order_id Bestell-ID.
+	 * @return WC_Order|false
+	 */
+	public static function fresh_order( $order_id ) {
+		$order_id = absint( $order_id );
+		if ( ! $order_id ) {
+			return false;
+		}
+
+		// Klassische Bestelltabelle: Post und Post-Meta.
+		clean_post_cache( $order_id );
+
+		// Meta-Cache von WooCommerce, gilt für beide Bestelltabellen.
+		wp_cache_delete( WC_Data::generate_meta_cache_key( $order_id, 'orders' ), 'orders' );
+
+		// Bestell-Cache von WooCommerce (HPOS), nur wenn vorhanden.
+		if ( function_exists( 'wc_get_container' ) && class_exists( '\Automattic\WooCommerce\Caches\OrderCache' ) ) {
+			try {
+				wc_get_container()->get( \Automattic\WooCommerce\Caches\OrderCache::class )->remove( $order_id );
+			} catch ( \Throwable $e ) {
+				// Ohne Cache gibt es nichts zu verwerfen.
+				unset( $e );
+			}
+		}
+
+		$order = wc_get_order( $order_id );
+		return $order instanceof WC_Order ? $order : false;
+	}
+
+	/**
 	 * Speichert die bestellrelevanten Einstellungen als Snapshot in der Bestellung.
 	 *
 	 * So bleiben Danke-Seite, E-Mail und Admin-Ansicht einer Bestellung korrekt,

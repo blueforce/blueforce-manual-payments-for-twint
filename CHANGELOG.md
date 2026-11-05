@@ -7,6 +7,18 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 ## [Unreleased]
 
+## [1.7.1] - 2026-11-05
+
+Vier Befunde aus einem Reaudit, jeder in der Testinstanz gegen den Repo-Code nachgestellt (HPOS mit eingeschaltetem Bestell-Cache), dazu eine gleichartige Lücke bei der Erinnerung.
+
+### Behoben
+
+- **Die Auto-Stornierung konnte eine inzwischen bezahlte Bestellung stornieren.** Der Lauf lud die offenen Bestellungen und arbeitete danach mit diesen Objekten weiter, oft Minuten später, weil jede Stornierung Mails verschickt und Lager zurückbucht. Bestätigte der Shop in der Zwischenzeit den Zahlungseingang, überschrieb der Lauf den neueren Status mit «cancelled» und gab den Lagerbestand frei. Neu wird jede Bestellung unmittelbar vor dem Stornieren frisch aus der Datenbank gelesen, an Post-, Meta- und Bestell-Cache vorbei (`BF_TWINT_Gateway::fresh_order()`), und nur storniert, wenn sie noch offen und TWINT ist. Ein Restfenster von Millisekunden zwischen Lesen und Speichern bleibt, eine Sperre auf Datenbankebene wäre für diesen Fall unverhältnismässig.
+- **Erinnerungen konnten hinter mehr als 1000 bereits erinnerten Bestellungen hängen bleiben.** Jeder Lauf begann bei der ältesten Bestellung und prüfte höchstens zehn Seiten zu 100. Bereits erinnerte Bestellungen bleiben bis zum Ende des Fensters Treffer und konnten so die neueren fälligen bei jedem Lauf verdecken. Neu beginnt der Lauf bei der neuesten fälligen Bestellung.
+- **Die Versandgrenze zählte nur gelungene Erinnerungen.** Schlug die Mailübergabe wiederholt fehl, konnte ein einzelner Lauf bis zu 1000 Versuche machen, bei langsamer Mailverbindung bis zum Abbruch. Neu zählt jeder Versuch, höchstens 20 pro Lauf. Bestellungen ohne Mailadresse kosten keinen Versuch. Fehlt die Zahlungsart ganz, bricht der Lauf mit einem Protokolleintrag ab, statt jede Bestellung einzeln scheitern zu lassen.
+- **Keine Erinnerung mehr an eine Bestellung, die während des Laufs bezahlt wurde.** Dieselbe Frisch-Prüfung wie bei der Stornierung, unmittelbar vor dem Versand.
+- **Der Datenexport liess eine gespeicherte TWINT-Kundennummer weg, sobald die Zahlungsart gewechselt hatte.** Massgebend ist neu nur, ob eine Nummer gespeichert ist. Der Block-Checkout speichert sie schon vor der Zahlungsabwicklung, nach einem Abbruch oder Wechsel blieb sie in der Bestellung, erschien aber nicht mehr im Export. Die Löschung hat sie schon immer erfasst.
+
 ### Geändert
 - **Mitgelieferte deutsche Kataloge auf den Stand von GlotPress gebracht.** `de_DE`, `de_CH` (Sie), `de_CH_informal` (du) und die Referenz `de_DE_formal` stammen jetzt aus dem vollständigen Export von translate.wordpress.org: 145 von 145 Texten, darunter 44, die seit den 1.6er-Versionen nur über die Sprachpakete kamen. `.mo` neu gebaut, `.pot` aus dem aktuellen Code erzeugt. Wirkt dort, wo ein Shop kein Sprachpaket geladen hat.
 
