@@ -102,9 +102,11 @@ ok "PHPCS"
 
 # fr_CH und it_CH sind keine WordPress-Locales. Tauchen sie irgendwo auf,
 # ist das ein Fehler und kein Release. Romandie laeuft auf fr_FR, das Tessin
-# auf it_IT, beide kommen ueber translate.wordpress.org.
+# auf it_IT, beide kommen ueber translate.wordpress.org. Ausgenommen sind nur
+# die beiden Dokumente, die genau diese Regel beschreiben.
 phantom=$(grep -rIn --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=testinstanz \
-	--exclude-dir=.git --exclude=release.sh -e 'fr_CH' -e 'it_CH' . | grep -v '^./docs/uebersetzungen.md:' || true)
+	--exclude-dir=.git --exclude=release.sh -e 'fr_CH' -e 'it_CH' . \
+	| grep -v -e '^./docs/uebersetzungen.md:' -e '^./docs/svn-release.md:' || true)
 if [ -n "$phantom" ]; then
 	printf '%s\n' "$phantom" >&2
 	fail "fr_CH/it_CH gefunden. Diese Locales gibt es nicht. Korrigieren auf fr_FR/it_IT."
