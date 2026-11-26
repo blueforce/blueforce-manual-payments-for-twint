@@ -2,7 +2,7 @@
 Contributors: worshipper
 Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
-Tested up to: 7.0
+Tested up to: 7.2
 Requires PHP: 7.4
 Stable tag: 1.7.1
 License: GPLv2 or later

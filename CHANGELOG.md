@@ -7,6 +7,10 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 ## [Unreleased]
 
+### Geändert
+
+- «Tested up to» in der readme auf WordPress 7.2 gesetzt (26.11.2026, nur readme, keine neue Version). Geprüft in der Testinstanz unter WordPress 7.2-RC3, WooCommerce 11.2.2 und PHP 8.5: Plugin Check ohne weiteren Befund, PHP-Syntax unter 7.4 und 8.5 sauber, PHPCompatibility 7.4 bis 8.5 ohne Befund, Laufzeittest über Einstellungen, Checkout, Danke-Seite, Mails, Bestellansicht, Zahlungsübersicht, Dashboard-Widget und Website-Zustand ohne eine einzige Meldung aus dem Plugin-Code. Die 7.2-Änderungen an jQuery Migrate, Medien, REST, Editor-Komponenten und Interactivity API betreffen das Plugin nicht.
+
 ## [1.7.1] - 2026-11-05
 
 Vier Befunde aus einem Reaudit, jeder in der Testinstanz gegen den Repo-Code nachgestellt (HPOS mit eingeschaltetem Bestell-Cache), dazu eine gleichartige Lücke bei der Erinnerung.
