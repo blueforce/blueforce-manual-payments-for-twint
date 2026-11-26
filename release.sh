@@ -29,7 +29,8 @@ SVN_DIR="${HOME}/Documents/Websites/plg-twint-svn"
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}"
 SVN_BIN="/opt/homebrew/opt/subversion/bin/svn"
 # PHP ist auf diesem Mac nicht im PATH (MAMP). Composer-Skripte brauchen es dort.
-PHP_BIN_DIR="/Applications/MAMP/bin/php/php8.3.30/bin"
+# Neueste MAMP-PHP 8.3 selbst suchen: Der Ordnername ändert sich mit jedem MAMP-Update.
+PHP_BIN_DIR="$(dirname "$(ls -d /Applications/MAMP/bin/php/php8.3.*/bin/php 2>/dev/null | sort -V | tail -1)")"
 COMPOSER="/Applications/MAMP/bin/php/composer"
 
 cd "$(dirname "$0")"
