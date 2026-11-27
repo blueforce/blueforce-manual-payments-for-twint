@@ -224,24 +224,29 @@ final class BF_TWINT_Payment_Reminder {
 			return 'no_address';
 		}
 
-		$mailer  = WC()->mailer();
-		$heading = __( 'Payment reminder', 'blueforce-manual-payments-for-twint' );
-		$subject = sprintf(
-			/* translators: %s: order number. */
-			__( 'Payment reminder for your order %s', 'blueforce-manual-payments-for-twint' ),
-			'#' . $order->get_order_number()
-		);
+		// Sprache wie bei den Kundenmails von WooCommerce (WC_Email::setup_locale()):
+		// die Sprache der Website, nicht die des gerade angemeldeten Benutzers.
+		// Mehrsprachige Plugins, die das für Kundenmails abschalten, schalten es
+		// über denselben Filter auch hier ab. Der ganze Mailaufbau gehört hinein,
+		// nicht nur der Versand, sonst stünden Betreff und Text schon in der
+		// falschen Sprache fest.
+		//
+		// Bewusst nicht wc_switch_to_site_locale(): Die stellt danach auch dann
+		// zurück, wenn gar nicht umgeschaltet wurde (Sprache war schon die der
+		// Website), und nimmt damit eine fremde Umschaltung vom Stapel.
+		$switched = function_exists( 'switch_to_locale' )
+			&& apply_filters( 'woocommerce_email_setup_locale', true ) // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce core filter.
+			&& switch_to_locale( get_locale() );
 
-		$intro = '<p>' . sprintf(
-			/* translators: %s: order number. */
-			esc_html__( 'We have not yet received the TWINT payment for your order %s. Here are the payment details again:', 'blueforce-manual-payments-for-twint' ),
-			'<strong>#' . esc_html( $order->get_order_number() ) . '</strong>'
-		) . '</p>';
+		try {
+			$sent = self::deliver_reminder( $order, $gateway, $to );
+		} finally {
+			if ( $switched ) {
+				restore_previous_locale();
+			}
+		}
 
-		$message = $intro . $gateway->get_payment_details_html( $order );
-		$sent    = $mailer->send( $to, $subject, $mailer->wrap_message( $heading, $message ) );
-
-		// Nur bei erfolgreicher Übergabe als «erinnert» markieren – sonst bekommt
+		// Nur bei erfolgreicher Übergabe als «erinnert» markieren, sonst bekommt
 		// die Bestellung beim nächsten Cron-Lauf einen neuen Versuch (innerhalb
 		// des Kandidaten-Fensters), statt fälschlich übersprungen zu werden.
 		if ( ! $sent ) {
@@ -262,5 +267,33 @@ final class BF_TWINT_Payment_Reminder {
 		$order->save();
 
 		return 'sent';
+	}
+
+	/**
+	 * Baut die Erinnerungs-Mail auf und übergibt sie dem Mailer.
+	 *
+	 * @param WC_Order           $order   Bestellung.
+	 * @param WC_Payment_Gateway $gateway TWINT-Gateway.
+	 * @param string             $to      Empfängeradresse.
+	 * @return bool Ob der Mailer die Mail angenommen hat.
+	 */
+	private static function deliver_reminder( $order, $gateway, $to ) {
+		$mailer  = WC()->mailer();
+		$heading = __( 'Payment reminder', 'blueforce-manual-payments-for-twint' );
+		$subject = sprintf(
+			/* translators: %s: order number. */
+			__( 'Payment reminder for your order %s', 'blueforce-manual-payments-for-twint' ),
+			'#' . $order->get_order_number()
+		);
+
+		$intro = '<p>' . sprintf(
+			/* translators: %s: order number. */
+			esc_html__( 'We have not yet received the TWINT payment for your order %s. Here are the payment details again:', 'blueforce-manual-payments-for-twint' ),
+			'<strong>#' . esc_html( $order->get_order_number() ) . '</strong>'
+		) . '</p>';
+
+		$message = $intro . $gateway->get_payment_details_html( $order );
+
+		return (bool) $mailer->send( $to, $subject, $mailer->wrap_message( $heading, $message ) );
 	}
 }

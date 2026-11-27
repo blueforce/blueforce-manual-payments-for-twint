@@ -132,6 +132,12 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	/**
 	 * Icon in sinnvoller Grösse rendern (Admin-Liste + klassischer Checkout).
 	 *
+	 * Das Plugin setzt bewusst kein Icon: Die TWINT-Bildmarke ist geschützt und
+	 * nicht GPL (entfernt in Commit 26dbd3a, Juni 2026). Ohne eigenes Icon gibt
+	 * die Methode einen leeren String aus. Ein Shop, der die Bildmarke mit
+	 * Erlaubnis von TWINT nutzen darf, setzt sie über den Filter
+	 * «woocommerce_gateway_icon».
+	 *
 	 * @return string
 	 */
 	public function get_icon() {
@@ -214,6 +220,15 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 			echo '</p></div>';
 		}
 
+		// Erinnerung nicht vor der Stornierung: Nur auf der TWINT-Einstellungsseite,
+		// dort, wo sich beide Fristen ändern lassen. Im übrigen Backend wäre der
+		// Hinweis Rauschen.
+		if ( $this->is_settings_screen() && $this->reminder_after_cancel() ) {
+			echo '<div class="notice notice-warning"><p>';
+			echo wp_kses_post( __( '<strong>Blueforce Manual Payments for TWINT:</strong> The payment reminder is not set to fewer days than the auto-cancellation, so unpaid orders are cancelled before the customer gets a reminder. Set the reminder to fewer days than the auto-cancellation.', 'blueforce-manual-payments-for-twint' ) );
+			echo '</p></div>';
+		}
+
 		if ( 'send' !== $this->mode || $this->has_send_target() ) {
 			return;
 		}
@@ -226,6 +241,34 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 			esc_url( $url )
 		);
 		echo '</p></div>';
+	}
+
+	/**
+	 * Ob gerade die TWINT-Einstellungsseite angezeigt wird.
+	 *
+	 * @return bool
+	 */
+	private function is_settings_screen() {
+		// Nur lesend, für die Entscheidung, ob ein Hinweis erscheint.
+		$page    = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$section = isset( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		return 'wc-settings' === $page && $this->id === $section;
+	}
+
+	/**
+	 * Ob die Erinnerung zu spät käme, weil die Stornierung vorher greift.
+	 *
+	 * Beide Läufe laufen zweimal täglich. Bei gleicher Tageszahl entscheidet der
+	 * Zufall der Reihenfolge, darum gilt schon Gleichstand als Konflikt.
+	 *
+	 * @return bool
+	 */
+	public function reminder_after_cancel() {
+		$reminder = absint( $this->get_option( 'reminder_days' ) );
+		$cancel   = absint( $this->get_option( 'auto_cancel_days' ) );
+
+		return $reminder > 0 && $cancel > 0 && $reminder >= $cancel;
 	}
 
 	/**
@@ -522,7 +565,11 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	public function validate_qr_image_field( $key, $value ) {
-		return esc_url_raw( trim( (string) $value ) );
+		// Nur http und https: Ein Bild-Link mit ftp:, mailto: oder ähnlichem ergibt
+		// im Checkout und in der Mail keinen Sinn. Den Host schränkt das bewusst
+		// nicht ein, Shops mit ausgelagerter Mediathek (CDN, S3) liefern ihre
+		// Bilder von einem fremden Host aus.
+		return esc_url_raw( trim( (string) $value ), array( 'http', 'https' ) );
 	}
 
 	/**
@@ -1282,12 +1329,15 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 
 		// instanceof statt blossem Truthy-Check: wc_get_order() liefert für eine
 		// Rückerstattungs-ID ein WC_Order_Refund ohne die hier benötigten Methoden.
-		$order = $order_id ? wc_get_order( $order_id ) : false;
+		$order    = $order_id ? wc_get_order( $order_id ) : false;
+		$released = false;
 
 		if ( $order instanceof WC_Order
 			&& BF_TWINT_GATEWAY_ID === $order->get_payment_method()
 			&& $order->has_status( array( 'on-hold', 'pending' ) )
 		) {
+			$released = true;
+
 			$user = wp_get_current_user();
 			$by   = ( $user && $user->exists() ) ? $user->display_name : __( 'unknown', 'blueforce-manual-payments-for-twint' );
 			$order->add_order_note(
@@ -1306,8 +1356,48 @@ class BF_TWINT_Gateway extends WC_Payment_Gateway {
 			}
 		}
 
-		wp_safe_redirect( wp_get_referer() ? wp_get_referer() : admin_url( 'admin.php?page=wc-orders' ) );
+		$target = wp_get_referer() ? wp_get_referer() : admin_url( 'admin.php?page=wc-orders' );
+
+		// Nicht freigegeben, etwa weil ein zweiter Klick oder eine Kollegin schneller
+		// war: Ohne Hinweis sähe das aus wie ein Erfolg. Der Parameter löst auf der
+		// Zielseite den Hinweis aus und wird danach aus der Adresse entfernt
+		// (removable_query_args).
+		if ( ! $released ) {
+			$target = add_query_arg( 'bf_twint_not_released', '1', $target );
+		}
+
+		wp_safe_redirect( $target );
 		exit;
+	}
+
+	/**
+	 * Hinweis nach einer abgelehnten Freigabe (siehe handle_mark_paid()).
+	 *
+	 * @return void
+	 */
+	public static function maybe_show_release_notice() {
+		// Nur lesend: Der Parameter zeigt einen Hinweis an, sonst nichts.
+		if ( ! isset( $_GET['bf_twint_not_released'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return;
+		}
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			return;
+		}
+
+		echo '<div class="notice notice-warning is-dismissible"><p>';
+		echo wp_kses_post( __( '<strong>Blueforce Manual Payments for TWINT:</strong> The order was not released. It is no longer awaiting a TWINT payment, for example because it has already been released.', 'blueforce-manual-payments-for-twint' ) );
+		echo '</p></div>';
+	}
+
+	/**
+	 * Entfernt den Hinweis-Parameter nach dem Anzeigen aus der Adresse.
+	 *
+	 * @param string[] $args Entfernbare Parameter.
+	 * @return string[]
+	 */
+	public static function removable_query_args( $args ) {
+		$args[] = 'bf_twint_not_released';
+		return $args;
 	}
 
 	/**

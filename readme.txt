@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 7.2
 Requires PHP: 7.4
-Stable tag: 1.7.1
+Stable tag: 1.7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,13 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 6. Customers can revisit the payment instructions at any time under My account – View order.
 
 == Changelog ==
+
+= 1.7.2 =
+* New: the TWINT settings page warns when the payment reminder is set to as many days as the auto-cancellation or more. In that case unpaid orders were cancelled before the customer was ever reminded. Your values are left as they are.
+* Fixed: clicking "Payment received" on an order that had already been released returned without any feedback. You now see a notice that the order was not released.
+* Fixed: the payment reminder is now built in the site language, the same way WooCommerce builds its customer emails. Multilingual plugins that turn this off with the WooCommerce filter "woocommerce_email_setup_locale" turn it off here too.
+* Changed: the QR image field only accepts http and https addresses.
+* Changed: tested up to WooCommerce 11.2 and WordPress 7.2.
 
 = 1.7.1 =
 * Fixed: auto-cancellation could cancel an order that was confirmed as paid while the scheduled run was in progress, and put its stock back. Each order is now read fresh from the database right before it is cancelled.
@@ -227,6 +234,9 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.7.2 =
+Warns when the payment reminder could never go out before auto-cancellation, and reports a refused order release.
 
 = 1.7.1 =
 Recommended: fixes a case where auto-cancellation could cancel an order that had just been confirmed as paid.

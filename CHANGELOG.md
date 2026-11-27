@@ -7,9 +7,22 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 ## [Unreleased]
 
+## [1.7.2] - 2026-11-27
+
+Befunde aus einem Audit mit Kimi, jeder gegen den aktuellen Code und, wo es um WooCommerce geht, gegen dessen Quellen 11.2.2 geprüft.
+
+### Behoben
+
+- **Warnung, wenn die Erinnerung nie rausgehen kann.** Ist die Zahlungserinnerung auf gleich viele oder mehr Tage gesetzt als die Auto-Stornierung, wird eine unbezahlte Bestellung storniert, bevor der Kunde erinnert wird. Die Einstellungen liessen das bisher kommentarlos zu. Neu zeigt die TWINT-Einstellungsseite in diesem Fall einen Hinweis. Die Werte selbst bleiben unverändert, der Shop entscheidet.
+- **Abgelehnte Freigabe wird gemeldet.** Klickte jemand «Zahlung erhalten», nachdem die Bestellung bereits freigegeben war (Doppelklick, zwei Personen gleichzeitig), kehrte die Seite ohne jede Rückmeldung zurück. Neu erscheint ein Hinweis, dass die Bestellung nicht freigegeben wurde, weil sie nicht mehr auf eine TWINT-Zahlung wartet.
+- **Zahlungserinnerung in der Sprache der Website.** Die Erinnerung wird neu so aufgebaut wie die Kundenmails von WooCommerce: in der Sprache der Website, nicht in der des Benutzers, in dessen Aufruf der Lauf gerade stattfindet. Mehrsprachige Plugins, die das für Kundenmails über den WooCommerce-Filter «woocommerce_email_setup_locale» abschalten, schalten es damit auch hier ab.
+
 ### Geändert
 
-- «Tested up to» in der readme auf WordPress 7.2 gesetzt (26.11.2026, nur readme, keine neue Version). Geprüft in der Testinstanz unter WordPress 7.2-RC3, WooCommerce 11.2.2 und PHP 8.5: Plugin Check ohne weiteren Befund, PHP-Syntax unter 7.4 und 8.5 sauber, PHPCompatibility 7.4 bis 8.5 ohne Befund, Laufzeittest über Einstellungen, Checkout, Danke-Seite, Mails, Bestellansicht, Zahlungsübersicht, Dashboard-Widget und Website-Zustand ohne eine einzige Meldung aus dem Plugin-Code. Die 7.2-Änderungen an jQuery Migrate, Medien, REST, Editor-Komponenten und Interactivity API betreffen das Plugin nicht.
+- Das Feld für das QR-Bild nimmt nur noch Adressen mit http oder https an. Der Host bleibt bewusst frei, weil Shops mit ausgelagerter Mediathek (CDN, S3) ihre Bilder von einem fremden Host ausliefern.
+- «WC tested up to» auf 11.2 gesetzt, geprüft mit WooCommerce 11.2.2.
+- `.pot` neu erzeugt (zwei neue Texte, die beiden Hinweise). Die mitgelieferten deutschen Kataloge sind um diese zwei ergänzt, die Sprachpakete folgen über GlotPress.
+- «Tested up to» in der readme auf WordPress 7.2 gesetzt (in der readme schon seit 26.11.2026). Geprüft in der Testinstanz unter WordPress 7.2-RC3, WooCommerce 11.2.2 und PHP 8.5: Plugin Check ohne weiteren Befund, PHP-Syntax unter 7.4 und 8.5 sauber, PHPCompatibility 7.4 bis 8.5 ohne Befund, Laufzeittest über Einstellungen, Checkout, Danke-Seite, Mails, Bestellansicht, Zahlungsübersicht, Dashboard-Widget und Website-Zustand ohne eine einzige Meldung aus dem Plugin-Code. Die 7.2-Änderungen an jQuery Migrate, Medien, REST, Editor-Komponenten und Interactivity API betreffen das Plugin nicht.
 
 ## [1.7.1] - 2026-11-05
 

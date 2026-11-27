@@ -3,7 +3,7 @@
  * Plugin Name:       Blueforce Manual Payments for TWINT
  * Plugin URI:        https://blueforce.ch/twint
  * Description:       Manual TWINT payment method for WooCommerce without the TWINT API – payments are reconciled and confirmed by hand.
- * Version:           1.7.1
+ * Version:           1.7.2
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -15,7 +15,7 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  *
  * WC requires at least: 7.0
- * WC tested up to:       11.0
+ * WC tested up to:       11.2
  *
  * Note: This plugin is an independent community project by Blueforce Digital
  * Solutions and is not affiliated with TWINT AG. "TWINT" is a registered trademark
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BF_TWINT_VERSION', '1.7.1' );
+define( 'BF_TWINT_VERSION', '1.7.2' );
 define( 'BF_TWINT_FILE', __FILE__ );
 define( 'BF_TWINT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'BF_TWINT_URL', plugin_dir_url( __FILE__ ) );
@@ -90,6 +90,8 @@ add_action(
 
 		// «Zahlung erhalten»-Button aus der Bestellansicht (Form-POST).
 		add_action( 'admin_post_bf_twint_mark_paid', array( 'BF_TWINT_Gateway', 'handle_mark_paid' ) );
+		add_action( 'admin_notices', array( 'BF_TWINT_Gateway', 'maybe_show_release_notice' ) );
+		add_filter( 'removable_query_args', array( 'BF_TWINT_Gateway', 'removable_query_args' ) );
 
 		// «Ich habe bezahlt»-Meldung des Kunden (Danke-Seite/«Mein Konto», auch als Gast).
 		add_action( 'admin_post_bf_twint_claim_paid', array( 'BF_TWINT_Gateway', 'handle_claim_paid' ) );

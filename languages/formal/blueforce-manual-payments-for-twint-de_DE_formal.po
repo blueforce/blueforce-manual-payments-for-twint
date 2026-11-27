@@ -664,3 +664,11 @@ msgstr "Blueforce Digital Solutions"
 #: includes/class-bf-twint-privacy.php:99
 msgid "Blueforce Manual Payments for TWINT"
 msgstr "Blueforce Manual Payments for TWINT"
+
+#: includes/class-bf-twint-gateway.php
+msgid "<strong>Blueforce Manual Payments for TWINT:</strong> The order was not released. It is no longer awaiting a TWINT payment, for example because it has already been released."
+msgstr "<strong>Blueforce Manual Payments for TWINT:</strong> Die Bestellung wurde nicht freigegeben. Sie wartet nicht mehr auf eine TWINT-Zahlung, zum Beispiel weil sie bereits freigegeben wurde."
+
+#: includes/class-bf-twint-gateway.php
+msgid "<strong>Blueforce Manual Payments for TWINT:</strong> The payment reminder is not set to fewer days than the auto-cancellation, so unpaid orders are cancelled before the customer gets a reminder. Set the reminder to fewer days than the auto-cancellation."
+msgstr "<strong>Blueforce Manual Payments for TWINT:</strong> Die Zahlungserinnerung ist nicht auf weniger Tage gesetzt als die automatische Stornierung. Unbezahlte Bestellungen werden darum storniert, bevor der Kunde eine Erinnerung erhält. Setzen Sie die Erinnerung auf weniger Tage als die Stornierung."
